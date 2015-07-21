@@ -1,2 +1,2 @@
-# node-PowerShell
-Easily run powershell from youe Node app
+# node-powershell
+Easily run powershell from your Node app
