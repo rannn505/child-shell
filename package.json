@@ -1,0 +1,38 @@
+{
+  "name": "node-powershell",
+  "version": "1.0.0",
+  "description": "Lightweight module to run PowerShell straight from your Node app",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "colors": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/node-powershell.git"
+  },
+  "keywords": [
+    "node-powershell",
+    "ps",
+    "powershell",
+    "node-ps",
+    "microsoft",
+    "shell",
+    "cmd",
+    "command",
+    "command",
+    "Line"
+  ],
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rannn505/node-powershell/issues"
+  },
+  "homepage": "https://github.com/rannn505/node-powershell#readme"
+}
