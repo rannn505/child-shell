@@ -60,3 +60,8 @@ powershell.input("node-powershell Rocks");
 ## License
 
   [MIT](LICENSE)
+
+
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rannn505/node-powershell/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
