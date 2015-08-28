@@ -65,3 +65,6 @@ powershell.input("node-powershell Rocks");
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rannn505/node-powershell/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rannn505/node-powershell/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
