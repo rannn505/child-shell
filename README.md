@@ -3,19 +3,10 @@ Node-PowerShell
 
 <div>
 <p> <img height="50" width="50" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell.png"> Lightweight module to run PowerShell straight from your Node app </p>
-
-<a href="http://badge.fury.io/js/node-powershell">
-<img src="https://badge.fury.io/js/node-powershell.svg" alt="npm version" height="18"></a>
-
-<a href="https://david-dm.org/rannn505/node-powershell">
-<img src="https://david-dm.org/rannn505/node-powershell.svg" alt="npm version" height="18"></a>
-
-<a href="https://david-dm.org/rannn505/node-powershell">
-<img src="http://img.shields.io/npm/dm/node-powershell.svg" alt="npm version" height="18"></a>
-
-<br>
-<a href="https://nodei.co/npm/node-powershell/"><img src="https://nodei.co/npm/node-powershell.png?downloads=true&downloadRank=true&stars=true"></a>
 </div>
+
+[![Version npm](https://img.shields.io/npm/v/Node-PowerShell.svg?style=flat-square)](https://www.npmjs.com/package/Node-PowerShell)[![NPM Downloads](https://img.shields.io/npm/dt/Node-PowerShell.svg?style=flat-square)](https://www.npmjs.com/package/Node-PowerShell)[![Dependencies](https://img.shields.io/david/rannn505/Node-PowerShell.svg?style=flat-square)](https://david-dm.org/rannn505/Node-PowerShell)
+
 
 ## Installation
 
@@ -61,10 +52,4 @@ powershell.input("node-powershell Rocks");
 
   [MIT](LICENSE)
 
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rannn505/node-powershell/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rannn505/node-powershell/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
