@@ -5,7 +5,7 @@ Node-PowerShell
 <p> <img height="50" width="50" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell.png"> Lightweight module to run PowerShell straight from your Node app </p>
 </div>
 
-[![Version npm](https://img.shields.io/npm/v/Node-PowerShell.svg?style=flat-square)](https://www.npmjs.com/package/Node-PowerShell)[![NPM Downloads](https://img.shields.io/npm/dt/Node-PowerShell.svg?style=flat-square)](https://www.npmjs.com/package/Node-PowerShell)[![Dependencies](https://img.shields.io/david/rannn505/Node-PowerShell.svg?style=flat-square)](https://david-dm.org/rannn505/Node-PowerShell)
+[![Version npm](https://img.shields.io/npm/v/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![NPM Downloads](https://img.shields.io/npm/dt/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![Dependencies](https://img.shields.io/david/rannn505/node-powershell.svg?style=flat-square)](https://david-dm.org/rannn505/node-powershell)
 
 
 ## Installation
