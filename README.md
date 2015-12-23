@@ -17,12 +17,16 @@ $ npm install node-powershell
 ## Quick start
 
 ```javascript
-var ps = require('node-powershell');
+var Shell = require('node-powershell');
 
-Shell = ps("echo node-powershell is awesome");
+ps = new Shell("echo node-powershell is awesome");
 
-Shell.output(function(data){
+ps.output(function(data){
     console.log(data);
+});
+ps.on('end', function(code) {
+    console.log('PS exited with code ' + code);
+    //optional callback
 });
 ```
 
