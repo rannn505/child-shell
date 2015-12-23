@@ -2,12 +2,14 @@
  * Created by Ran Cohen on 20/07/2015.
  */
 
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
 var spawn = require("child_process").spawn,proc;
 var colors = require("colors");
 
 const MODULE_NAME = 'node-powershell';
 
-function ps (obj){
+function Shell (obj){
 
     var run = obj;
     var shell = this;
@@ -23,6 +25,7 @@ function ps (obj){
     proc.on('close', function (code) {
         proc.stdin.end();
         console.log(colors.green('child process ' + proc.pid  + ' exited with code ' + code));
+        shell.emit('end', code);
     });
 
 
@@ -47,4 +50,5 @@ function ps (obj){
     return shell;
 }
 
-module.exports = ps;
+util.inherits(Shell, EventEmitter);
+module.exports = Shell;
