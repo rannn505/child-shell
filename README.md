@@ -17,16 +17,16 @@ $ npm install node-powershell
 ## Quick start
 
 ```javascript
-var Shell = require('node-powershell');
+var shell = require('node-powershell');
 
-ps = new Shell("echo node-powershell is awesome");
+PS = new shell('echo "node-powershell is awesome"');
 
-ps.output(function(data){
+PS.on('output', function(data){
     console.log(data);
 });
-ps.on('end', function(code) {
-    console.log('PS exited with code ' + code);
+PS.on('end', function(code) {
     //optional callback
+    //Do Something
 });
 ```
 
@@ -35,25 +35,34 @@ ps.on('end', function(code) {
 ####  Running a `.ps1` script:
 
 ```js
-Shell = ps("'Path/To/Your/Script.ps1'");
+PS = new shell("Path/To/Your/Script.ps1");
 ```
-Don't forget the `"' '"` around the path
 
 ####  Putting an input to yor script:
 
-Just use `[Console]::In.ReadLine()` instead of `Read-Host` in your script:
+Just use `param ( )` instead of `Read-Host` in your script:
 ```PowerShell
-$t = [Console]::In.ReadLine();
-echo $t
+param (
+    [Parameter(Mandatory = $true)]
+    [string]$st
+)
+echo $st
 ```
 
-and `.input` property in your node app:
+and `'path "args"'` in your node app:
 ```javascript
-powershell.input("node-powershell Rocks");
+PS = new shell('Path/To/Your/Script.ps1 "node-powershell Rocks"');
 ```
+
+#### Disabling Debug Messages:
+
+use `{debugMsg: false}` option: (Default is true)
+```javascript
+PS = new shell('echo "node-powershell is awesome"', {debugMsg: false});
+```
+
 
 ## License
 
   [MIT](LICENSE)
-
 

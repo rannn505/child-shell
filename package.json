@@ -1,6 +1,6 @@
 {
   "name": "node-powershell",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Lightweight module to run PowerShell straight from your Node app",
   "main": "index.js",
   "directories": {

@@ -4,50 +4,59 @@
 
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-var spawn = require("child_process").spawn,proc;
+var spawn = require("child_process").spawn;
 var colors = require("colors");
 
 const MODULE_NAME = 'node-powershell';
 
-function Shell (obj){
+/**
+ * The PS Shell class.
+ * @param {string} cmdlets - the commends/script`s path to run.
+ * @param {object} opt - options fot the shell
+ * @returns {Shell}
+ * @constructor
+ */
+function Shell (cmdlets, opt){
 
-    var run = obj;
-    var shell = this;
+    var _run = cmdlets;
+    var _shell = this;
 
-    proc = spawn("powershell.exe",["-command", "&"+run+""]);
+    opt = (typeof opt == 'undefined') ? {} : opt;
+    opt.debugMsg = (typeof opt.debugMsg == 'undefined') ? true : opt.debugMsg;
 
-    proc.stdin.setEncoding('utf8');
-    proc.stdout.setEncoding('utf8');
-    proc.stderr.setEncoding('utf8');
+    var _proc = spawn("powershell.exe",
+        ["-command", util.format("& {%s}",_run)],
+        {stdio: ['ignore', 'pipe', 'pipe' ]});
 
-    console.log(colors.green('Runing ' + proc.pid + ' on ' + process.platform));
+    _proc.stdout.setEncoding('utf8');
+    _proc.stderr.setEncoding('utf8');
 
-    proc.on('close', function (code) {
-        proc.stdin.end();
-        console.log(colors.green('child process ' + proc.pid  + ' exited with code ' + code));
-        shell.emit('end', code);
+    if(opt.debugMsg){
+        util.log(
+            colors.blue(util.format('<%s> ', MODULE_NAME)) +
+            colors.green(util.format('Starting %s on %s\n', _proc.pid , process.platform)))
+    }
+
+
+    _proc.stdout.on("data",function(data){
+        _shell.emit('output', data);
+    });
+    _proc.stderr.on("data",function(data) {
+        _shell.emit('output', data);
     });
 
+    _proc.on('close', function (code) {
 
-    shell.output = function(cb){
-        proc.stdout.on("data",function(data){
-           cb(data);
-        });
+        if(opt.debugMsg) {
+            util.log(
+                colors.blue(util.format('<%s> ', MODULE_NAME)) +
+                colors.green(util.format('Process %s exited with code %s', _proc.pid, code)));
+        }
 
-        proc.stderr.on("data",function(data) {
-            cb(data);
-        });
-    };
+        _shell.emit('end', code);
+    });
 
-    shell.input = function(data){
-
-        proc.stdin.write(data,'utf8',function(){
-            //console.log('Data Received');
-            proc.stdin.end();
-        });
-    };
-
-    return shell;
+    return _shell;
 }
 
 util.inherits(Shell, EventEmitter);

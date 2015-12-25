@@ -1,2 +1,5 @@
-$t = [Console]::In.ReadLine();
-echo $t
+param (
+    [Parameter(Mandatory = $true)]
+    [string]$st = "node-powershell"
+)
+echo $st

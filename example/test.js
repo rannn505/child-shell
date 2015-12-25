@@ -2,19 +2,18 @@
  * Created by Ran Cohen on 20/07/2015.
  */
 
-var ps = require('../index');
+var shell = require('../index');
 
-var shell_1 = ps('echo "node-powershell is awesome"');
-
-shell_1.output(function(data){
+/*Test Cmdlet*/
+var PS1 = new shell('echo "node-powershell is awesome"', {debugMsg: false});
+PS1.on('output', function(data){
     console.log(data);
 });
+PS1.on('end', function(code) {
 
-
-var shell_2 = ps("'C:/Users/Ran Cohen/Desktop/node-powershell/example/script.ps1'");
-
-shell_2.input("node-powershell Rocks");
-
-shell_2.output(function(data){
-    console.log(data);
+    /*Test Script*/
+    var PS2 = new shell('C:/Users/RAN/Desktop/node-powershell/example/script.ps1 "node-powershell Rocks"');
+    PS2.on('output', function(data) {
+        console.log(data);
+    });
 });
