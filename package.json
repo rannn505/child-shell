@@ -3,6 +3,10 @@
   "version": "1.2.0",
   "description": "Lightweight module to run PowerShell straight from your Node app",
   "main": "index.js",
+  "files":[
+      "index.js",
+      "example"
+  ],
   "directories": {
     "example": "example"
   },

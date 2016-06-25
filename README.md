@@ -17,7 +17,7 @@ $ npm install node-powershell
 ```javascript
 var shell = require('node-powershell').Shell;
 
-var params =  [{name:'str', value:'node-powershell Rocks'}];
+var params = [{name:'paramName', value:'paramValue'}];
 shell.executionStringBuilder("Path/To/Your/Script.ps1", params)
     .then(function(str){
         var ps = new shell(str);
@@ -43,6 +43,7 @@ options:
 - **debugMsg** - Determines whether to log verbose to the console (Boolean) (Default: true) *optional*
 - **outputEncoding** - Sets the output encoding for the current shell (String) (Default: 'utf8') *optional*
 - **executionPolicy** - Sets the default execution policy for the current shell session (String) (Default: 'Unrestricted') *optional*
+
 #### shellInstance.execute:
 Starts executing the ps1ScriptPath / psCommand of the shell. return a promise with the output.
 ```javascript
@@ -73,6 +74,7 @@ var sm = new ShellManager(options);
 ```
 options:
 - **maxParallel** - Determines the number of shells that can run in parallel (Number) (Default: 4) *optional*
+
 #### ShellManagerInstance.queue:
 Queue the shell for later execution.
 ```javascript
