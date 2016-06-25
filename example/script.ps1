@@ -1,5 +1,5 @@
 param (
     [Parameter(Mandatory = $true)]
-    [string]$st = "node-powershell"
+    [string]$str = "node-powershell"
 )
-echo $st
+echo $str

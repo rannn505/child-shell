@@ -1,15 +1,21 @@
 {
   "name": "node-powershell",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Lightweight module to run PowerShell straight from your Node app",
   "main": "index.js",
   "directories": {
     "example": "example"
   },
   "dependencies": {
-    "colors": "^1.1.2"
+    "bluebird": "^3.4.1",
+    "chalk": "^1.1.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,9 +31,15 @@
     "microsoft",
     "shell",
     "cmd",
+    "commandline",
     "command",
-    "command",
-    "Line"
+    "Line",
+    "windows",
+    "windows powershell",
+    "script",
+    "spwan",
+    "shells",
+    "terminal"
   ],
   "author": "Ran Cohen <rannn505@outlook.com>",
   "license": "MIT",
