@@ -1,36 +1,30 @@
-var shell        = require('../index').Shell;
-var ShellManager = require('../index').ShellManager;
+var shell = require('../dist/index');
 
-/* Promise Method */
-var params =  [{name:'str', value:'node-powershell Rocks'}];
-shell.executionStringBuilder("D:/Projects/open_source/node-powershell/example/script.ps1", params)
-    .then(function(str){
-        var ps = new shell(str, {executionPolicy: 'Bypass', debugMsg: false});
-        return ps.execute();
+var ps = new shell({executionPolicy: 'Bypass', debugMsg: true});
+
+ps.addCommand('$a = "node-"');
+ps.addCommand('$a += "powershell "');
+ps.addCommand('$a += "is awesome"; $a')
+    .then(function(){
+        return ps.invoke();
     })
     .then(function(output){
         console.log(output);
+        var params =  [{name:'str', value:'node-powershell rocks'}];
+        ps.addCommand('./script-input.ps1', params);
+        return ps.invoke();
+    })
+    .then(function(output){
+        console.log(output);
+        ps.addCommand('./script-loop.ps1');
+        return ps.invoke();
+    })
+    .then(function(output){
+        console.log(output);
+        console.log(ps.history);
+        ps.dispose();
     })
     .catch(function(err){
         console.log(err);
-    });
-
-/* Events Method */
-var ps1 = new shell("D:/Projects/open_source/node-powershell/example/script.ps1 'node-powershell Awesome'");
-ps1.execute();
-ps1.on('output', function(data){
-    console.log(data);
-});
-ps1.on('end', function(code) {
-    console.log(code);
-});
-
-/* ShellManager Method */
-var sm = new ShellManager({maxParallel: 2});
-sm.queue(ps1);
-sm.queue(ps1);
-sm.queue(new shell("D:/Projects/open_source/node-powershell/example/script.ps1 'node-powershell Sooo Cool'"));
-sm.execute()
-    .then(function(output){
-        console.log(output);
+        ps.dispose();
     });

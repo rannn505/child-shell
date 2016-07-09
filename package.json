@@ -1,24 +1,16 @@
 {
   "name": "node-powershell",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Lightweight module to run PowerShell straight from your Node app",
-  "main": "index.js",
-  "files":[
-      "index.js",
-      "example"
+  "main": "./dist/index.js",
+  "files": [
+    "index.js",
+    "example/",
+    "LICENSE",
+    "README.md"
   ],
   "directories": {
     "example": "example"
-  },
-  "dependencies": {
-    "bluebird": "^3.4.1",
-    "chalk": "^1.1.3"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.10.1",
-    "babel-preset-es2015": "^6.9.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -50,5 +42,16 @@
   "bugs": {
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
-  "homepage": "https://github.com/rannn505/node-powershell#readme"
+  "homepage": "https://github.com/rannn505/node-powershell#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "chalk": "^1.1.3"
+  },
+  "devDependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.9.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean": "^0.3.2"
+  }
 }

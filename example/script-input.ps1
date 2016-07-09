@@ -2,4 +2,4 @@ param (
     [Parameter(Mandatory = $true)]
     [string]$str = "node-powershell"
 )
-echo $str
+$str

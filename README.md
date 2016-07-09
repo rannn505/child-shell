@@ -10,115 +10,79 @@ Node-PowerShell
 
 ## Installation
 ```bash
-$ npm install node-powershell
+$ npm i -S node-powershell
 ```
 
 ## Quick start
 ```javascript
-var shell = require('node-powershell').Shell;
+var shell = require('node-powershell');
 
-var params = [{name:'paramName', value:'paramValue'}];
-shell.executionStringBuilder("Path/To/Your/Script.ps1", params)
-    .then(function(str){
-        var ps = new shell(str);
-        return ps.execute();
+var ps = new shell({executionPolicy: 'Bypass', debugMsg: true});
+
+ps.addCommand('echo "node-powershell rocks"');
+    .then(function(){
+        return ps.invoke();
     })
     .then(function(output){
         console.log(output);
+        ps.dispose();
     })
     .catch(function(err){
         console.log(err);
+        ps.dispose();
     });
 ```
+
 
 ## API
 
-### Shell Class `require('node-powershell').Shell`
-#### Initiating:
+### PowerShell Class `require('node-powershell')`
+Provides promise based methods that are used to create a pipeline of commands and invoke those commands within a PowerShell runspace.
+
+#### initialize(constructor):
 Creates a new shell instance.
 ```javascript
-var ps = new shell(ps1ScriptPath / psCommand, options);
+var ps = new shell(options);
 ```
 options:
 - **debugMsg** - Determines whether to log verbose to the console (Boolean) (Default: true) *optional*
+- **inputEncoding** - Sets the input encoding for the current shell (String) (Default: 'utf8') *optional*
 - **outputEncoding** - Sets the output encoding for the current shell (String) (Default: 'utf8') *optional*
 - **executionPolicy** - Sets the default execution policy for the current shell session (String) (Default: 'Unrestricted') *optional*
 
-#### shellInstance.execute:
-Starts executing the ps1ScriptPath / psCommand of the shell. return a promise with the output.
-```javascript
-ps.execute()
-    .then(function(output){
-        console.log(output);
-    })
-    .catch(function(err){
-        console.log(err);
-    });
-```
-#### (static) Shell.executionStringBuilder:
-Helper method that return a promise with an "Always works" Execution String.
-```javascript
-var paramsArray =  [{name:'paramName', value:'paramValue'}];
-shell.executionStringBuilder(ps1ScriptPath, paramsArray)
-    .then(function(str){
-        console.log(str);
-    });
-```
+#### Properties:
+| Name    | Description                                                             |
+|---------|-------------------------------------------------------------------------|
+| history | An array containing the command history ever added to the shell.        |
+| streams | An object containing the sdtio (in,out,err) of the PowerShell Instance. |
 
-### ShellManager Class `require('node-powershell').ShellManager`
-***Use this class when you want to execute lots of shells at once, and get their outputs together.***
-#### Initiating:
-Creates a new shell instance.
-```javascript
-var sm = new ShellManager(options);
-```
-options:
-- **maxParallel** - Determines the number of shells that can run in parallel (Number) (Default: 4) *optional*
+#### Methods:
+| Name                             | Description                                                                              | Syntax                                                                         | Return Value                                                    |
+|----------------------------------|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| addCommand(command, params = []) | Adds a command to the end of the pipeline of the shell object.                           | ps.addCommand('./script.ps1',  [{name:'str', value:'node-powershell rocks'}]); | A promise of the commands.                                      |
+| invoke()                         | Runs the commands of the shell object pipeline.                                          | ps.invoke();                                                                   | A promise with the result  (can also be rejected to the catch). |
+| dispose()                        | Releases all resources used by the shell object and closes the PowerShell child_process. | ps.dispose();                                                                  | A promise of the exit code.                                     |
 
-#### ShellManagerInstance.queue:
-Queue the shell for later execution.
-```javascript
-sm.queue(new shell());
-```
-#### ShellManagerInstance.execute:
-Starts executing all of the queued shells. return a promise with the output.
-```javascript
-sm.execute()
-    .then(function(output){
-        console.log(output);
-    })
-    .catch(function(err){
-        console.log(err);
-    });
-```
+#### Events:
+| Name   | Description                     | Syntax                     |
+|--------|---------------------------------|----------------------------|
+| output | Emits when shell has an output. | ps.on('output', data=>{}); |
+| err    | Emits when shell has an error.  | ps.on('err', error=>{});   |
+| end    | Emits when shell ends.          | ps.on('end', code=>{});    |
 
 
 ## Examples
-
-####  Use the Shell events:
-```javascript
-var shell = require('node-powershell').Shell;
-
-var ps = new shell('echo "node-powershell is awesome"');
-ps.on('output', function(data){
-    console.log(data);
-});
-ps.on('end', function(code) {
-    //Do Something else
-});
-```
 
 ####  Putting an input to yor script:
 Just use `param ( )` instead of `Read-Host` in your script:
 ```PowerShell
 param (
     [Parameter(Mandatory = $true)]
-    [string]$st
+    [string]$str
 )
-echo $st
+echo $str
 ```
-and `Shell.executionStringBuilder()` or `'path "args"'` in your node app.
-
+and `Shell.addCommand() with the params array` in your node app.
 
 ***for more examples please look at the [example page](https://github.com/rannn505/node-powershell/blob/master/example/example.js).***
 
