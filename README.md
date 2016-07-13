@@ -19,7 +19,7 @@ var shell = require('node-powershell');
 
 var ps = new shell({executionPolicy: 'Bypass', debugMsg: true});
 
-ps.addCommand('echo "node-powershell rocks"');
+ps.addCommand('echo "node-powershell rocks"')
     .then(function(){
         return ps.invoke();
     })
