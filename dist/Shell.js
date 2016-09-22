@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -15,12 +17,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var os = require('os');
 var util = require('util');
 var eventEmitter = require('events').EventEmitter;
-var spawn = require("child_process").spawn;
+var spawn = require('child_process').spawn;
 var colors = require('chalk');
 var promise = require('bluebird');
 
 var MODULE_NAME = 'node-powershell';
-var ERROR_COLOR = colors.bold.red;
+var IS_WIN = os.platform() === 'win32';
+var MODULE_MSG = colors.bold.blue('<' + MODULE_NAME + '>:: ');
+var MODULE_MSG2 = colors.bold.blue('NPS> ');
+var OK_MSG = colors.green;
+var ERROR_MSG = colors.red;
 
 /**
  * The PS Shell class.
@@ -54,8 +60,14 @@ var Shell = exports.Shell = function (_eventEmitter) {
         _this._opt = {};
         _this._opt.debugMsg = debugMsg;
 
-        var _args = ['-NoLogo', '-NoExit', '-NoProfile', '-InputFormat', 'Text', '-ExecutionPolicy', executionPolicy, '-Command', '-'];
-        _this._proc = spawn("powershell.exe", _args, {
+        var _args = ['-NoLogo', '-NoExit', '-NoProfile', '-InputFormat', 'Text', '-Command', '-'];
+        if (IS_WIN) {
+            _args = ['-ExecutionPolicy', executionPolicy].concat(_toConsumableArray(_args));
+        }
+
+        var _procname = 'powershell' + (IS_WIN ? '.exe' : '');
+
+        _this._proc = spawn(_procname, _args, {
             stdio: 'pipe'
         });
 
@@ -94,7 +106,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
             stderr: _this._proc.stderr
         };
 
-        _this._opt.debugMsg && console.log(colors.blue('<' + MODULE_NAME + '>:: ') + colors.green('Process ' + _this._proc.pid + ' started\n'));
+        _this._opt.debugMsg && console.log(MODULE_MSG2 + OK_MSG('Process ' + _this._proc.pid + ' started\n'));
         return _this;
     }
 
@@ -124,8 +136,8 @@ var Shell = exports.Shell = function (_eventEmitter) {
 
             var _shell = this;
 
-            this._opt.debugMsg && console.log(colors.blue('<' + MODULE_NAME + '>:: ') + colors.green('Command invoke started\n'));
-            this._opt.debugMsg && console.log(colors.green(this._commands + '\n'));
+            this._opt.debugMsg && console.log(MODULE_MSG2 + OK_MSG('Command invoke started\n'));
+            this._opt.debugMsg && console.log(OK_MSG(this._commands + '\n'));
 
             return new Promise(function (resolve, reject) {
                 var output = '';
@@ -143,13 +155,13 @@ var Shell = exports.Shell = function (_eventEmitter) {
                 function resolve_listener(output) {
                     resolve(output);
                     clean_listeners();
-                    _shell._opt.debugMsg && console.log(colors.blue('<' + MODULE_NAME + '>:: ') + colors.green('Command invoke finished\n'));
+                    _shell._opt.debugMsg && console.log(MODULE_MSG2 + OK_MSG('Command invoke finished\n'));
                 }
 
                 function reject_listener(error) {
                     reject(error);
                     clean_listeners();
-                    _shell._opt.debugMsg && console.log(colors.blue('<' + MODULE_NAME + '>:: ') + colors.green('Command invoke failed\n'));
+                    _shell._opt.debugMsg && console.log(MODULE_MSG2 + ERROR_MSG('Command invoke failed\n'));
                 }
 
                 _this3.on('_resolve', resolve_listener);
@@ -170,7 +182,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
                 // this._proc.kill();
 
                 _this4._proc.on('close', function (code) {
-                    _this4._opt.debugMsg && console.log(colors.blue('<' + MODULE_NAME + '>:: ') + colors.green('Process ' + _this4._proc.pid + ' exited with code ' + code + '\n'));
+                    _this4._opt.debugMsg && console.log(MODULE_MSG2 + OK_MSG('Process ' + _this4._proc.pid + ' exited with code ' + code + '\n'));
 
                     setTimeout(function () {
                         _shell.emit('end', code);

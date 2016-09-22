@@ -1,17 +1,22 @@
-Node-PowerShell
+<img height="64" width="64" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell3.png"> Node-PowerShell
 ===
-
-<div>
-<p> <img height="50" width="50" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell.png"> Lightweight module to run PowerShell straight from your Node app </p>
-</div>
 
 [![Version npm](https://img.shields.io/npm/v/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![NPM Downloads](https://img.shields.io/npm/dt/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![Dependencies](https://img.shields.io/david/rannn505/node-powershell.svg?style=flat-square)](https://david-dm.org/rannn505/node-powershell)
 
+>  Lightweight module to run PowerShell straight from your Node app.
 
 ## Installation
 ```bash
 $ npm i -S node-powershell
 ```
+
+## :fire::fire::fire: NEW :fire::fire::fire:
+As you may have heard already, lately Microsoft is taking steps towards becoming an open source company. :clap:
+One of these steps, brings us [PowerShell6][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
+Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
+Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
+[PowerShell6]: (https://github.com/PowerShell/PowerShell)
+
 
 ## Quick start
 ```javascript

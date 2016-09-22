@@ -1,12 +1,17 @@
 var os           = require('os');
 var util         = require('util');
 var eventEmitter = require('events').EventEmitter;
-var spawn        = require("child_process").spawn;
+var spawn        = require('child_process').spawn;
 var colors       = require('chalk');
 var promise      = require('bluebird');
 
 const MODULE_NAME = 'node-powershell';
-const ERROR_COLOR = colors.bold.red;
+const IS_WIN      = os.platform() === 'win32';
+const MODULE_MSG  = colors.bold.blue(`<${MODULE_NAME}>:: `);
+const MODULE_MSG2 = colors.bold.blue(`NPS> `);
+const OK_MSG      = colors.green;
+const ERROR_MSG   = colors.red;
+
 
 /**
  * The PS Shell class.
@@ -28,11 +33,14 @@ export class Shell extends eventEmitter {
         this._opt = {};
         this._opt.debugMsg = debugMsg;
 
-        let _args = ['-NoLogo', '-NoExit', '-NoProfile', '-InputFormat', 'Text',
-            '-ExecutionPolicy', executionPolicy,
-            '-Command', '-'
-        ];
-        this._proc = spawn("powershell.exe", _args, {
+        let _args = ['-NoLogo', '-NoExit', '-NoProfile', '-InputFormat', 'Text', '-Command', '-'];
+        if(IS_WIN) {
+            _args = ['-ExecutionPolicy', executionPolicy, ..._args];
+        }
+
+        let _procname = `powershell${IS_WIN ? '.exe' : ''}`;
+
+        this._proc = spawn(_procname, _args, {
             stdio: 'pipe'
         });
 
@@ -71,7 +79,7 @@ export class Shell extends eventEmitter {
             stderr: this._proc.stderr
         };
 
-        (this._opt.debugMsg) && console.log(colors.blue(`<${MODULE_NAME}>:: `) + colors.green(`Process ${this._proc.pid} started\n`));
+        (this._opt.debugMsg) && console.log(MODULE_MSG2 + OK_MSG(`Process ${this._proc.pid} started\n`));
     }
     addCommand(command, params = []) {
         return new Promise((resolve, reject) => {
@@ -89,8 +97,8 @@ export class Shell extends eventEmitter {
     invoke() {
         var _shell = this;
 
-        (this._opt.debugMsg) && console.log(colors.blue(`<${MODULE_NAME}>:: `) + colors.green(`Command invoke started\n`));
-        (this._opt.debugMsg) && console.log(colors.green(`${this._commands}\n`));
+        (this._opt.debugMsg) && console.log(MODULE_MSG2 + OK_MSG(`Command invoke started\n`));
+        (this._opt.debugMsg) && console.log(OK_MSG(`${this._commands}\n`));
 
         return new Promise((resolve, reject) => {
             var output = '';
@@ -108,13 +116,13 @@ export class Shell extends eventEmitter {
             function resolve_listener(output) {
                 resolve(output);
                 clean_listeners();
-                (_shell._opt.debugMsg) && console.log(colors.blue(`<${MODULE_NAME}>:: `) + colors.green(`Command invoke finished\n`));
+                (_shell._opt.debugMsg) && console.log(MODULE_MSG2 + OK_MSG(`Command invoke finished\n`));
             }
 
             function reject_listener(error) {
                 reject(error);
                 clean_listeners();
-                (_shell._opt.debugMsg) && console.log(colors.blue(`<${MODULE_NAME}>:: `) + colors.green(`Command invoke failed\n`));
+                (_shell._opt.debugMsg) && console.log(MODULE_MSG2 + ERROR_MSG(`Command invoke failed\n`));
             }
 
             this.on('_resolve', resolve_listener);
@@ -131,7 +139,7 @@ export class Shell extends eventEmitter {
             // this._proc.kill();
 
             this._proc.on('close', code => {
-                (this._opt.debugMsg) && console.log(colors.blue(`<${MODULE_NAME}>:: `) + colors.green(`Process ${this._proc.pid} exited with code ${code}\n`));
+                (this._opt.debugMsg) && console.log(MODULE_MSG2 + OK_MSG(`Process ${this._proc.pid} exited with code ${code}\n`));
 
                 setTimeout(function() {
                     _shell.emit('end', code);
