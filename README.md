@@ -11,11 +11,11 @@ $ npm i -S node-powershell
 ```
 
 ## :fire::fire::fire: NEW :fire::fire::fire:
-As you may have heard already, lately Microsoft is taking steps towards becoming an open source company. :clap:
+As you may have heard already, lately Microsoft is taking steps towards becoming an open source company.
 One of these steps, brings us [PowerShell6][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
 Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
 Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
-[PowerShell6]: (https://github.com/PowerShell/PowerShell)
+[PowerShell6]: https://github.com/PowerShell/PowerShell
 
 
 ## Quick start
