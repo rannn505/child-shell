@@ -22,7 +22,7 @@ Moreover, I will continue to follow the development of the new PS repo, and to u
 ```javascript
 var shell = require('node-powershell');
 
-var ps = new shell({executionPolicy: 'Bypass', debugMsg: true});
+var ps = new shell({executionPolicy: 'Bypass', debugMsg: true, noProfile: true});
 
 ps.addCommand('echo "node-powershell rocks"')
     .then(function(){
