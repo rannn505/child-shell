@@ -36,7 +36,7 @@ export class Shell extends eventEmitter {
 
         let _args = ['-NoLogo', '-NoExit', '-InputFormat', 'Text', '-Command', '-'];
 
-        if (noProfile) {
+        if(noProfile) {
             _args = ['-NoProfile', ..._args];
         }
 
@@ -49,6 +49,10 @@ export class Shell extends eventEmitter {
         this._proc = spawn(_procname, _args, {
             stdio: 'pipe'
         });
+
+        if(!this._proc.pid) {
+            throw new Error(`Opss... ${MODULE_NAME} was unable to start PowerShell.\nPlease make sure that PowerShell is installed properly on your system, and try again.`);
+        }
 
         this._proc.stdin.setEncoding(inputEncoding);
         this._proc.stdout.setEncoding(outputEncoding);

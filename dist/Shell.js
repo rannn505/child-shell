@@ -39,7 +39,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
     _inherits(Shell, _eventEmitter);
 
     function Shell() {
-        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var _ref$executionPolicy = _ref.executionPolicy;
         var executionPolicy = _ref$executionPolicy === undefined ? 'Unrestricted' : _ref$executionPolicy;
@@ -54,7 +54,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
 
         _classCallCheck(this, Shell);
 
-        var _this = _possibleConstructorReturn(this, (Shell.__proto__ || Object.getPrototypeOf(Shell)).call(this));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Shell).call(this));
 
         _this._commands = '';
         _this._history = [];
@@ -77,6 +77,10 @@ var Shell = exports.Shell = function (_eventEmitter) {
         _this._proc = spawn(_procname, _args, {
             stdio: 'pipe'
         });
+
+        if (!_this._proc.pid) {
+            throw new Error('Opss... ' + MODULE_NAME + ' was unable to start PowerShell.\nPlease make sure that PowerShell is installed properly on your system, and try again.');
+        }
 
         _this._proc.stdin.setEncoding(inputEncoding);
         _this._proc.stdout.setEncoding(outputEncoding);
@@ -122,7 +126,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
         value: function addCommand(command) {
             var _this2 = this;
 
-            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+            var params = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
             return new Promise(function (resolve, reject) {
                 var _command = ' ' + command;
