@@ -54,6 +54,7 @@ options:
 - **inputEncoding** - Sets the input encoding for the current shell (String) (Default: 'utf8') *optional*
 - **outputEncoding** - Sets the output encoding for the current shell (String) (Default: 'utf8') *optional*
 - **executionPolicy** - Sets the default execution policy for the current shell session (String) (Default: 'Unrestricted') *optional*
+- **noProfile** - Determines whether to load the Windows PS profile (Boolean) (Default: true) *optional*
 
 #### Properties:
 | Name    | Description                                                             |
