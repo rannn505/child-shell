@@ -24,7 +24,8 @@ export class Shell extends eventEmitter {
         executionPolicy: executionPolicy = 'Unrestricted',
         inputEncoding: inputEncoding = 'utf8',
         outputEncoding: outputEncoding = 'utf8',
-        debugMsg: debugMsg = true
+        debugMsg: debugMsg = true,
+        noProfile: noProfile = true,
     } = {}) {
         super();
         this._commands = '';
@@ -33,7 +34,12 @@ export class Shell extends eventEmitter {
         this._opt = {};
         this._opt.debugMsg = debugMsg;
 
-        let _args = ['-NoLogo', '-NoExit', '-NoProfile', '-InputFormat', 'Text', '-Command', '-'];
+        let _args = ['-NoLogo', '-NoExit', '-InputFormat', 'Text', '-Command', '-'];
+
+        if (noProfile) {
+            _args = ['-NoProfile', ..._args];
+        }
+
         if(IS_WIN) {
             _args = ['-ExecutionPolicy', executionPolicy, ..._args];
         }

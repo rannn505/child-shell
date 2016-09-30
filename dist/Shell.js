@@ -39,7 +39,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
     _inherits(Shell, _eventEmitter);
 
     function Shell() {
-        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         var _ref$executionPolicy = _ref.executionPolicy;
         var executionPolicy = _ref$executionPolicy === undefined ? 'Unrestricted' : _ref$executionPolicy;
@@ -49,10 +49,12 @@ var Shell = exports.Shell = function (_eventEmitter) {
         var outputEncoding = _ref$outputEncoding === undefined ? 'utf8' : _ref$outputEncoding;
         var _ref$debugMsg = _ref.debugMsg;
         var debugMsg = _ref$debugMsg === undefined ? true : _ref$debugMsg;
+        var _ref$noProfile = _ref.noProfile;
+        var noProfile = _ref$noProfile === undefined ? true : _ref$noProfile;
 
         _classCallCheck(this, Shell);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Shell).call(this));
+        var _this = _possibleConstructorReturn(this, (Shell.__proto__ || Object.getPrototypeOf(Shell)).call(this));
 
         _this._commands = '';
         _this._history = [];
@@ -60,7 +62,12 @@ var Shell = exports.Shell = function (_eventEmitter) {
         _this._opt = {};
         _this._opt.debugMsg = debugMsg;
 
-        var _args = ['-NoLogo', '-NoExit', '-NoProfile', '-InputFormat', 'Text', '-Command', '-'];
+        var _args = ['-NoLogo', '-NoExit', '-InputFormat', 'Text', '-Command', '-'];
+
+        if (noProfile) {
+            _args = ['-NoProfile'].concat(_toConsumableArray(_args));
+        }
+
         if (IS_WIN) {
             _args = ['-ExecutionPolicy', executionPolicy].concat(_toConsumableArray(_args));
         }
@@ -115,7 +122,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
         value: function addCommand(command) {
             var _this2 = this;
 
-            var params = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
             return new Promise(function (resolve, reject) {
                 var _command = ' ' + command;

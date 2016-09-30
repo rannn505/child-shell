@@ -22,7 +22,7 @@ Moreover, I will continue to follow the development of the new PS repo, and to u
 ```javascript
 var shell = require('node-powershell');
 
-var ps = new shell({executionPolicy: 'Bypass', debugMsg: true});
+var ps = new shell({executionPolicy: 'Bypass', debugMsg: true, noProfile: true});
 
 ps.addCommand('echo "node-powershell rocks"')
     .then(function(){
@@ -54,6 +54,7 @@ options:
 - **inputEncoding** - Sets the input encoding for the current shell (String) (Default: 'utf8') *optional*
 - **outputEncoding** - Sets the output encoding for the current shell (String) (Default: 'utf8') *optional*
 - **executionPolicy** - Sets the default execution policy for the current shell session (String) (Default: 'Unrestricted') *optional*
+- **noProfile** - Determines whether to load the Windows PS profile (Boolean) (Default: true) *optional*
 
 #### Properties:
 | Name    | Description                                                             |
