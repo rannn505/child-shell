@@ -1,4 +1,4 @@
-<img height="64" width="64" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell3.png"> Node-PowerShell
+<img height="64" width="64" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell3-1-0.png"> Node-PowerShell
 ===
 
 [![Version npm](https://img.shields.io/npm/v/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![NPM Downloads](https://img.shields.io/npm/dt/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![Dependencies](https://img.shields.io/david/rannn505/node-powershell.svg?style=flat-square)](https://david-dm.org/rannn505/node-powershell)
@@ -8,34 +8,27 @@
 ## Installation
 ```bash
 $ npm i -S node-powershell
+$ yarn add node-powershell
 ```
-
-## :fire::fire::fire: NEW :fire::fire::fire:
-As you may have heard already, lately Microsoft is taking steps towards becoming an open source company.
-One of these steps, brings us [PowerShell6][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
-Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
-Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
-[PowerShell6]: https://github.com/PowerShell/PowerShell
-
 
 ## Quick start
 ```javascript
-var shell = require('node-powershell');
-
-var ps = new shell({executionPolicy: 'Bypass', debugMsg: true, noProfile: true});
+const shell = require('node-powershell');
+let ps = new shell({
+  executionPolicy: 'Bypass',
+  noProfile: true
+});
 
 ps.addCommand('echo "node-powershell rocks"')
-    .then(function(){
-        return ps.invoke();
-    })
-    .then(function(output){
-        console.log(output);
-        ps.dispose();
-    })
-    .catch(function(err){
-        console.log(err);
-        ps.dispose();
-    });
+ps.invoke()
+  .then(output=> {
+    console.log(output);
+    ps.dispose();
+  })
+  .catch(err=> {
+    console.log(err);
+    ps.dispose();
+  });
 ```
 
 
@@ -91,6 +84,14 @@ echo $str
 and `Shell.addCommand() with the params array` in your node app.
 
 ***for more examples please look at the [example page](https://github.com/rannn505/node-powershell/blob/master/example/example.js).***
+
+
+## :fire::fire::fire: PowerShell 6.0 :fire::fire::fire:
+As you may have heard already, lately Microsoft is taking steps towards becoming an open source company.
+One of these steps, brings us [PowerShell 6.0][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
+Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
+Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
+[PowerShell 6.0]: https://github.com/PowerShell/PowerShell
 
 
 ## License

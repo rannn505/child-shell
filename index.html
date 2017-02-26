@@ -1,1 +1,103 @@
-<h1>NPS</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Node-PowerShell </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism-okaidia.min.css">
+  <style>
+    .container-fixed {
+      bottom: 0;
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+    .highlight {
+      background: #272822;
+      color: #f8f8f2;
+      width: 100%;
+      text-shadow: 0px 1px 2px rgba(0,0,0,0.4);
+      font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+      font-size: 14px;
+      line-height: 1.5;
+      max-height: 400px;
+      border: 0;
+      border-radius: 0;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    	background-color: #6bbf47;
+    }
+    ::-webkit-scrollbar {
+    	width: 5px;
+    	background-color: #4c86ea;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #4c86ea;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container-fluid container-fixed" style="background-color: #4c86ea;
+    background-image: -webkit-linear-gradient( 135deg, #4c86ea 0%, #4c86ea 60%, #6bbf47 60%, #6bbf47 60%);
+    background-image: linear-gradient( 135deg, #4c86ea 0%, #4c86ea 60%, #6bbf47 60%, #6bbf47 60%); overflow-y: auto;">
+    <a href="https://github.com/rannn505/node-powershell"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <div class="row" style="margin: 20px 0 20px 0">
+      <div class="col-md-6" style="text-align: left; color: white; font-family: monospace; font-size: 60px;">
+        <img src="https://github.com/rannn505/node-powershell/blob/master/assets/logo.png" height="64"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9">
+        <div class="highlight" style="border-radius: 0; padding: 1em;">
+          <span class="language-javascript">
+            > Node-PowerShell taking advantage of two of the simplest, effective and easy tools that exist in the today technology world.
+            On the one hand, <a href="https://nodejs.org/en/">NodeJS</a> which made a revolution in the world of javascript,
+            and on the other hand, <a href="https://github.com/PowerShell/PowerShell">PowerShell</a> which recently came out with an initial open-source, cross-platform version,
+            and by creating a connection between them, gives you the power to create any solution you were asked to, no matter if you are a programmer, an IT or a DevOps guy.
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4" style="">
+        <pre class="highlight" style="border-radius: 0;">
+<code class="language-javascript">const shell = require('node-powershell');
+let ps = new shell({
+  executionPolicy: 'Bypass',
+  noProfile: true
+});
+
+ps.addCommand('echo "node-powershell rocks"')
+ps.invoke()
+  .then(output=> {
+    console.log(output);
+    ps.dispose();
+  })
+  .catch(err=> {
+    console.log(err);
+    ps.dispose();
+  });</code></pre>
+      </div>
+      <div class="col-md-offset-3 col-md-5" style="text-align: center;">
+        <img src="https://github.com/rannn505/node-powershell/blob/master/assets/box.png" height="400"/>
+      </div>
+    </div>
+    <div class="row" style="margin: 20px -15px 0 -15px">
+      <div class="col-md-12" >
+        <div class="highlight" style="border-radius: 0; text-align: center; padding: 1em;">
+          <span>© 2017 by <a href="mailto:rannn505@outlook.com">Ran Cohen - rannn505</a>.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -4,5 +4,8 @@ node_modules/**
 # img
 assets/img/**
 
+#coverage
+coverage/**
+
 #.idea
 .idea/**

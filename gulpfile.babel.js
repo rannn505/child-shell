@@ -1,11 +1,22 @@
-import gulp from "gulp";
-import babel from 'gulp-babel';
-import clean from 'gulp-clean';
+import gulp from "gulp"
+import clean from 'gulp-clean'
+import babel from 'gulp-babel'
+import header from 'gulp-header'
 
 const paths = {
     src:  { js: './src/**/*.js'},
     dest: { js: './dist'}
 };
+const pkg = require('./package.json');
+const banner = ['/*********************************************************',
+  ' * <%= pkg.name %> - <%= pkg.description %>',
+  ' * @version v<%= pkg.version %>',
+  ' * @link <%= pkg.homepage %>',
+  ' * @copyright Copyright (c) 2017 <%= pkg.author %>',
+  ' * @license <%= pkg.license %> (http://www.opensource.org/licenses/mit-license.php)',
+  ' * @Compiled At: ' + new Date().toLocaleDateString(),
+  '  *********************************************************/',
+  ''].join('\n');
 
 gulp.task('clean', function () {
   return gulp.src(paths.dest.js)
@@ -15,6 +26,7 @@ gulp.task('clean', function () {
 gulp.task('build', ['clean'], ()=> {
     return gulp.src(paths.src.js)
 		.pipe(babel())
+    .pipe(header(banner, { pkg : pkg } ))
 		.pipe(gulp.dest(paths.dest.js));
 });
 
