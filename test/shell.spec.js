@@ -8,7 +8,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 // test files
-const shell = require('../dist/index');
+const shell = require('../dist/shell').Shell;
 
 
 describe('Shell', () => {
