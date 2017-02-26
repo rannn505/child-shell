@@ -5,9 +5,7 @@ node_js:
   - "6"
   - "node"
 before_install:
-  - wget "https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/powershell_6.0.0-alpha.16-1ubuntu1.16.04.1_amd64.deb"
-  - sudo dpkg -i powershell_6.0.0-alpha.16-1ubuntu1.16.04.1_amd64.deb
-  - sudo apt-get install -f
+  - bash < (curl -fsSL https://raw.githubusercontent.com/PowerShell/PowerShell/v6.0.0-alpha.16/tools/download.sh)
 before_script:
   - npm install -g gulp
 script:

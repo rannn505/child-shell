@@ -39,7 +39,6 @@
     ::-webkit-scrollbar-thumb {
       background-color: #4c86ea;
     }
-
   </style>
 </head>
 <body>
@@ -49,7 +48,8 @@
     <a href="https://github.com/rannn505/node-powershell"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
     <div class="row" style="margin: 20px 0 10px 0">
       <div class="col-md-6" style="text-align: left; color: white; font-family: monospace; font-size: 60px;">
-        <img src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/logo.png" height="64"/>
+        <img class="hidden-xs hidden-sm" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/logo.png" height="64"/>
+        <img class="hidden-md hidden-lg" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell3-1-0.png" height="64"/>
       </div>
     </div>
     <div class="row" style="margin: 0 0 20px 0">
@@ -76,31 +76,27 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-8">
-        <div class="row">
-          <div class="col-md-4">
-            <pre class="highlight" style="border-radius: 0; font-size: 12px">
+      <div class="col-md-4">
+        <pre class="highlight" style="border-radius: 0; font-size: 12px">
 <code class="language-javascript">const shell = require('node-powershell');
 let ps = new shell({
-  executionPolicy: 'Bypass',
-  noProfile: true
+executionPolicy: 'Bypass',
+noProfile: true
 });
 
-ps.addCommand('echo "node-powershell"')
+ps.addCommand('echo node-powershell')
 ps.invoke()
 .then(output=> {
-  console.log(output);
-  ps.dispose();
+console.log(output);
+ps.dispose();
 })
 .catch(err=> {
-  console.log(err);
-  ps.dispose();
+console.log(err);
+ps.dispose();
 });</code></pre>
-          </div>
-          <div class="col-md-8" style="margin: 20px 0 0 0;">
-            <img src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/run.png" width="100%"/>
-          </div>
-        </div>
+      </div>
+      <div class="col-md-4 hidden-xs hidden-sm" style="margin: .5em 0">
+        <img src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/run.png" height="100%" width="100%"/>
       </div>
       <div class="col-md-4" style="text-align: center;">
         <img src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/box.png" height="100%"/>
