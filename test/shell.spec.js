@@ -1,3 +1,4 @@
+'use strict';
 const chai = require('chai');
 const path = require('path');
 const chaiAsPromised = require("chai-as-promised");
