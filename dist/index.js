@@ -12,12 +12,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _shell = require('./shell');
+var _Shell = require('./Shell');
 
 Object.defineProperty(exports, 'default', {
   enumerable: true,
   get: function get() {
-    return _shell.Shell;
+    return _Shell.Shell;
   }
 });
 module.exports = exports['default'];
