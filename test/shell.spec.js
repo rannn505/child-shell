@@ -8,7 +8,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 // test files
-const shell = require(path.join(__dirname, '..', 'dist', 'index'));
+const shell = require(path.join(__dirname, '..', 'dist', 'shell')).Shell;
 
 
 describe('Shell', () => {
