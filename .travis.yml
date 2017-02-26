@@ -5,7 +5,9 @@ node_js:
   - "6"
   - "node"
 before_install:
-  - bash < (curl -fsSL https://raw.githubusercontent.com/PowerShell/PowerShell/v6.0.0-alpha.16/tools/download.sh)
+  - wget https://raw.githubusercontent.com/PowerShell/PowerShell/v6.0.0-alpha.16/tools/download.sh
+  - sudo chmod +x download.sh
+  - sudo ./download.sh
 before_script:
   - npm install -g gulp
 script:
