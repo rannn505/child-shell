@@ -98,19 +98,68 @@ export class Shell extends eventEmitter {
   }
   addCommand(command, params = []) {
     return new Promise((resolve, reject) => {
-      !command && reject(ERROR_MSG('Command is missing'));
-      !Array.isArray(params) && reject(ERROR_MSG('Params must be an array'));
+      !command && reject(ERROR_MSG(`Command is missing`));
+      !Array.isArray(params) && reject(ERROR_MSG(`Params must be an array`));
       let _cmdStr = `${command}`;
       params.forEach(param => {
-         let _keys = Object.keys(param);
-         let _name  = _keys.indexOf('name')  !== -1 ? param.name  : _keys[0];
-         let _value = _keys.indexOf('value') !== -1 ? param.value : param[_name]; // !important
-         if (!_value) {
-           _cmdStr = _cmdStr.concat(` -${_name}`);
-         }
-         else {
-           _cmdStr = _cmdStr.concat(` -${_name} ${/\s/.test(_value) ? '"'+_value+'"' : _value}`);
-         }
+        let _type =  Object.prototype.toString.call(param).slice(8, -1);
+        if(_type === 'Object') {
+          // param is {name: '', value: ''} or {name: value}
+          let _keys = Object.keys(param);
+          let _name, _value;
+          if(_keys.length === 2 && _keys[0] === 'name' && _keys[1] === 'value') {
+            // param is {name: '', value: ''}
+            _name = param.name;
+            _value = param.value;
+          }
+          else if(_keys.length === 1 && _keys[0]) {
+            // param is {name: value}
+            _name = _keys[0];
+            _value = param[_name];
+          }
+          else {
+            reject(ERROR_MSG(`All objecct params need to be {name: '', value: ''} or {name: value} structure`));
+          }
+          // cast param value from JS data types to PowerShell data types.
+          switch (Object.prototype.toString.call(_value).slice(8, -1)) {
+            case 'String':
+              _value = /\s/.test(_value) || (_value.indexOf('<') !== -1 && _value.indexOf('>') !== -1) ? '"'+_value+'"' : _value;
+              break;
+            case 'Number':
+              _value = _value;
+              break;
+            case 'Array':
+              _value = _value;
+              break;
+            case 'Boolean':
+              _value = _value ? '$True' : '$False';
+              break;
+            case 'Date':
+              _value = _value.toLocaleString();
+              break;
+            case 'Undefined' || 'Null':
+              // param is switch
+              _value = _value;
+              break;
+            default:
+              _value = /\s/.test(_value) ? '"'+_value+'"' : _value;
+          }
+          let _replaced = false;
+          _cmdStr = _cmdStr.replace(`@${_name}`, match => {
+            _replaced = true;
+            return `-${_name} ${_value}`
+          });
+          if(!_replaced) {
+            _cmdStr = _cmdStr.concat(` -${_name}${_value ? ' '+_value : ''}`);
+          }
+        }
+        else if(_type === 'String') {
+          // param is switch
+          _cmdStr = _cmdStr.concat(` -${param}`);
+        }
+        else {
+          reject(ERROR_MSG(`All Params need to be objects or strings`));
+        }
       });
       this._cmds.push(_cmdStr);
       this._history.push(_cmdStr);
@@ -122,7 +171,7 @@ export class Shell extends eventEmitter {
     return new Promise((resolve, reject) => {
       let _cmdsStr = _self._cmds.join('; ');
       _self.__print__(OK_MSG, `Command invoke started`);
-      console.log(` ${colors.gray(_cmdsStr)}`)
+      this._cfg.debugMsg && console.log(` ${colors.gray(_cmdsStr)}`)
 
       function resolve_listener(data) {
         _self.__print__(OK_MSG, `Command invoke finished\n`);

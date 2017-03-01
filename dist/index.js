@@ -4,7 +4,7 @@
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-02-26
+ * @Compiled At: 2017-03-02
   *********************************************************/
 'use strict';
 

@@ -4,7 +4,7 @@
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-02-26
+ * @Compiled At: 2017-03-02
   *********************************************************/
 'use strict';
 
@@ -145,13 +145,60 @@ var Shell = exports.Shell = function (_eventEmitter) {
         !Array.isArray(params) && reject(ERROR_MSG('Params must be an array'));
         var _cmdStr = '' + command;
         params.forEach(function (param) {
-          var _keys = Object.keys(param);
-          var _name = _keys.indexOf('name') !== -1 ? param.name : _keys[0];
-          var _value = _keys.indexOf('value') !== -1 ? param.value : param[_name]; // !important
-          if (!_value) {
-            _cmdStr = _cmdStr.concat(' -' + _name);
+          var _type = Object.prototype.toString.call(param).slice(8, -1);
+          if (_type === 'Object') {
+            // param is {name: '', value: ''} or {name: value}
+            var _keys = Object.keys(param);
+            var _name = void 0,
+                _value = void 0;
+            if (_keys.length === 2 && _keys[0] === 'name' && _keys[1] === 'value') {
+              // param is {name: '', value: ''}
+              _name = param.name;
+              _value = param.value;
+            } else if (_keys.length === 1 && _keys[0]) {
+              // param is {name: value}
+              _name = _keys[0];
+              _value = param[_name];
+            } else {
+              reject(ERROR_MSG('All objecct params need to be {name: \'\', value: \'\'} or {name: value} structure'));
+            }
+            // cast param value from JS data types to PowerShell data types.
+            switch (Object.prototype.toString.call(_value).slice(8, -1)) {
+              case 'String':
+                _value = /\s/.test(_value) || _value.indexOf('<') !== -1 && _value.indexOf('>') !== -1 ? '"' + _value + '"' : _value;
+                break;
+              case 'Number':
+                _value = _value;
+                break;
+              case 'Array':
+                _value = _value;
+                break;
+              case 'Boolean':
+                _value = _value ? '$True' : '$False';
+                break;
+              case 'Date':
+                _value = _value.toLocaleString();
+                break;
+              case 'Undefined' || 'Null':
+                // param is switch
+                _value = _value;
+                break;
+              default:
+                _value = /\s/.test(_value) ? '"' + _value + '"' : _value;
+            }
+            var _replaced = false;
+            _cmdStr = _cmdStr.replace('@' + _name, function (match) {
+              _replaced = true;
+              return '-' + _name + ' ' + _value;
+            });
+            if (!_replaced) {
+              _cmdStr = _cmdStr.concat(' -' + _name + (_value ? ' ' + _value : ''));
+            }
+          } else if (_type === 'String') {
+            // param is switch
+            _cmdStr = _cmdStr.concat(' -' + param);
           } else {
-            _cmdStr = _cmdStr.concat(' -' + _name + ' ' + (/\s/.test(_value) ? '"' + _value + '"' : _value));
+            reject(ERROR_MSG('All Params need to be objects or strings'));
           }
         });
         _this2._cmds.push(_cmdStr);
@@ -162,11 +209,13 @@ var Shell = exports.Shell = function (_eventEmitter) {
   }, {
     key: 'invoke',
     value: function invoke() {
+      var _this3 = this;
+
       var _self = this;
       return new Promise(function (resolve, reject) {
         var _cmdsStr = _self._cmds.join('; ');
         _self.__print__(OK_MSG, 'Command invoke started');
-        console.log(' ' + colors.gray(_cmdsStr));
+        _this3._cfg.debugMsg && console.log(' ' + colors.gray(_cmdsStr));
 
         function resolve_listener(data) {
           _self.__print__(OK_MSG, 'Command invoke finished\n');
@@ -196,12 +245,12 @@ var Shell = exports.Shell = function (_eventEmitter) {
   }, {
     key: 'dispose',
     value: function dispose() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _self = this;
       return new Promise(function (resolve, reject) {
         _self._proc.on('close', function (code) {
-          var _exitMsg = 'Process ' + _this3._proc.pid + ' exited with code ' + code + '\n';
+          var _exitMsg = 'Process ' + _this4._proc.pid + ' exited with code ' + code + '\n';
           _self.emit('end', code);
           if (code == 1) {
             _self.__print__(ERROR_MSG, _exitMsg);
