@@ -1,6 +1,6 @@
 /*********************************************************
  * node-powershell - Certainly the easiest way to run PowerShell from your NodeJS app
- * @version v3.0.1
+ * @version v3.1.0
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
