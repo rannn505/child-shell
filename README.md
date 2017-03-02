@@ -44,7 +44,7 @@ ps.invoke()
 
 
 ## API Reference
-**:memo: [API reference](http://cdn.rawgit.com/rannn505/node-powershell/1523054e/docs/docs.html)**<br/>
+**:memo: [API reference](http://cdn.rawgit.com/rannn505/node-powershell/236b6c3a/docs/docs.html)**<br/>
 I've created a convenient and readable page, so you can enjoy the experience of learning and begin to use the module quickly and easily.
 
 
