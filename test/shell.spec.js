@@ -28,12 +28,12 @@ describe('Shell', () => {
     expect(ps).to.include.keys('history', 'streams');
   });
 
-  it('addCommand resolve array', () => {
-    return Promise.all([
-      expect(ps.addCommand('Write-Host test -nonewline')).to.eventually.be.an('array'),
-      expect(ps.invoke()).to.eventually.equal('test')
-    ]);
-  });
+  // it('addCommand resolve array', () => {
+  //   return Promise.all([
+  //     expect(ps.addCommand('Write-Host test -nonewline')).to.eventually.be.an('array'),
+  //     expect(ps.invoke()).to.eventually.equal('test')
+  //   ]);
+  // });
   it('addCommand param syntax - {name: "", value: ""}', () => {
     return Promise.all([
       expect(ps.addCommand('Write-Host', [
