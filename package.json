@@ -1,7 +1,7 @@
 {
   "name": "node-powershell",
-  "version": "3.1.0",
-  "description": "Certainly the easiest way to run PowerShell from your NodeJS app",
+  "version": "3.1.1",
+  "description": "Easily run PowerShell from your NodeJS app",
   "main": "./dist/index.js",
   "files": [
     "dist",
