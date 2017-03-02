@@ -28,7 +28,15 @@ describe('Shell', () => {
     expect(ps).to.include.keys('history', 'streams');
   });
 
-  it('addCommand param syntax - {name: "", value: ""}', () => {
+  it('addCommand resolve array', function() {
+    this.timeout(0);
+    return Promise.all([
+      expect(ps.addCommand('Write-Host test -nonewline')).to.eventually.be.an('array'),
+      expect(ps.invoke()).to.eventually.equal('test')
+    ]);
+  });
+  it('addCommand param syntax - {name: "", value: ""}', function() {
+    this.timeout(0);
     return Promise.all([
       expect(ps.addCommand('Write-Host', [
         {name: 'object', value: 'test'},
@@ -93,6 +101,7 @@ describe('Shell', () => {
   });
 
   it('listen to output event', function(done) {
+    this.timeout(0);
     ps.on('output', data => {
       expect(data).to.equal('test');
       ps.removeAllListeners();
@@ -104,6 +113,7 @@ describe('Shell', () => {
       });
   });
   it('listen to err event', function(done) {
+    this.timeout(0);
     ps.on('err', data => {
       ps.removeAllListeners();
       done();
@@ -115,6 +125,7 @@ describe('Shell', () => {
   });
 
   it('dispose Shell', function(done) {
+    this.timeout(0);
     ps.on('end', data => {
       ps.removeAllListeners();
       expect(data).to.equal(0);
