@@ -1,9 +1,20 @@
 <img height="64" width="64" src="https://raw.githubusercontent.com/rannn505/node-powershell/master/assets/node-powershell3-1-0.png"> Node-PowerShell
 ===
 
-[![Version npm](https://img.shields.io/npm/v/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![NPM Downloads](https://img.shields.io/npm/dt/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell)[![Dependencies](https://img.shields.io/david/rannn505/node-powershell.svg?style=flat-square)](https://david-dm.org/rannn505/node-powershell)
+<a href="https://travis-ci.org/rannn505/node-powershell"><img src="https://img.shields.io/travis/rannn505/node-powershell.svg?style=flat-square" alt="Build Status"></a>
+<a href="https://www.npmjs.com/package/node-powershell"><img src="https://img.shields.io/npm/v/node-powershell.svg?style=flat-square" alt="NPM Version"></a>
+<a href="https://npm-stat.com/charts.html?package=node-powershell"><img src="https://img.shields.io/npm/dt/node-powershell.svg?style=flat-square" alt="NPM Downloads"></a>
+<a href="https://coveralls.io/github/rannn505/node-powershell"><img src="https://img.shields.io/coveralls/rannn505/node-powershell.svg?style=flat-square" alt="Coveralls"></a>
+<a href="http://packagequality.com/#?package=node-powershell"><img src="http://npm.packagequality.com/shield/node-powershell.svg?style=flat-square" alt="Package Quality"></a>
+<a href="https://github.com/rannn505/node-powershell/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed-raw/rannn505/node-powershell.svg?style=flat-square" alt="Closed Issues"></a>
+<a href="https://david-dm.org/rannn505/node-powershell"><img src="https://img.shields.io/david/rannn505/node-powershell.svg?style=flat-square" alt="Dependencies"></a>
+<a href="https://github.com/rannn505/node-powershell/blob/master/LICENSE"><img src="https://img.shields.io/github/license/rannn505/node-powershell.svg?style=flat-square" alt="License"></a>
+<a href="https://github.com/rannn505/node-powershell/stargazers"><img src="https://img.shields.io/github/stars/rannn505/node-powershell.svg?style=social&label=Star" alt=" GitHub Stars"></a>
 
->  Lightweight module to run PowerShell straight from your Node app.
+>  Node-PowerShell taking advantage of two of the simplest, effective and easy tools that exist in the today technology world.
+On the one hand, <a href="https://nodejs.org/en/">NodeJS</a> which made a revolution in the world of javascript,
+and on the other hand, <a href="https://github.com/PowerShell/PowerShell">PowerShell</a> which recently came out with an initial open-source, cross-platform version,
+and by connecting them together, gives you the power to create any solution you were asked to, no matter if you are a programmer, an IT or a DevOps guy.
 
 ## Installation
 ```bash
@@ -14,79 +25,30 @@ $ yarn add node-powershell
 ## Quick start
 ```javascript
 const shell = require('node-powershell');
+
 let ps = new shell({
   executionPolicy: 'Bypass',
   noProfile: true
 });
 
-ps.addCommand('echo "node-powershell rocks"')
+ps.addCommand('echo node-powershell')
 ps.invoke()
-  .then(output=> {
-    console.log(output);
-    ps.dispose();
-  })
-  .catch(err=> {
-    console.log(err);
-    ps.dispose();
-  });
+.then(output => {
+  console.log(output);
+})
+.catch(err => {
+  console.log(err);
+  ps.dispose();
+});
 ```
 
 
-## API
-
-### PowerShell Class `require('node-powershell')`
-Provides promise based methods that are used to create a pipeline of commands and invoke those commands within a PowerShell runspace.
-
-#### initialize(constructor):
-Creates a new shell instance.
-```javascript
-var ps = new shell(options);
-```
-options:
-- **debugMsg** - Determines whether to log verbose to the console (Boolean) (Default: true) *optional*
-- **inputEncoding** - Sets the input encoding for the current shell (String) (Default: 'utf8') *optional*
-- **outputEncoding** - Sets the output encoding for the current shell (String) (Default: 'utf8') *optional*
-- **executionPolicy** - Sets the default execution policy for the current shell session (String) (Default: 'Unrestricted') *optional*
-- **noProfile** - Determines whether to load the Windows PS profile (Boolean) (Default: true) *optional*
-
-#### Properties:
-| Name    | Description                                                             |
-|---------|-------------------------------------------------------------------------|
-| history | An array containing the command history ever added to the shell.        |
-| streams | An object containing the sdtio (in,out,err) of the PowerShell Instance. |
-
-#### Methods:
-| Name                             | Description                                                                              | Syntax                                                                         | Return Value                                                    |
-|----------------------------------|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|-----------------------------------------------------------------|
-| addCommand(command, params = []) | Adds a command to the end of the pipeline of the shell object.                           | ps.addCommand('./script.ps1',  [{name:'str', value:'node-powershell rocks'}]); | A promise of the commands.                                      |
-| invoke()                         | Runs the commands of the shell object pipeline.                                          | ps.invoke();                                                                   | A promise with the result  (can also be rejected to the catch). |
-| dispose()                        | Releases all resources used by the shell object and closes the PowerShell child_process. | ps.dispose();                                                                  | A promise of the exit code.                                     |
-
-#### Events:
-| Name   | Description                     | Syntax                     |
-|--------|---------------------------------|----------------------------|
-| output | Emits when shell has an output. | ps.on('output', data=>{}); |
-| err    | Emits when shell has an error.  | ps.on('err', error=>{});   |
-| end    | Emits when shell ends.          | ps.on('end', code=>{});    |
+## API Reference
+**:memo: [API reference](https://github.com/rannn505/node-powershell/blob/master/example/example.js)**<br/>
+I've created a convenient and readable page, so you can enjoy the experience of learning and begin to use the module quickly and easily.
 
 
-## Examples
-
-####  Putting an input to yor script:
-Just use `param ( )` instead of `Read-Host` in your script:
-```PowerShell
-param (
-    [Parameter(Mandatory = $true)]
-    [string]$str
-)
-echo $str
-```
-and `Shell.addCommand() with the params array` in your node app.
-
-***for more examples please look at the [example page](https://github.com/rannn505/node-powershell/blob/master/example/example.js).***
-
-
-## :fire::fire::fire: PowerShell 6.0 :fire::fire::fire:
+## :fire: PowerShell 6.0
 As you may have heard already, lately Microsoft is taking steps towards becoming an open source company.
 One of these steps, brings us [PowerShell 6.0][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
 Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
@@ -96,4 +58,4 @@ Moreover, I will continue to follow the development of the new PS repo, and to u
 
 ## License
 
-  [MIT](LICENSE)
+  [MIT](LICENSE) © [Ran Cohen](https://github.com/rannn505)

@@ -97,11 +97,16 @@ export class Shell extends eventEmitter {
     this._cfg.debugMsg && console.log(`${MODULE_MSG} ${type(msg)}`);
   }
   addCommand(command, params = []) {
-    return new Promise((resolve, reject) => {
-      !command && reject(ERROR_MSG(`Command is missing`));
-      !Array.isArray(params) && reject(ERROR_MSG(`Params must be an array`));
+    const _self = this;
+    return new Promise(function(resolve, reject) {
+      if(!command) {
+        return reject(ERROR_MSG(`Command is missing`));
+      }
+      if(!Array.isArray(params)) {
+        return reject(ERROR_MSG(`Params must be an array`));
+      }
       let _cmdStr = `${command}`;
-      params.forEach(param => {
+      for (const param of params) {
         let _type =  Object.prototype.toString.call(param).slice(8, -1);
         if(_type === 'Object') {
           // param is {name: '', value: ''} or {name: value}
@@ -118,7 +123,7 @@ export class Shell extends eventEmitter {
             _value = param[_name];
           }
           else {
-            reject(ERROR_MSG(`All objecct params need to be {name: '', value: ''} or {name: value} structure`));
+            return reject(ERROR_MSG(`All objecct params need to be {name: '', value: ''} or {name: value} structure`));
           }
           // cast param value from JS data types to PowerShell data types.
           switch (Object.prototype.toString.call(_value).slice(8, -1)) {
@@ -158,30 +163,30 @@ export class Shell extends eventEmitter {
           _cmdStr = _cmdStr.concat(` -${param}`);
         }
         else {
-          reject(ERROR_MSG(`All Params need to be objects or strings`));
+          return reject(ERROR_MSG(`All Params need to be objects or strings`));
         }
-      });
-      this._cmds.push(_cmdStr);
-      this._history.push(_cmdStr);
-      resolve(this._cmds);
+      };
+      _self._cmds.push(_cmdStr);
+      _self._history.push(_cmdStr);
+      return resolve(_self._cmds);
     });
   }
   invoke() {
     const _self = this;
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
       let _cmdsStr = _self._cmds.join('; ');
       _self.__print__(OK_MSG, `Command invoke started`);
-      this._cfg.debugMsg && console.log(` ${colors.gray(_cmdsStr)}`)
+      _self._cfg.debugMsg && console.log(` ${colors.gray(_cmdsStr)}`)
 
       function resolve_listener(data) {
         _self.__print__(OK_MSG, `Command invoke finished\n`);
-        resolve(data);
         reset();
+        return resolve(data);
       }
       function reject_listener(error) {
         _self.__print__(ERROR_MSG, `Command invoke failed\n`);
-        reject(ERROR_MSG(error));
         reset();
+        return reject(ERROR_MSG(error));
       }
       function reset() {
         _self.removeListener('_resolve', resolve_listener);
@@ -200,17 +205,17 @@ export class Shell extends eventEmitter {
   }
   dispose() {
     const _self = this;
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
       _self._proc.on('close', code => {
-        let _exitMsg = `Process ${this._proc.pid} exited with code ${code}\n`;
+        let _exitMsg = `Process ${_self._proc.pid} exited with code ${code}\n`;
         _self.emit('end', code);
         if(code == 1) {
           _self.__print__(ERROR_MSG, _exitMsg);
-          reject(ERROR_MSG(`script exit ${code}`));
+          return reject(ERROR_MSG(`script exit ${code}`));
         }
         else {
           _self.__print__(OK_MSG, _exitMsg);
-          resolve(`script exit ${code}`);
+          return resolve(`script exit ${code}`);
         }
       });
 

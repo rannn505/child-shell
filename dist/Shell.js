@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -136,96 +138,126 @@ var Shell = exports.Shell = function (_eventEmitter) {
   }, {
     key: 'addCommand',
     value: function addCommand(command) {
-      var _this2 = this;
-
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
+      var _self = this;
       return new Promise(function (resolve, reject) {
-        !command && reject(ERROR_MSG('Command is missing'));
-        !Array.isArray(params) && reject(ERROR_MSG('Params must be an array'));
+        if (!command) {
+          return reject(ERROR_MSG('Command is missing'));
+        }
+        if (!Array.isArray(params)) {
+          return reject(ERROR_MSG('Params must be an array'));
+        }
         var _cmdStr = '' + command;
-        params.forEach(function (param) {
-          var _type = Object.prototype.toString.call(param).slice(8, -1);
-          if (_type === 'Object') {
-            // param is {name: '', value: ''} or {name: value}
-            var _keys = Object.keys(param);
-            var _name = void 0,
-                _value = void 0;
-            if (_keys.length === 2 && _keys[0] === 'name' && _keys[1] === 'value') {
-              // param is {name: '', value: ''}
-              _name = param.name;
-              _value = param.value;
-            } else if (_keys.length === 1 && _keys[0]) {
-              // param is {name: value}
-              _name = _keys[0];
-              _value = param[_name];
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = params[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var param = _step.value;
+
+            var _type = Object.prototype.toString.call(param).slice(8, -1);
+            if (_type === 'Object') {
+              var _ret = function () {
+                // param is {name: '', value: ''} or {name: value}
+                var _keys = Object.keys(param);
+                var _name = void 0,
+                    _value = void 0;
+                if (_keys.length === 2 && _keys[0] === 'name' && _keys[1] === 'value') {
+                  // param is {name: '', value: ''}
+                  _name = param.name;
+                  _value = param.value;
+                } else if (_keys.length === 1 && _keys[0]) {
+                  // param is {name: value}
+                  _name = _keys[0];
+                  _value = param[_name];
+                } else {
+                  return {
+                    v: reject(ERROR_MSG('All objecct params need to be {name: \'\', value: \'\'} or {name: value} structure'))
+                  };
+                }
+                // cast param value from JS data types to PowerShell data types.
+                switch (Object.prototype.toString.call(_value).slice(8, -1)) {
+                  case 'String':
+                    _value = /\s/.test(_value) || _value.indexOf('<') !== -1 && _value.indexOf('>') !== -1 ? '"' + _value + '"' : _value;
+                    break;
+                  case 'Number':
+                    _value = _value;
+                    break;
+                  case 'Array':
+                    _value = _value;
+                    break;
+                  case 'Boolean':
+                    _value = _value ? '$True' : '$False';
+                    break;
+                  case 'Date':
+                    _value = _value.toLocaleString();
+                    break;
+                  case 'Undefined' || 'Null':
+                    // param is switch
+                    _value = _value;
+                    break;
+                  default:
+                    _value = /\s/.test(_value) ? '"' + _value + '"' : _value;
+                }
+                var _replaced = false;
+                _cmdStr = _cmdStr.replace('@' + _name, function (match) {
+                  _replaced = true;
+                  return '-' + _name + ' ' + _value;
+                });
+                if (!_replaced) {
+                  _cmdStr = _cmdStr.concat(' -' + _name + (_value ? ' ' + _value : ''));
+                }
+              }();
+
+              if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+            } else if (_type === 'String') {
+              // param is switch
+              _cmdStr = _cmdStr.concat(' -' + param);
             } else {
-              reject(ERROR_MSG('All objecct params need to be {name: \'\', value: \'\'} or {name: value} structure'));
+              return reject(ERROR_MSG('All Params need to be objects or strings'));
             }
-            // cast param value from JS data types to PowerShell data types.
-            switch (Object.prototype.toString.call(_value).slice(8, -1)) {
-              case 'String':
-                _value = /\s/.test(_value) || _value.indexOf('<') !== -1 && _value.indexOf('>') !== -1 ? '"' + _value + '"' : _value;
-                break;
-              case 'Number':
-                _value = _value;
-                break;
-              case 'Array':
-                _value = _value;
-                break;
-              case 'Boolean':
-                _value = _value ? '$True' : '$False';
-                break;
-              case 'Date':
-                _value = _value.toLocaleString();
-                break;
-              case 'Undefined' || 'Null':
-                // param is switch
-                _value = _value;
-                break;
-              default:
-                _value = /\s/.test(_value) ? '"' + _value + '"' : _value;
-            }
-            var _replaced = false;
-            _cmdStr = _cmdStr.replace('@' + _name, function (match) {
-              _replaced = true;
-              return '-' + _name + ' ' + _value;
-            });
-            if (!_replaced) {
-              _cmdStr = _cmdStr.concat(' -' + _name + (_value ? ' ' + _value : ''));
-            }
-          } else if (_type === 'String') {
-            // param is switch
-            _cmdStr = _cmdStr.concat(' -' + param);
-          } else {
-            reject(ERROR_MSG('All Params need to be objects or strings'));
           }
-        });
-        _this2._cmds.push(_cmdStr);
-        _this2._history.push(_cmdStr);
-        resolve(_this2._cmds);
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        ;
+        _self._cmds.push(_cmdStr);
+        _self._history.push(_cmdStr);
+        return resolve(_self._cmds);
       });
     }
   }, {
     key: 'invoke',
     value: function invoke() {
-      var _this3 = this;
-
       var _self = this;
       return new Promise(function (resolve, reject) {
         var _cmdsStr = _self._cmds.join('; ');
         _self.__print__(OK_MSG, 'Command invoke started');
-        _this3._cfg.debugMsg && console.log(' ' + colors.gray(_cmdsStr));
+        _self._cfg.debugMsg && console.log(' ' + colors.gray(_cmdsStr));
 
         function resolve_listener(data) {
           _self.__print__(OK_MSG, 'Command invoke finished\n');
-          resolve(data);
           reset();
+          return resolve(data);
         }
         function reject_listener(error) {
           _self.__print__(ERROR_MSG, 'Command invoke failed\n');
-          reject(ERROR_MSG(error));
           reset();
+          return reject(ERROR_MSG(error));
         }
         function reset() {
           _self.removeListener('_resolve', resolve_listener);
@@ -245,19 +277,17 @@ var Shell = exports.Shell = function (_eventEmitter) {
   }, {
     key: 'dispose',
     value: function dispose() {
-      var _this4 = this;
-
       var _self = this;
       return new Promise(function (resolve, reject) {
         _self._proc.on('close', function (code) {
-          var _exitMsg = 'Process ' + _this4._proc.pid + ' exited with code ' + code + '\n';
+          var _exitMsg = 'Process ' + _self._proc.pid + ' exited with code ' + code + '\n';
           _self.emit('end', code);
           if (code == 1) {
             _self.__print__(ERROR_MSG, _exitMsg);
-            reject(ERROR_MSG('script exit ' + code));
+            return reject(ERROR_MSG('script exit ' + code));
           } else {
             _self.__print__(OK_MSG, _exitMsg);
-            resolve('script exit ' + code);
+            return resolve('script exit ' + code);
           }
         });
 

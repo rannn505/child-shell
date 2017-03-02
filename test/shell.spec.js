@@ -14,17 +14,18 @@ const shell = require('../dist/index');
 
 describe('Shell', () => {
   let ps;
-  console.log(__dirname);
+  // console.log(__dirname);
 
-  before(() => {
+  it('Shell constructor', () => {
     ps = new shell({
-      executionPolicy: 'Bypass',
-      debugMsg: true,
-      noProfile: false
+      executionPolicy: 'Unrestricted',
+      inputEncoding: 'utf8',
+      outputEncoding: 'utf8',
+      debugMsg: false,
+      noProfile: true
     });
-  });
-  after(() => {
-    ps.dispose();
+    expect(ps instanceof shell).to.be.true;
+    expect(ps).to.include.keys('history', 'streams');
   });
 
   it('addCommand resolve array', () => {
@@ -63,7 +64,13 @@ describe('Shell', () => {
       expect(ps.invoke()).to.eventually.equal('test')
     ]);
   });
-
+  it('addCommand errors', () => {
+    return Promise.all([
+      expect(ps.addCommand('')).be.rejectedWith(`Command is missing`),
+      expect(ps.addCommand('echo test', {test: 'test'})).be.rejectedWith(`Params must be an array`),
+      expect(ps.addCommand('echo test', [false, new Date()])).be.rejectedWith(`All Params need to be objects or strings`),
+    ]);
+  });
 
   it('cast data types', () => {
     ps.addCommand(`& "${path.resolve(__dirname, 'scripts', 'script-dataTypes.ps1')}"`, [
@@ -85,5 +92,40 @@ describe('Shell', () => {
     return expect(ps.invoke().then(output => {
       return JSON.parse(output).every(e => e.test)
     })).to.eventually.be.true;
+  });
+  it('invoke failed', () => {
+    ps.addCommand('test');
+    return expect(ps.invoke()).to.eventually.be.rejected;
+  });
+
+  it('listen to output event', function(done) {
+    ps.on('output', data => {
+      expect(data).to.equal('test');
+      ps.removeAllListeners();
+      done();
+    });
+    ps.addCommand('Write-Host test -nonewline')
+      .then(() => {
+        return ps.invoke();
+      });
+  });
+  it('listen to err event', function(done) {
+    ps.on('err', data => {
+      ps.removeAllListeners();
+      done();
+    });
+    ps.addCommand('throw "error"')
+      .then(() => {
+        return ps.invoke();
+      });
+  });
+
+  it('dispose Shell', function(done) {
+    ps.on('end', data => {
+      ps.removeAllListeners();
+      expect(data).to.equal(0);
+      done();
+    });
+    ps.dispose()
   });
 });

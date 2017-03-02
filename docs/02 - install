@@ -1,5 +1,0 @@
-## Installation
-```bash
-$ npm i -S node-powershell
-$ yarn add node-powershell
-```
