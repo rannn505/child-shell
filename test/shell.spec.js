@@ -88,7 +88,7 @@ describe('Shell', () => {
     })).to.eventually.be.true;
   });
   it('invoke failed', () => {
-    ps.addCommand('test');
+    ps.addCommand('throw "error"');
     return expect(ps.invoke()).to.eventually.be.rejected;
   });
 
