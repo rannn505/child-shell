@@ -27,6 +27,7 @@ let ps = new shell(options);
 ### Methods
 #### addCommand(command, params = []) [promise]
 Adds a command to the end of the pipeline of the shell object.
+
 - **command** [String] *required*
   - PowerShell command
   - PowerShell script
