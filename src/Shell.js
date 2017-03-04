@@ -10,7 +10,6 @@ const IS_WIN      = os.platform() === 'win32';
 const MODULE_MSG  = colors.bold.blue(`NPS> `);
 const OK_MSG      = colors.green;
 const ERROR_MSG   = colors.red;
-const EOI         = 'EOI';
 
 
 /**
@@ -28,8 +27,10 @@ export class Shell extends eventEmitter {
     outputEncoding: outputEncoding = 'utf8',
     debugMsg: debugMsg = true,
     noProfile: noProfile = true,
+    endOfInvoke: endOfInvoke = 'EOI',
   } = {}) {
     super();
+    const _self = this;
 
     // cmds bulk to run at the next invoke call
     this._cmds = [];
@@ -38,6 +39,7 @@ export class Shell extends eventEmitter {
     // global config for class
     this._cfg = {};
     this._cfg.debugMsg = debugMsg;
+    this._cfg.endOfInvoke = endOfInvoke;
 
     // arguments for PowerShell process
     let _args = ['-NoLogo', '-NoExit', '-InputFormat', 'Text', '-Command', '-'];
@@ -67,7 +69,7 @@ export class Shell extends eventEmitter {
     let _type = '_resolve';
 
     this._proc.stdout.on('data', data => {
-      if(data.indexOf(EOI) !== -1) {
+      if(data.indexOf(_self._cfg.endOfInvoke.replace(/\`/ig, '')) !== -1) {
         this.emit(_type, _output.join(''));
         _output = [];
         _type = '_resolve';
@@ -199,7 +201,7 @@ export class Shell extends eventEmitter {
 
       _self._proc.stdin.write(_cmdsStr);
       _self._proc.stdin.write(os.EOL);
-      _self._proc.stdin.write(`echo ${EOI}`);
+      _self._proc.stdin.write(`echo ${_self._cfg.endOfInvoke}`);
       _self._proc.stdin.write(os.EOL);
     });
   }
