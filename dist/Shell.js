@@ -12,6 +12,18 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function(searchString, position) {
+        var subjectString = this.toString();
+        if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+            position = subjectString.length;
+        }
+        position -= searchString.length;
+        var lastIndex = subjectString.lastIndexOf(searchString, position);
+        return lastIndex !== -1 && lastIndex === position;
+    };
+}
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
         return typeof obj;
     } : function (obj) {
@@ -97,7 +109,6 @@ var EOI = 'EOI';
  * @returns {Shell} A Shell instance which allows you to run PowerShell commands from your NodeJS app.
  * It exposes a simple API that bridges between your node and a PS child process.
  */
-
 var Shell = exports.Shell = function (_eventEmitter) {
     _inherits(Shell, _eventEmitter);
 
@@ -125,8 +136,6 @@ var Shell = exports.Shell = function (_eventEmitter) {
         // global config for class
         _this._cfg = {};
         _this._cfg.debugMsg = debugMsg;
-        // flag that designates the expected output is a JSON
-        _this.waitForJson = false;
 
         // arguments for PowerShell process
         var _args = ['-NoLogo', '-NoExit', '-InputFormat', 'Text', '-Command', '-'];
@@ -154,22 +163,12 @@ var Shell = exports.Shell = function (_eventEmitter) {
         // output to print after invoke call
         var _output = [];
         var _type = '_resolve';
-        var jsonData;
+        var trimmedData;
 
         _this._proc.stdout.on('data', function (data) {
-            if (_this.waitForJson) {
-                try {
-                    jsonBufferCount++;
-                    _output.push(data);
-                    _output.join('');
-                    jsonData = JSON.parse(_output);
-                    _this.emit(_type, jsonData);
-                    _this.waitForJson = false;
-                    _output = [];
-                } catch (err) {
-                    // This just means we aren't done yet since the JSON parse failed..
-                }
-            } else if (data.indexOf(EOI) !== -1) {
+            trimmedData = data.trim();
+            if (trimmedData.endsWith(EOI)) {
+                _output.push(trimmedData.substring(0, trimmedData.length - 3));
                 _this.emit(_type, _output.join(''));
                 _output = [];
                 _type = '_resolve';
@@ -182,12 +181,6 @@ var Shell = exports.Shell = function (_eventEmitter) {
             _this.emit('err', error);
             _output.push(error);
             _type = '_reject';
-            // If we are waiting on a JSON array, the regular flow waiting for 'EOI' does not apply
-            if (_this.waitForJson) {
-                _this.emit(_type, error);
-                _output = [];
-                _type = '_resolve';
-            }
         });
 
         // public props
@@ -345,44 +338,6 @@ var Shell = exports.Shell = function (_eventEmitter) {
                 _self._proc.stdin.write(_cmdsStr);
                 _self._proc.stdin.write(os.EOL);
                 _self._proc.stdin.write('echo ' + EOI);
-                _self._proc.stdin.write(os.EOL);
-            });
-        }
-    }, {
-        // This function should only be used when the expected Powershell ouput is a SINGLE JSON OBJECT/ARRAY.
-        // Otherwise, it will stall miserably....
-        key: 'invokeForJson',
-        value: function invokeForJson() {
-            var _self = this;
-            return new Promise(function (resolve, reject) {
-                var _cmdsStr = _self._cmds.join('; ');
-                _self.__print__(OK_MSG, 'Command invokeForJson started');
-                _self._cfg.debugMsg && console.log(' ' + colors.gray(_cmdsStr));
-
-                function resolve_listener(jsonData) {
-                    _self.__print__(OK_MSG, 'Command invokeForJson finished\n');
-                    reset();
-                    return resolve(jsonData);
-                }
-
-                function reject_listener(error) {
-                    _self.__print__(ERROR_MSG, 'Command invokeForJson failed\n');
-                    reset();
-                    return reject(ERROR_MSG(error));
-                }
-
-                function reset() {
-                    _self.removeListener('_resolve', resolve_listener);
-                    _self.removeListener('_reject', reject_listener);
-                    _self._cmds = [];
-                }
-
-                _self.on('_resolve', resolve_listener);
-                _self.on('_reject', reject_listener);
-
-                _self.waitForJson = true;
-
-                _self._proc.stdin.write(_cmdsStr);
                 _self._proc.stdin.write(os.EOL);
             });
         }
