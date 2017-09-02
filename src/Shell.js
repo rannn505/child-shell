@@ -68,7 +68,7 @@ export class Shell extends eventEmitter {
 
     this._proc.stdout.on('data', data => {
       if(data.indexOf(EOI) !== -1) {
-        if (data.indexOf(os.EOL+EOI)) {
+        if (data.indexOf(os.EOL+EOI) !== -1) {
           var correctedData = data.replace(os.EOL+EOI,'');
           this.emit('output', correctedData);
           _output.push(correctedData);

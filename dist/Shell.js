@@ -104,7 +104,7 @@ var Shell = exports.Shell = function (_eventEmitter) {
 
     _this._proc.stdout.on('data', function (data) {
       if (data.indexOf(EOI) !== -1) {
-        if (data.indexOf(os.EOL + EOI)) {
+        if (data.indexOf(os.EOL + EOI) !== -1) {
           var correctedData = data.replace(os.EOL + EOI, '');
           _this.emit('output', correctedData);
           _output.push(correctedData);
