@@ -10,7 +10,7 @@ const IS_WIN      = os.platform() === 'win32';
 const MODULE_MSG  = colors.bold.blue(`NPS> `);
 const OK_MSG      = colors.green;
 const ERROR_MSG   = colors.red;
-const EOI         = 'EOI';
+const EOI         = '4ab5852ddbe5489dbbb4249b3b032ce4';
 
 
 /**
@@ -68,6 +68,12 @@ export class Shell extends eventEmitter {
 
     this._proc.stdout.on('data', data => {
       if(data.indexOf(EOI) !== -1) {
+        if (data.indexOf(os.EOL+EOI)) {
+          var correctedData = data.replace(os.EOL+EOI,'');
+          this.emit('output', correctedData);
+          _output.push(correctedData);
+        }
+
         this.emit(_type, _output.join(''));
         _output = [];
         _type = '_resolve';

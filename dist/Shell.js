@@ -1,10 +1,10 @@
 /*********************************************************
- * node-powershell - Certainly the easiest way to run PowerShell from your NodeJS app
- * @version v3.1.0
+ * node-powershell - Easily run PowerShell from your NodeJS app
+ * @version v3.1.1
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-03-02
+ * @Compiled At: 2017-9-1
   *********************************************************/
 'use strict';
 
@@ -36,7 +36,7 @@ var IS_WIN = os.platform() === 'win32';
 var MODULE_MSG = colors.bold.blue('NPS> ');
 var OK_MSG = colors.green;
 var ERROR_MSG = colors.red;
-var EOI = 'EOI';
+var EOI = '4ab5852ddbe5489dbbb4249b3b032ce4';
 
 /**
  * The Shell class.
@@ -104,6 +104,12 @@ var Shell = exports.Shell = function (_eventEmitter) {
 
     _this._proc.stdout.on('data', function (data) {
       if (data.indexOf(EOI) !== -1) {
+        if (data.indexOf(os.EOL + EOI)) {
+          var correctedData = data.replace(os.EOL + EOI, '');
+          _this.emit('output', correctedData);
+          _output.push(correctedData);
+        }
+
         _this.emit(_type, _output.join(''));
         _output = [];
         _type = '_resolve';
