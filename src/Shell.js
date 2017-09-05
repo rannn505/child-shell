@@ -10,7 +10,7 @@ const IS_WIN      = os.platform() === 'win32';
 const MODULE_MSG  = colors.bold.blue(`NPS> `);
 const OK_MSG      = colors.green;
 const ERROR_MSG   = colors.red;
-const EOI         = 'EOI';
+const EOI         = '4ab5852ddbe5489dbbb4249b3b032ce4';
 
 
 /**
@@ -68,6 +68,19 @@ export class Shell extends eventEmitter {
 
     this._proc.stdout.on('data', data => {
       if(data.indexOf(EOI) !== -1) {
+        // noticed a strange bug the occationally instead of getting the \r\n that was expected on Windows I would only get \n
+        // from what I could tell using Write-Host would produce only a \n about 95% of the time but echo always produced \r\n
+        if (data.indexOf("\r\n"+EOI) !== -1) {
+          var correctedData = data.replace("\r\n"+EOI,'');
+          this.emit('output', correctedData);
+          _output.push(correctedData);
+        }
+        else if (data.indexOf("\n"+EOI) !== -1) {
+          var correctedData = data.replace("\n"+EOI,'');
+          this.emit('output', correctedData);
+          _output.push(correctedData);
+        }
+
         this.emit(_type, _output.join(''));
         _output = [];
         _type = '_resolve';
