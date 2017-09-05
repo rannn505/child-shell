@@ -4,7 +4,7 @@
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-9-1
+ * @Compiled At: 2017-9-4
   *********************************************************/
 'use strict';
 
@@ -104,8 +104,14 @@ var Shell = exports.Shell = function (_eventEmitter) {
 
     _this._proc.stdout.on('data', function (data) {
       if (data.indexOf(EOI) !== -1) {
-        if (data.indexOf(os.EOL + EOI) !== -1) {
-          var correctedData = data.replace(os.EOL + EOI, '');
+        // noticed a strange bug the occationally instead of getting the \r\n that was expected on Windows I would only get \n
+        // from what I could tell using Write-Host would produce only a \n about 95% of the time but echo always produced \r\n
+        if (data.indexOf("\r\n" + EOI) !== -1) {
+          var correctedData = data.replace("\r\n" + EOI, '');
+          _this.emit('output', correctedData);
+          _output.push(correctedData);
+        } else if (data.indexOf("\n" + EOI) !== -1) {
+          var correctedData = data.replace("\n" + EOI, '');
           _this.emit('output', correctedData);
           _output.push(correctedData);
         }
