@@ -40,7 +40,7 @@ All you need to do is to send the parameters to your script as follows:
 {bool: true} <-> [bool]$bool
 {decimal: '1d'} <-> [decimal]$decimal
 {double: 1.1} <-> [double]$double
-{DateTime: new Date().toLocaleString()} <-> [DateTime]$DateTime
+{DateTime: new Date()} <-> [DateTime]$DateTime
 {xml: '<a></a>'} <-> [xml]$xml
 {array: [1,2]} <-> [array]$array
 {hashtable: {A:1, B:2}} <-> [hashtable]$hashtable
