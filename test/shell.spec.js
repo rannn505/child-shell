@@ -85,7 +85,7 @@ describe('Shell', () => {
       {decimal: '1d'},
       // single
       {double: 1.1},
-      {DateTime: new Date()},
+      {DateTime: new Date().toLocaleString()},
       {xml: '<a></a>'},
       {array: [1,2]},
       {hashtable: {A:1, B:2}},
