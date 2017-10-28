@@ -28,7 +28,7 @@ $tests = @(
   [PSCustomObject]@{name="DateTime"; value=$DateTime; test=$DateTime -is [DateTime]},
   [PSCustomObject]@{name="xml"; value=$xml; test=$xml -is [xml]},
   [PSCustomObject]@{name="array"; value=$array; test=$array -is [array] -and $array.length -gt 1},
-#  [PSCustomObject]@{name="hashtable"; value=$hashtable; test=$hashtable -is [hashtable]},
+  [PSCustomObject]@{name="hashtable"; value=$hashtable; test=$hashtable -is [hashtable]},
   [PSCustomObject]@{name="switch"; value=$switch; test=$switch -is [switch] -and $switch -eq $true}
 )
 

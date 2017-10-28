@@ -1,5 +1,5 @@
 import gulp from "gulp"
-import clean from 'gulp-clean'
+import del from 'del'
 import babel from 'gulp-babel'
 import header from 'gulp-header'
 
@@ -18,10 +18,9 @@ const banner = ['/*********************************************************',
   '  *********************************************************/',
   ''].join('\n');
 
-gulp.task('clean', function () {
-  return gulp.src(paths.dest.js)
-    .pipe(clean({force: true}));
-});
+  gulp.task('clean', () => {
+    return del(paths.dest.js);
+  });
 
 gulp.task('build', ['clean'], ()=> {
     return gulp.src(paths.src.js)

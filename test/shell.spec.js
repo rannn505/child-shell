@@ -42,7 +42,7 @@ describe('Shell', () => {
         {name: 'object', value: 'test'},
         {name: 'foregroundcolor', value: 'red'},
         {name: 'nonewline', value: null}
-      ])).to.eventually.have.deep.property('[0]', 'Write-Host -object test -foregroundcolor red -nonewline'),
+      ])).to.eventually.have.nested.property('[0]', 'Write-Host -object test -foregroundcolor red -nonewline'),
       expect(ps.invoke()).to.eventually.equal('test')
     ]);
   });
@@ -52,7 +52,7 @@ describe('Shell', () => {
         {object: 'test'},
         {foregroundcolor: 'red'},
         {nonewline: null}
-      ])).to.eventually.have.deep.property('[0]', 'Write-Host -object test -foregroundcolor red -nonewline'),
+      ])).to.eventually.have.nested.property('[0]', 'Write-Host -object test -foregroundcolor red -nonewline'),
       expect(ps.invoke()).to.eventually.equal('test')
     ]);
   });
@@ -62,15 +62,15 @@ describe('Shell', () => {
         {object: 'test'},
         {foregroundcolor: 'red'},
         'nonewline'
-      ])).to.eventually.have.deep.property('[0]', 'Write-Host -object test -foregroundcolor red -nonewline'),
+      ])).to.eventually.have.nested.property('[0]', 'Write-Host -object test -foregroundcolor red -nonewline'),
       expect(ps.invoke()).to.eventually.equal('test')
     ]);
   });
   it('addCommand errors', () => {
     return Promise.all([
-      expect(ps.addCommand('')).be.rejectedWith(`Command is missing`),
-      expect(ps.addCommand('echo test', {test: 'test'})).be.rejectedWith(`Params must be an array`),
-      expect(ps.addCommand('echo test', [false, new Date()])).be.rejectedWith(`All Params need to be objects or strings`),
+      expect(ps.addCommand('')).be.eventually.rejectedWith(`Command is missing`),
+      expect(ps.addCommand('echo test', {test: 'test'})).be.eventually.rejectedWith(`Params must be an array`),
+      expect(ps.addCommand('echo test', [false, new Date()])).be.eventually.rejectedWith(`All Params need to be objects or strings`),
     ]);
   });
 
@@ -88,7 +88,7 @@ describe('Shell', () => {
       {DateTime: new Date().toLocaleString()},
       {xml: '<a></a>'},
       {array: [1,2]},
-      // {hashtable: [{A:1},{B:2}]},
+      {hashtable: {A:1, B:2}},
       'switch'
     ]);
     return expect(ps.invoke().then(output => {
@@ -103,8 +103,8 @@ describe('Shell', () => {
   it('listen to output event', function(done) {
     this.timeout(0);
     ps.on('output', data => {
-      expect(data).to.equal('test');
       ps.removeAllListeners();
+      expect(data).to.equal('test');
       done();
     });
     ps.addCommand('Write-Host test -nonewline')
@@ -120,7 +120,7 @@ describe('Shell', () => {
     });
     ps.addCommand('throw "error"')
       .then(() => {
-        return ps.invoke();
+        return expect(ps.invoke()).to.eventually.be.rejected;
       });
   });
 

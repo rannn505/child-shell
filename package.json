@@ -17,9 +17,9 @@
     "start": "cd ./example && node example.js",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "test:coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "patch": "npm version minor -m \"Release version %s\"",
     "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags",
-    "patch": "npm version minor -m \"Release version %s\""
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -70,6 +70,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-clean": "^0.3.2",
