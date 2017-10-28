@@ -27,3 +27,21 @@ ps.addCommand('Get-Process @ComputerName | where {$_.ProcessName -eq "powershell
   {ComputerName: 'localhost'}
 ]);
 ```
+
+### cast JS to PS data types
+Node-PowerShell can help you convert JS data types to PS data types.
+All you need to do is to send the parameters to your script as follows:
+```javascript
+{string: 'abc'} <-> [string]$string
+{char: 'a'} <-> [char] $char
+{byte: '0x26'} <-> [byte] $byte
+{int: 1} <-> [int]$int
+{long: 10000000000} <-> [long]$long
+{bool: true} <-> [bool]$bool
+{decimal: '1d'} <-> [decimal]$decimal
+{double: 1.1} <-> [double]$double
+{DateTime: new Date().toLocaleString()} <-> [DateTime]$DateTime
+{xml: '<a></a>'} <-> [xml]$xml
+{array: [1,2]} <-> [array]$array
+{hashtable: {A:1, B:2}} <-> [hashtable]$hashtable
+```

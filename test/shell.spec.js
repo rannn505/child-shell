@@ -81,7 +81,7 @@ describe('Shell', () => {
       {byte: '0x26'},
       {int: 1},
       {long: 10000000000},
-      {bool: '$True'},
+      {bool: true},
       {decimal: '1d'},
       // single
       {double: 1.1},

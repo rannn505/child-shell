@@ -15,21 +15,9 @@ ps.addCommand('$a += "is awesome"; $a')
     return ps.invoke();
   })
   // .then(function(output){
-  //   console.log(output);
-  //   ps.addCommand('./script-input.ps1', [
-  //       //  { str: "Hello World" } // Good
-  //       //  { str: "Hello 'again' World" } // Good
-  //       //  { name: 'Hello World' } // Good
-  //       //  { str: 'Hello "again" World' } // Bad
-  //       //  { str: JSON.stringify({name: 'Mike'}) } // Bad
-  //       //  { str: "'" + JSON.stringify({name: 'Mike'}) + "'" } // Good
-  //   ]);
+  //   ps.addCommand('throw "error"')
   //   return ps.invoke();
   // })
-  .then(function(output){
-    ps.addCommand('throw "error"')
-    return ps.invoke();
-  })
   .then(function(output){
     console.log(output);
     ps.addCommand('./script-loop.ps1');
