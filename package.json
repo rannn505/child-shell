@@ -1,6 +1,6 @@
 {
   "name": "node-powershell",
-  "version": "3.3.0",
+  "version": "3.2.0",
   "description": "Easily run PowerShell from your NodeJS app",
   "main": "./dist/index.js",
   "files": [
@@ -17,7 +17,7 @@
     "start": "cd ./example && node example.js",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha",
     "test:coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "patch": "npm version minor -m \"Release version %s\"",
+    "patch": "npm version patch -m \"Release version %s\"",
     "version": "npm run build && git add -A",
     "postversion": "git push && git push --tags"
   },
