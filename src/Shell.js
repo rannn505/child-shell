@@ -51,8 +51,7 @@ export class Shell extends EventEmitter {
     }
 
     // the PowerShell process
-    this._proc = spawn(`${USE_PWSH ? 'pwsh' : 'powershell'} ${IS_WIN ? '.exe' : ''}`, args, { stdio: 'pipe' });
-
+    this._proc = spawn(`${USE_PWSH ? 'pwsh' : 'powershell'}${IS_WIN ? '.exe' : ''}`, args, { stdio: 'pipe' });
     // Make sure the PS process start successfully
     if(!this._proc.pid) {
       throw new Error(MSGS.INIT.ERROR.START_PS);
