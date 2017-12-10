@@ -2,6 +2,8 @@ const os          = require('os');
 const colors      = require('chalk');
 
 export const MODULE_NAME = 'node-powershell';
+//set this to true for versions of powershell-6.0.0-beta.9 or higher that use pwsh instead of powershell.exe
+export const USE_PWSH = false;
 // export const EOI         = 'EOI';
 export const IS_WIN      = os.platform() === 'win32';
 export const MODULE_MSG  = colors.bold.blue(`NPS> `);

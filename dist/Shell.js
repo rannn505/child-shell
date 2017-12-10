@@ -4,7 +4,7 @@
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-10-28
+ * @Compiled At: 2017-12-10
   *********************************************************/
 'use strict';
 
@@ -46,7 +46,8 @@ var _require4 = require('./Constants'),
     INFO_MSG = _require4.INFO_MSG,
     OK_MSG = _require4.OK_MSG,
     ERROR_MSG = _require4.ERROR_MSG,
-    MSGS = _require4.MSGS;
+    MSGS = _require4.MSGS,
+    USE_PWSH = _require4.USE_PWSH;
 
 /**
  * The Shell class.
@@ -105,8 +106,7 @@ var Shell = exports.Shell = function (_EventEmitter) {
     }
 
     // the PowerShell process
-    _this._proc = spawn('powershell' + (IS_WIN ? '.exe' : ''), args, { stdio: 'pipe' });
-
+    _this._proc = spawn('' + (USE_PWSH ? 'pwsh' : 'powershell') + (IS_WIN ? '.exe' : ''), args, { stdio: 'pipe' });
     // Make sure the PS process start successfully
     if (!_this._proc.pid) {
       throw new Error(MSGS.INIT.ERROR.START_PS);

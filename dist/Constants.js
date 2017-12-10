@@ -4,7 +4,7 @@
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-10-28
+ * @Compiled At: 2017-12-10
   *********************************************************/
 'use strict';
 
@@ -15,6 +15,8 @@ var os = require('os');
 var colors = require('chalk');
 
 var MODULE_NAME = exports.MODULE_NAME = 'node-powershell';
+//set this to true for versions of powershell-6.0.0-beta.9 or higher that use pwsh instead of powershell.exe
+var USE_PWSH = exports.USE_PWSH = false;
 // export const EOI         = 'EOI';
 var IS_WIN = exports.IS_WIN = os.platform() === 'win32';
 var MODULE_MSG = exports.MODULE_MSG = colors.bold.blue('NPS> ');
