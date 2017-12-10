@@ -55,7 +55,7 @@ Node-PowerShell Welcomes the move, and started the current version, will fully s
 Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
 [PowerShell 6.0]: https://github.com/PowerShell/PowerShell
 
-If you are going to use 6.0 Alpha or Beta versions be aware v6.0.0-beta.9 introduces breaking changes for node-powershell.  [https://github.com/PowerShell/PowerShell/issues/5225]  You can either use v6.0.0-beta.7 https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-beta.7] or earlier, or you can toggle ```javascript const USE_PWSH = true``` in node-powershell's src/Constants.js.
+If you are going to use 6.0 Alpha or Beta versions be aware v6.0.0-beta.9 introduces breaking changes for node-powershell.  [https://github.com/PowerShell/PowerShell/issues/5225]  You can either use v6.0.0-beta.7 https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-beta.7] or earlier, or you can toggle ```javascript const USE_PWSH = true``` in node-powershell's src/Constants.js, then go to the node-powershell folder, run sudo npm install, then run sudo npm run-script build.
 
 
 ## License
