@@ -5,7 +5,7 @@ const Promise          = require('bluebird');
 
 const { ShellStream, ShellWrite, toPS } = require('./Utils');
 const { MODULE_NAME, IS_WIN,
-  MODULE_MSG, INFO_MSG, OK_MSG, ERROR_MSG, MSGS } = require('./Constants');
+  MODULE_MSG, INFO_MSG, OK_MSG, ERROR_MSG, MSGS, USE_PWSH } = require('./Constants');
 
 
 /**
@@ -51,7 +51,7 @@ export class Shell extends EventEmitter {
     }
 
     // the PowerShell process
-    this._proc = spawn(`powershell${IS_WIN ? '.exe' : ''}`, args, { stdio: 'pipe' });
+    this._proc = spawn(`${USE_PWSH ? 'pwsh' : 'powershell'} ${IS_WIN ? '.exe' : ''}`, args, { stdio: 'pipe' });
 
     // Make sure the PS process start successfully
     if(!this._proc.pid) {
