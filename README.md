@@ -55,6 +55,8 @@ Node-PowerShell Welcomes the move, and started the current version, will fully s
 Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
 [PowerShell 6.0]: https://github.com/PowerShell/PowerShell
 
+If you are going to use 6.0 Alpha or Beta versions be aware v6.0.0-beta.9 introduces breaking changes for node-powershell.  [https://github.com/PowerShell/PowerShell/issues/5225]  Use v6.0.0-beta.7 https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-beta.7] or you will have to come up with your own workaround for the issue.
+
 
 ## License
 
