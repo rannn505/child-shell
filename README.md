@@ -50,7 +50,7 @@ I've created a convenient and readable page, so you can enjoy the experience of 
 
 ## :fire: PowerShell 6.0
 As you may have heard already, lately Microsoft is taking steps towards becoming an open source company.
-One of these steps, brings us [PowerShell 6.0][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
+One of these steps, brings us *PowerShell 6.0* , which is a cross-platform version of the amazing tool that we know and love from Windows.
 Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
 Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
 [PowerShell 6.0]: https://github.com/PowerShell/PowerShell
