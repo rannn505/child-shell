@@ -95,6 +95,18 @@ describe('Shell', () => {
       return JSON.parse(output).every(e => e.test)
     })).to.eventually.be.true;
   });
+  it('escape string quotes', () => {
+    ps.addCommand(`& "${path.resolve(__dirname, 'scripts', 'script-stringParameter.ps1')}"`, [
+      {baseline: 'quickbrownfox'},
+      {singleQuote: '\'quick\'brownfox'},
+      {doubleQuote: '"quick"brownfox'},
+      {mixedQuote: '"quick"brown\'fox\''},
+      {withSpace: '"quick" brown \'fox\''}
+    ]);
+    return expect(ps.invoke().then(output => {
+      return JSON.parse(output).every(e => e.test)
+    })).to.eventually.be.true;
+  })
   it('invoke failed', () => {
     ps.addCommand('throw "error"');
     return expect(ps.invoke()).to.eventually.be.rejected;
