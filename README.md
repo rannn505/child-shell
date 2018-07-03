@@ -53,9 +53,10 @@ As you may have heard already, lately Microsoft is taking steps towards becoming
 One of these steps, brings us [PowerShell 6.0][] , which is a cross-platform version of the amazing tool that we know and love from Windows.
 Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS.
 Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
-[PowerShell 6.0]: https://github.com/PowerShell/PowerShell
 
 
 ## License
 
-  [MIT](LICENSE) © [Ran Cohen](https://github.com/rannn505)
+[MIT](LICENSE) © [Ran Cohen](https://github.com/rannn505)
+
+[PowerShell 6.0]: https://github.com/PowerShell/PowerShell
