@@ -101,7 +101,8 @@ describe('Shell', () => {
       {singleQuote: '\'quick\'brownfox'},
       {doubleQuote: '"quick"brownfox'},
       {mixedQuote: '"quick"brown\'fox\''},
-      {withSpace: '"quick" brown \'fox\''}
+      {withSpace: '"quick" brown \'fox\''},
+      {withComma: 'quick,brown,fox'}
     ]);
     return expect(ps.invoke().then(output => {
       return JSON.parse(output).every(e => e.test)

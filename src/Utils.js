@@ -35,7 +35,7 @@ export const toPS = (value) => {
   switch (Object.prototype.toString.call(value).slice(8, -1)) {
     case 'String':
       if (value) value = value.replace(/[\'\"]/g, '`$&');
-      return /\s/.test(value) || (value.indexOf('<') !== -1 && value.indexOf('>') !== -1) ? '"'+value+'"' : value;
+      return /[\s\,]/.test(value) || (value.indexOf('<') !== -1 && value.indexOf('>') !== -1) ? '"'+value+'"' : value;
     case 'Number':
       return value;
     case 'Array':
