@@ -105,7 +105,7 @@ var Shell = exports.Shell = function (_EventEmitter) {
     }
 
     // the PowerShell process
-    _this._proc = spawn('powershell' + (IS_WIN ? '.exe' : ''), args, { stdio: 'pipe' });
+    _this._proc = spawn('powershell' + (IS_WIN ? '.exe' : ''), args, { stdio: 'pipe', windowsHide: true });
 
     // Make sure the PS process start successfully
     if (!_this._proc.pid) {
