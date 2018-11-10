@@ -34,14 +34,12 @@ ps.invoke()
 });
 ```
 
-## API Reference
+## Documentation
+[**Documentation**](https://rannn505.gitbook.io/node-powershell/)  
 
-**:memo:** [**API reference**](https://rannn505.gitbook.io/node-powershell/)  
- I've created a convenient and readable page, so you can enjoy the experience of learning and begin to use the module quickly and easily.
-
-## :fire: PowerShell 6.0
-
-As you may have heard already, lately Microsoft is taking steps towards becoming an open source company. One of these steps, brings us [PowerShell 6.0](https://github.com/PowerShell/PowerShell) , which is a cross-platform version of the amazing tool that we know and love from Windows. Node-PowerShell Welcomes the move, and started the current version, will fully support the new PS. Moreover, I will continue to follow the development of the new PS repo, and to update the module accordingly. Enjoy!
+## PowerShell 6
+[**Microsoft**](https://docs.microsoft.com/en-us/powershell/scripting/powershell-scripting?view=powershell-6)
+[**GitHub**](https://github.com/PowerShell/PowerShell)
 
 ## License
 

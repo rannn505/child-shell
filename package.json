@@ -51,7 +51,11 @@
     "powershell rhel",
     "powershell ubuntu",
     "powershell macos",
-    "powershell docker"
+    "powershell docker",
+    "PowerShell Core",
+    "PowerShell Core 6.0",
+    "PowerShell 6.0",
+    "pwsh"
   ],
   "author": "Ran Cohen <rannn505@outlook.com>",
   "license": "MIT",
