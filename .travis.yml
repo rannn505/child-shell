@@ -26,5 +26,5 @@ matrix:
 before_script:
   - npm install -g gulp
 script:
-  - npm run build
+  # - npm run build
   - npm run test:coveralls

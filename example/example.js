@@ -1,4 +1,4 @@
-var shell = require('../dist/index');
+var shell = require('../lib/index');
 
 var ps = new shell({executionPolicy: 'Bypass', verbose: true, version: 3});
 
