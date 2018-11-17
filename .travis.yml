@@ -9,20 +9,23 @@ matrix:
       node_js:
         - "lts/*"
         - "lts/boron"
-      before_install: sudo dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb
-      install: sudo apt-get install -f
+      before_install:
+        - wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
+        - sudo dpkg -i packages-microsoft-prod.deb
+        - sudo apt-get update
+        - sudo apt-get install -y powershell
       # osx - pwsh
     - os: osx
       node_js:
         - "lts/*"
         - "lts/boron"
-      install: brew cask install powershell
+      before_install: brew cask install powershell
       # windows - pwsh
     - os: windows
       node_js:
         - "lts/*"
         - "lts/boron"
-      install: choco install powershell-core
+      before_install: choco install powershell-core
       # windows - powershell
     - os: windows
       env: NPS=powershell
@@ -30,7 +33,7 @@ matrix:
         - "lts/*"
         - "lts/boron"
 cache: npm
-before_script:
+install:
   - npm install 
   - npm install -g gulp
 script:
