@@ -1,11 +1,8 @@
-sudo: required
 language: node_js
 node_js:
   - "lts/*"
   - "lts/boron"
-env:
-  - EMBER_VERSION=canary
-cache: npm
+env: NPS=pwsh
 matrix:
   include:
       # linux 16.04 - pwsh
@@ -22,8 +19,10 @@ matrix:
       install: choco install powershell-core
       # windows - powershell
     - os: windows
-      install: brew cask install powershell
+      env: NPS=powershell
+cache: npm
 before_script:
+  - npm install 
   - npm install -g gulp
 script:
   # - npm run build
