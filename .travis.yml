@@ -1,25 +1,30 @@
 sudo: required
-services:
-  - docker
 language: node_js
 node_js:
-  - "4"
-  - "5"
-  - "6"
-  - "node"
-before_install:
-  - docker pull ubuntu:16.04
-  - wget https://raw.githubusercontent.com/PowerShell/PowerShell/v6.0.0-alpha.16/tools/download.sh
-  - sudo chmod +x download.sh
-  - sudo ./download.sh
+  - "lts/*"
+  - "lts/boron"
+env:
+  - EMBER_VERSION=canary
+cache: npm
+matrix:
+  include:
+      # linux 16.04 - pwsh
+    - os: linux
+      dist: xenial
+      sudo: required
+      before_install: sudo dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb
+      install: sudo apt-get install -f
+      # osx - pwsh
+    - os: osx
+      install: brew cask install powershell
+      # windows - pwsh
+    - os: windows
+      install: choco install powershell-core
+      # windows - powershell
+    - os: windows
+      install: brew cask install powershell
 before_script:
   - npm install -g gulp
 script:
   - npm run build
   - npm run test:coveralls
-branches:
-  only:
-    - master
-cache:
-  directories:
-  - $HOME/.npm

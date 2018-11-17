@@ -75,6 +75,7 @@
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
     "del": "^3.0.0",
+    "eslint": "^5.9.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-clean": "^0.3.2",
