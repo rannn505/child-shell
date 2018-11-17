@@ -1,7 +1,4 @@
 language: node_js
-node_js:
-  - "lts/*"
-  - "lts/boron"
 env: NPS=pwsh
 matrix:
   include:
@@ -9,17 +6,29 @@ matrix:
     - os: linux
       dist: xenial
       sudo: required
+      node_js:
+        - "lts/*"
+        - "lts/boron"
       before_install: sudo dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb
       install: sudo apt-get install -f
       # osx - pwsh
     - os: osx
+      node_js:
+        - "lts/*"
+        - "lts/boron"
       install: brew cask install powershell
       # windows - pwsh
     - os: windows
+      node_js:
+        - "lts/*"
+        - "lts/boron"
       install: choco install powershell-core
       # windows - powershell
     - os: windows
       env: NPS=powershell
+      node_js:
+        - "lts/*"
+        - "lts/boron"
 cache: npm
 before_script:
   - npm install 
