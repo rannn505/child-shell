@@ -2,7 +2,7 @@
   "name": "node-powershell",
   "version": "3.3.1",
   "description": "Easily run PowerShell from your NodeJS app",
-  "main": "./dist/index.js",
+  "main": "./lib/index.js",
   "files": [
     "dist",
     "example",
@@ -12,11 +12,9 @@
     "example": "example"
   },
   "scripts": {
-    "build": "gulp",
-    "dev": "gulp watch",
+    "test": "nyc --reporter=html --reporter=text mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "cd ./example && node example.js",
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha",
-    "test:coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "patch": "npm version patch -m \"Release version %s\"",
     "version": "npm run build && git add -A",
     "postversion": "git push && git push --tags"
@@ -68,20 +66,13 @@
     "chalk": "^2.1.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-es2015": "^6.24.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
-    "del": "^3.0.0",
     "eslint": "^5.9.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.0",
-    "gulp-clean": "^0.3.2",
-    "gulp-header": "^1.8.9",
-    "istanbul": "^0.4.5",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "mocha": "^4.0.1",
-    "mocha-lcov-reporter": "^1.3.0"
+    "nyc": "^13.1.0"
   }
 }
