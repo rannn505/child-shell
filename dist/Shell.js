@@ -4,7 +4,7 @@
  * @link http://rannn505.github.io/node-powershell/
  * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-10-28
+ * @Compiled At: 2017-12-17
   *********************************************************/
 'use strict';
 
@@ -75,6 +75,8 @@ var Shell = exports.Shell = function (_EventEmitter) {
         executionPolicy = _ref$executionPolicy === undefined ? 'Unrestricted' : _ref$executionPolicy,
         _ref$noProfile = _ref.noProfile,
         noProfile = _ref$noProfile === undefined ? true : _ref$noProfile,
+        _ref$usePwsh = _ref.usePwsh,
+        usePwsh = _ref$usePwsh === undefined ? false : _ref$usePwsh,
         _ref$EOI = _ref.EOI,
         EOI = _ref$EOI === undefined ? 'EOI' : _ref$EOI,
         version = _ref.version;
@@ -105,7 +107,7 @@ var Shell = exports.Shell = function (_EventEmitter) {
     }
 
     // the PowerShell process
-    _this._proc = spawn('powershell' + (IS_WIN ? '.exe' : ''), args, { stdio: 'pipe' });
+    _this._proc = spawn('' + (usePwsh ? 'pwsh' : 'powershell') + (IS_WIN ? '.exe' : ''), args, { stdio: 'pipe' });
 
     // Make sure the PS process start successfully
     if (!_this._proc.pid) {

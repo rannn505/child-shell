@@ -1,7 +1,7 @@
 {
-  "name": "node-powershell",
-  "version": "3.3.1",
-  "description": "Easily run PowerShell from your NodeJS app",
+  "name": "node-powershellcore",
+  "version": "1.0.0",
+  "description": "Easily run PowerShell from your NodeJS app - cross platform edition!",
   "main": "./dist/index.js",
   "files": [
     "dist",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rannn505/node-powershell.git"
+    "url": "git+https://github.com/BenjaminMichael/node-powershell.git"
   },
   "keywords": [
     "node-powershell",
@@ -57,12 +57,12 @@
     "PowerShell 6.0",
     "pwsh"
   ],
-  "author": "Ran Cohen <rannn505@outlook.com>",
+  "author": "github.com/BenjaminMichael",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
-  "homepage": "http://rannn505.github.io/node-powershell/",
+  "homepage": "https://github.com/BenjaminMichael/node-powershell.git",
   "dependencies": {
     "bluebird": "^3.5.1",
     "chalk": "^2.1.0"
