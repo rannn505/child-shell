@@ -1,10 +1,10 @@
 /*********************************************************
  * node-powershell - Easily run PowerShell from your NodeJS app
  * @version v3.3.1
- * @link http://rannn505.github.io/node-powershell/
- * @copyright Copyright (c) 2017 Ran Cohen <rannn505@outlook.com>
+ * @link http://hsimah.github.io/node-powershell/
+ * @copyright Copyright (c) 2017 Hamish Blake <hamishblake@gmail.com>
  * @license MIT (http://www.opensource.org/licenses/mit-license.php)
- * @Compiled At: 2017-10-28
+ * @Compiled At: 2018-8-7
   *********************************************************/
 'use strict';
 
@@ -71,28 +71,22 @@ var ShellWrite = exports.ShellWrite = function ShellWrite(stream, data) {
 var toPS = exports.toPS = function toPS(value) {
   switch (Object.prototype.toString.call(value).slice(8, -1)) {
     case 'String':
-      return (/\s/.test(value) || value.indexOf('<') !== -1 && value.indexOf('>') !== -1 ? '"' + value + '"' : value
+      if (value) value = value.replace(/[\'\"]/g, '`$&');
+      return (/[\s\,]/.test(value) || value.indexOf('<') !== -1 && value.indexOf('>') !== -1 ? '"' + value + '"' : value
       );
-      break;
     case 'Number':
       return value;
-      break;
     case 'Array':
       return value;
-      break;
     case 'Object':
       return '@' + JSON.stringify(value).replace(/:/g, '=').replace(/,/g, ';');
-      break;
     case 'Boolean':
       return value ? '$True' : '$False';
-      break;
     case 'Date':
       return value.toLocaleString();
-      break;
     case 'Undefined' || 'Null':
       // param is switch
       return value;
-      break;
     default:
       return (/\s/.test(value) ? '"' + value + '"' : value
       );
