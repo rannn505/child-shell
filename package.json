@@ -17,8 +17,7 @@
     "start": "cd ./example && node example.js",
     "patch": "npm version patch -m \"Release version %s\"",
     "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags",
-    "postinstall": "node ./postinstall.js"
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
