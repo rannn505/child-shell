@@ -1,10 +1,11 @@
 var shell = require('../lib/index');
 
-var ps = new shell({executionPolicy: 'Bypass', verbose: true, version: 3});
+var ps = new shell({executionPolicy: 'Bypass', verbose: true, /*version: 3*/});
 
 ps.addCommand('$a = "node-"');
 ps.addCommand('$a += "powershell "');
 ps.addCommand('$a += "is awesome"; $a')
+ps.addCommand('pwd')
   .then(function(){
     return ps.invoke();
   })
@@ -27,10 +28,12 @@ ps.addCommand('$a += "is awesome"; $a')
     console.log(output);
     console.log(ps.history);
     ps.dispose();
+    process.exit();
   })
   .catch(function(err){
     console.log(err);
     ps.dispose();
+    process.exit();
   });
 
 // ps.addCommand('echo node-powershell')

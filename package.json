@@ -17,7 +17,8 @@
     "start": "cd ./example && node example.js",
     "patch": "npm version patch -m \"Release version %s\"",
     "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "postinstall": "node ./postinstall.js"
   },
   "repository": {
     "type": "git",
@@ -62,8 +63,7 @@
   },
   "homepage": "http://rannn505.github.io/node-powershell/",
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "chalk": "^2.1.0"
+    "chalk": "^2.4.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
