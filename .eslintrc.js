@@ -1,3 +1,10 @@
 module.exports = {
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "rules": {
+      "keyword-spacing": 0,
+      "lines-between-class-members": 0,
+      "arrow-parens": 0,
+      "no-unused-expressions": 0,
+      
+    }
 };
