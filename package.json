@@ -1,23 +1,25 @@
 {
   "name": "node-powershell",
-  "version": "3.3.1",
+  "version": "4.0.0-rc.1",
   "description": "Easily run PowerShell from your NodeJS app",
   "main": "./lib/index.js",
   "files": [
-    "dist",
+    "lib",
+    "docs",
     "example",
     "test"
   ],
   "directories": {
-    "example": "example"
+    "lib": "lib",
+    "docs": "docs",
+    "example": "example",
+    "test": "test"
   },
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha",
+    "test": "nyc mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "start": "cd ./example && node example.js",
-    "patch": "npm version patch -m \"Release version %s\"",
-    "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags"
+    "lint": "eslint lib/",
+    "start": "cd ./example && node example.js"
   },
   "repository": {
     "type": "git",
