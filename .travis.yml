@@ -30,7 +30,7 @@ matrix:
         - "lts/boron"
       before_install: 
         - choco install powershell-core
-        - PATH+=":C:\Program Files\PowerShell\"
+        # - PATH+=":C:\Program Files\PowerShell\"
       # windows - powershell
     - os: windows
       env: 
