@@ -29,7 +29,7 @@ matrix:
         - "lts/*"
         - "lts/boron"
       before_install: 
-        - wget -q -O PowerShell.exe $(curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | grep "browser_download_url.*x64.msi" | cut -d ":" -f 2,3 | tr -d \")
+        - wget $(curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | grep "browser_download_url.*x64.msi" | cut -d ":" -f 2,3 | tr -d \") -q -O PowerShell.exe
         - msiexec.exe /i "PowerShell.exe"
       # windows - powershell
     - os: windows
