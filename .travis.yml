@@ -22,13 +22,16 @@ matrix:
       before_install: brew cask install powershell
       # windows - pwsh
     - os: windows
+      env: YARN_GPG=no
       node_js:
         - "lts/*"
         - "lts/boron"
       before_install: choco install powershell-core
       # windows - powershell
     - os: windows
-      env: NPS=powershell
+      env: 
+        - NPS=powershell
+        - YARN_GPG=no
       node_js:
         - "lts/*"
         - "lts/boron"
