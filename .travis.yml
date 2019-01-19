@@ -23,12 +23,14 @@ matrix:
       # windows - pwsh
     - os: windows
       env: 
-        - NPS=C:\Program Files\PowerShell\6.1.2\pwsh
+        - NPS="C:\Program Files\PowerShell\6.1.2\pwsh"
         - YARN_GPG=no
       node_js:
         - "lts/*"
         - "lts/boron"
-      before_install: choco install powershell-core
+      before_install: 
+        - choco install powershell-core
+        - PATH+=":C:\Program Files\PowerShell\"
       # windows - powershell
     - os: windows
       env: 
