@@ -6,6 +6,7 @@ module.exports = {
       "arrow-parens": 0,
       "no-unused-expressions": 0,
       "no-param-reassign": 0,
+      "linebreak-style": 0,
       "no-console": "off",
     }
 };

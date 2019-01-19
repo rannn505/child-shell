@@ -152,6 +152,7 @@ describe('Shell', () => {
         .then(output => {
           expect(JSON.parse(output).every(e => e.test)).to.be.true;
           expect(ps.history[0].hadErrors).to.be.false;
+          return Promise.resolve();
         });
     });
 
@@ -161,6 +162,7 @@ describe('Shell', () => {
         .catch(error => {
           expect(error).to.be.an.instanceof(PS_CMD_FAIL_ERROR);
           expect(ps.history[1].hadErrors).to.be.true;
+          return Promise.resolve();
         });
     });
   });
