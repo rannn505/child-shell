@@ -34,8 +34,8 @@ matrix:
           | grep "browser_download_url.*x64.msi" \
           | cut -d : -f 2,3 \
           | tr -d \" \
-          | wget -O PowerShell.exe -i -
-        - msiexec.exe /i "PowerShell.exe"
+          | wget -O PowerShell.exe -iq - \
+          && msiexec.exe /i "PowerShell.exe"
       # windows - powershell
     - os: windows
       env: 
