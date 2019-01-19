@@ -23,7 +23,7 @@ matrix:
       # windows - pwsh
     - os: windows
       env: 
-        - NPS=pwsh
+        - NPS=C:\Program Files\PowerShell\6.1.2\pwsh
         - YARN_GPG=no
       node_js:
         - "lts/*"
