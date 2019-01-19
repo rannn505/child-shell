@@ -22,7 +22,9 @@ matrix:
       before_install: brew cask install powershell
       # windows - pwsh
     - os: windows
-      env: YARN_GPG=no
+      env: 
+        - NPS=pwsh
+        - YARN_GPG=no
       node_js:
         - "lts/*"
         - "lts/boron"
