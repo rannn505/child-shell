@@ -130,7 +130,8 @@ describe('Shell', () => {
   });
 
   describe('#invoke()', () => {
-    it('should invoke command in the Shell', () => {
+    it('should invoke command in the Shell', function(done) {
+      this.timeout(0);
       return ps.addCommand(`& "${path.resolve(__dirname, 'script-dataTypes.ps1')}"`)
         .then(() => ps.addParameters([
           {string: 'abc'},
@@ -152,17 +153,18 @@ describe('Shell', () => {
         .then(output => {
           expect(JSON.parse(output).every(e => e.test)).to.be.true;
           expect(ps.history[0].hadErrors).to.be.false;
-          return Promise.resolve();
+          return done();
         });
     });
 
-    it('should fail invoking command in the Shell', () => {
+    it('should fail invoking command in the Shell', function(done) {
+      this.timeout(0);
       return ps.addCommand('throw "error"')
         .then(() => ps.invoke())
         .catch(error => {
           expect(error).to.be.an.instanceof(PS_CMD_FAIL_ERROR);
           expect(ps.history[1].hadErrors).to.be.true;
-          return Promise.resolve();
+          return done();
         });
     });
   });
