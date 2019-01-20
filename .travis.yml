@@ -30,8 +30,7 @@ matrix:
         - "lts/boron"
       before_install:
         - choco install 7zip.install jq
-        - wget -q -nv -O- https://api.github.com/repos/PowerShell/PowerShell/releases/latest 2>/dev/null | jq -r '.assets[] | select(.browser_download_url | contains("win-x64.zip")) | .browser_download_url' | wget -i - -O /tmp/pwsh.zip &&
-        - 7z e /tmp/pwsh.zip -o$PWD/pwsh
+        - wget -q -nv -O- https://api.github.com/repos/PowerShell/PowerShell/releases/latest 2>/dev/null | jq -r '.assets[] | select(.browser_download_url | contains("win-x64.zip")) | .browser_download_url' | wget -i - -O /tmp/pwsh.zip && 7z e /tmp/pwsh.zip -o$PWD/pwsh
         - export PATH=$PATH:$PWD/pwsh/
       # windows - powershell
     - os: windows
