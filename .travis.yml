@@ -23,14 +23,12 @@ matrix:
       # windows - pwsh
     - os: windows
       env: 
-        - NPS="C:\Program Files\PowerShell\6.1.2\pwsh"
+        - NPS=pwsh
         - YARN_GPG=no
       node_js:
         - "lts/*"
         - "lts/boron"
-      before_install: 
-        - wget $(curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | grep "browser_download_url.*x64.msi" | cut -d ":" -f 2,3 | tr -d \") -q -O PowerShell.exe
-        - msiexec.exe /i "PowerShell.exe"
+      before_install: choco install powershell-core
       # windows - powershell
     - os: windows
       env: 
