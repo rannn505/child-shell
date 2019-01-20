@@ -28,7 +28,11 @@ matrix:
       node_js:
         - "lts/*"
         - "lts/boron"
-      before_install: choco install pwsh
+      before_install:
+        - sudo apt-get install unzip jq
+        - wget -q -nv -O- https://api.github.com/repos/PowerShell/PowerShell/releases/latest 2>/dev/null |  jq -r '.assets[] | select(.browser_download_url | contains("win-x64.zip")) | .browser_download_url' | wget -i - -O /tmp/pwsh.zip
+        - unzip /tmp/pwsh.zip -d ./pwsh
+        - export PATH=$PATH:$PWD/casperjs-1.0.2/bin/
       # windows - powershell
     - os: windows
       env: 
