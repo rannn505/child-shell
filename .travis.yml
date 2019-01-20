@@ -28,7 +28,7 @@ matrix:
       node_js:
         - "lts/*"
         - "lts/boron"
-      before_install: choco install powershell-core
+      before_install: choco install pwsh
       # windows - powershell
     - os: windows
       env: 
