@@ -154,6 +154,10 @@ describe('Shell', () => {
           expect(JSON.parse(output).every(e => e.test)).to.be.true;
           expect(ps.history[0].hadErrors).to.be.false;
           return Promise.resolve();
+        })
+        .catch(error => {
+          console.log(error);
+          return Promise.resolve();
         });
     });
 
