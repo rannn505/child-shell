@@ -36,7 +36,7 @@ describe('Shell', () => {
   describe('#constructor', () => {
     it('should create a new PS Shell', () => {
       ps = new Shell({
-        executionPolicy: 'Unrestricted',
+        executionPolicy: 'Bypass',
         noProfile: true,
         verbose: false,
       });
