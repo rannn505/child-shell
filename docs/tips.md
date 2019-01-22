@@ -1,6 +1,6 @@
 # Tips
 
-## script input
+#### script input
 
 Use `param ( )` instead of `Read-Host` in your script.
 
@@ -14,7 +14,7 @@ $str
 
 and `addCommand()` with params array in your node app.
 
-## parse output
+#### parse output
 
 Use [PSObject](https://devopscollective.gitbooks.io/the-big-book-of-powershell-gotchas/content/manuscript/new-object_psobject_vs_pscustomobject.html) to represent the output of your commands, then pipe it to `| ConvertTo-Json -Compress` command.
 
@@ -25,17 +25,19 @@ $obj | ConvertTo-Json -Compress
 
 now you can use `JSON.parse()` to parse the output to a JS object.
 
-## use pipeline
+#### use NPS environment variable
 
-Use `addCommand()` with the `@param` syntax.
+Set `NPS` environment variable to force a new Shell instance to use a specific PowerShell runspace.
 
-```javascript
-ps.addCommand('Get-Process @ComputerName | where {$_.ProcessName -eq "powershell"}', [
-  {ComputerName: 'localhost'}
-]);
+```cmd
+$ set NPS=pwsh
 ```
 
-## cast JS to PS data types
+```bash
+$ export NPS=pwsh-preview
+```
+
+#### cast JS to PS data types
 
 Node-PowerShell can help you convert JS data types to PS data types. All you need to do is to send the parameters to your script as follows:
 

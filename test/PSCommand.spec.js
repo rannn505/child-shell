@@ -20,6 +20,7 @@ describe('PSCommand', () => {
       expect(psCommand).to.be.an.instanceof(PSCommand);
       expect(psCommand).to.have.deep.property('command', COMMAND);
       [
+        'addArgument',
         'addParameter', 
         'clear', 
         'clone',

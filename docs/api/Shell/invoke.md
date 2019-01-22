@@ -9,5 +9,5 @@ Runs the commands currently in the shell object pipeline.
 #### Example
 
 ```javascript
-ps.invoke().then(output => {}).catch(err => {});
+ps.invoke().then(output => {}).catch(error => {});
 ```

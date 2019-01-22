@@ -9,5 +9,5 @@ Releases all resources used by the shell object and closes the PowerShell child_
 #### Example
 
 ```javascript
-ps.dispose().then(code => {}).catch(err => {});
+ps.dispose().then(code => {}).catch(error => {});
 ```
