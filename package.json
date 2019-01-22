@@ -1,6 +1,6 @@
 {
   "name": "node-powershell",
-  "version": "4.0.0-rc.1",
+  "version": "4.0.0-rc.2",
   "description": "Easily run PowerShell from your NodeJS app",
   "main": "./lib/index.js",
   "files": [
