@@ -16,7 +16,6 @@
   * [initialize](api/PSCommand/initialize.md)
   * [addArgument](api/PSCommand/addArgument.md)
   * [addParameter](api/PSCommand/addParameter.md)
-  * [clear](api/PSCommand/clear.md)
   * [clone](api/PSCommand/clone.md)
 * [Tips](tips.md)
 * [Change Log](../CHANGELOG.md)

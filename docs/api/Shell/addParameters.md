@@ -8,7 +8,7 @@ Adds multiple parameters to the last added command.
 
 #### Returns
 
-[Promise] - A promise that resolves with the array of commands currently in the pipeline, or rejects with an error.
+[Promise] - A promise that fulfills with the array of commands currently in the pipeline, or rejects with an error.
 
 #### Example
 

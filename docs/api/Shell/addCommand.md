@@ -14,7 +14,7 @@ Adds a command to the end of the pipeline of the shell object.
 
 #### Returns
 
-[Promise] - A promise that resolves with the array of commands currently in the pipeline, or rejects with an error.
+[Promise] - A promise that fulfills with the array of commands currently in the pipeline, or rejects with an error.
 
 #### Example
 

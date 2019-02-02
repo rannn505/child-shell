@@ -22,7 +22,6 @@ describe('PSCommand', () => {
       [
         'addArgument',
         'addParameter', 
-        'clear', 
         'clone',
       ].forEach(method => {
         expect(psCommand).to.respondTo(method);
@@ -49,7 +48,7 @@ describe('PSCommand', () => {
 
     it('should add argument to a PSCommand', () => {
       expect(psCommand.addArgument(ARGUMENT)).to.be.an.instanceof(PSCommand);
-      expect(psCommand.command).to.equal(`${COMMAND} ${ARGUMENT}`);
+      expect(psCommand.addArgument(ARGUMENT).command).to.equal(`${COMMAND} ${ARGUMENT}`);
     });
 
     it('should fail adding argument to a PSCommand', () => {
@@ -73,7 +72,7 @@ describe('PSCommand', () => {
 
     it('should add parameter to a PSCommand', () => {
       expect(psCommand.addParameter(PARAMETER1).addParameter(PARAMETER2)).to.be.an.instanceof(PSCommand);
-      expect(psCommand.command).to.equal(`${COMMAND} -ForegroundColor red -BackgroundColor white`);
+      expect(psCommand.addParameter(PARAMETER1).addParameter(PARAMETER2).command).to.equal(`${COMMAND} -ForegroundColor red -BackgroundColor white`);
     });
 
     it('should fail adding parameter to a PSCommand', () => {
@@ -85,7 +84,7 @@ describe('PSCommand', () => {
       try {
         psCommand.addParameter('');
       } catch (error) {
-        expect(error).to.be.an.instanceof(PS_ARG_TYPE_ERROR);
+        expect(error).to.be.an.instanceof(PS_ARG_MISS_ERROR);
       }
       try {
         psCommand.addParameter(Object.assign({}, PARAMETER2, {test: true}));
@@ -101,15 +100,6 @@ describe('PSCommand', () => {
     it('should clone a PSCommand', () => {
       expect(psCommand.clone()).to.be.an.instanceof(PSCommand);
       expect(psCommand.clone().command).to.equal(psCommand.command);
-    });
-  });
-
-  describe('#clear()', () => {
-    const psCommand = new PSCommand(COMMAND);
-
-    it('should clear a PSCommand', () => {
-      expect(psCommand.clear()).to.be.an.instanceof(PSCommand);
-      expect(psCommand.command).to.equal('');
     });
   });
 });

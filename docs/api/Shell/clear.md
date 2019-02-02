@@ -4,7 +4,7 @@ Empty the commands array.
 
 #### Returns
 
-[Promise] - A promise that resolves with an empty array of commands.
+[Promise] - A promise that fulfills with an empty array of commands.
 
 #### Example
 

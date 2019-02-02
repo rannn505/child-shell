@@ -12,7 +12,7 @@ param (
 $str
 ```
 
-and `addCommand()` with params array in your node app.
+and `addParameters()` in your node app.
 
 #### parse output
 

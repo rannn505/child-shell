@@ -32,7 +32,7 @@ All pwsh options from [here](https://docs.microsoft.com/en-us/powershell/module/
 
 ```javascript
 import Shell from 'node-powershell'
-let ps = new Shell({
+const ps = new Shell({
   verbose: true,
   executionPolicy: 'Bypass',
   noProfile: true,

@@ -1,10 +1,9 @@
-# Shell API
+# PSCommand API
 
-This section documents the complete Shell API.
+This section documents the complete PSCommand API.
 
 * [initialize](initialize.md)
-* [addCommand(command, [params])](addCommand.md)
-* [invoke()](invoke.md)
-* [dispose()](dispose.md)
+* [addArgument(argument)](addArgument.md)
+* [addParameter(parameter)](addParameter.md)
+* [clone()](clone.md)
 * [properties](properties.md)
-* [events](events.md)

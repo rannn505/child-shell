@@ -186,9 +186,7 @@ describe('Shell', () => {
         expect(data).to.equal('test');
         done();
       });
-      const psCommand = new PSCommand(COMMAND);
-      psCommand.addArgument('test').addParameter({nonewline: undefined});
-      ps.addCommand(psCommand)
+      ps.addCommand(new PSCommand(COMMAND).addArgument('test').addParameter({nonewline: undefined}))
         .then(() => ps.invoke());
     });
 
