@@ -3,7 +3,9 @@
 Creates a new Shell instance.
 Starts by default, a powershell process on Windows, and a powershell-core (pwsh) process on Linux and macOS.
 
-#### NPS Arguments
+### Arguments
+
+#### node-powershell options:
 
 * **verbose** - Determines whether to log verbose to the console. `[Boolean] (Default: true) _optional_`
 * **pwsh** - Instruct the Shell to use pwsh as the PowerShell runspace. `[Boolean] (Default: false) _optional_ [Windows-Only]`
