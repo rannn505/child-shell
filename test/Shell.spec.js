@@ -25,14 +25,6 @@ describe('Shell', () => {
     return ps.clear();
   });
 
-  after(() => {
-    ps.on('end', data => {
-      ps.removeAllListeners();
-      expect(data).to.equal(0);
-    });
-    ps.dispose();
-  });
-
   describe('#constructor', () => {
     it('should create a new PS Shell', () => {
       ps = new Shell({
@@ -199,6 +191,18 @@ describe('Shell', () => {
       });
       ps.addCommand('throw "error"')
         .then(() => expect(ps.invoke()).to.eventually.be.rejected);
+    });
+  });
+
+  describe('#dispose', () => {
+    it('should dispose the shell', function(done) {
+      this.timeout(0);
+      ps.on('end', data => {
+        ps.removeAllListeners();
+        expect(data).to.equal(0);
+        done();
+      });
+      ps.dispose();
     });
   });
 });
