@@ -1,5 +1,38 @@
 # Change Log
 
+## [v4.0.0](https://github.com/rannn505/node-powershell/tree/v4.0.0) - 2019-02-09
+
+**Implemented enhancements:**
+
+* Add full support to pwsh & pwsh-preview. finally :)
+* New Shell methods.
+* New PSCommand class.
+* New typed errors.
+* New icon & homepage & docs.
+* Add NPS environment variable support.
+* Improve ci process (run nps on all OS & PS combinations).
+* Performance improvement.
+
+**Breaking changes:**
+
+* @param syntax -> es6 string templates.
+
+**Deprecate features:**
+
+* debugMsg option -> verbose option.
+* addCommand params option -> addParameter/s.
+
+**Fixed bugs:**
+
+* Issue with ps dispose. [\#37](https://github.com/rannn505/node-powershell/issues/37)
+* node-powershell was unable to start powershell. [\#39](https://github.com/rannn505/node-powershell/issues/39)
+* Add proper support for multi-line PowerShell strings. [\#44](https://github.com/rannn505/node-powershell/issues/44)
+* your documentation page has nothing in it. [\#47](https://github.com/rannn505/node-powershell/issues/47)
+* String parameters with quotes hang shell. [\#54](https://github.com/rannn505/node-powershell/issues/54)
+* Powershell Core Feedback. [\#72](https://github.com/rannn505/node-powershell/issues/72)
+* API Document is not working. [\#64](https://github.com/rannn505/node-powershell/issues/64)
+
+
 ## [v3.3.0](https://github.com/rannn505/node-powershell/tree/v3.3.0) - 2017-10-28
 
 **Implemented enhancements:**
