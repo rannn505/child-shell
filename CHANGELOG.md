@@ -1,6 +1,6 @@
 # Change Log
 
-## [v4.0.0](https://github.com/rannn505/node-powershell/tree/v4.0.0) - 2019-02-09
+## [v4.0.0](https://github.com/rannn505/node-powershell/tree/v4.0.0) - 2019-02-12
 
 **Implemented enhancements:**
 
