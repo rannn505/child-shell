@@ -1,4 +1,7 @@
-# dependency directory
+# temp
+tmp/**
+
+# dependency
 node_modules/**
 
 # assets
@@ -8,8 +11,10 @@ assets/edit/**
 
 # coverage
 coverage/**
+.nyc_output/**
 
-# .idea
+# idea
+.vscode/**
 .idea/**
 
 # links

@@ -1,14 +1,13 @@
-var shell = require('../dist/index');
+const Shell = require('../lib/index');
 
-var ps = new shell({executionPolicy: 'Bypass', verbose: true, version: 3});
+const ps = new Shell({executionPolicy: 'Bypass', verbose: true, /*version: 3*/});
 
 ps.addCommand('$a = "node-"');
 ps.addCommand('$a += "powershell "');
 ps.addCommand('$a += "is awesome"; $a')
-  .then(function(){
-    return ps.invoke();
-  })
-  .then(function(output){
+ps.addCommand('pwd')
+ps.invoke()
+  .then(output => {
     console.log(output);
     var params = [{name:'str', value:'node-powershell rocks'}];
     ps.addCommand('./script-input.ps1', params);
@@ -27,19 +26,10 @@ ps.addCommand('$a += "is awesome"; $a')
     console.log(output);
     console.log(ps.history);
     ps.dispose();
+    process.exit();
   })
   .catch(function(err){
     console.log(err);
     ps.dispose();
+    process.exit();
   });
-
-// ps.addCommand('echo node-powershell')
-// ps.invoke()
-// .then(output => {
-//   console.log(output);
-//   ps.dispose();
-// })
-// .catch(err => {
-//   console.log(err);
-//   ps.dispose();
-// });
