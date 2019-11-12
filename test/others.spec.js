@@ -14,6 +14,7 @@ const {
   convertToPSParam,
   convertToPSOption,
 } = require('../lib/utils');
+
 const {
   PS_PROC_ERROR,
   PS_ARG_MISS_ERROR,
@@ -44,6 +45,15 @@ describe('Utils', () => {
   });
 
   describe('convert', () => {
+    it('convert an array to a PS param', () => {
+      const param = [true, "String with spaces", { key: 123 }];
+      const convertedParam = convertToPSParam(param);
+      
+      expect(convertedParam[0]).to.equal("$True");
+      expect(convertedParam[1]).to.equal('"String with spaces"');
+      expect(convertedParam[2]).to.equal('@{"key"=123}');
+    });
+
     it('convert a JS param to a PS param');
     it('convert a JS option to a PS option');
   });
