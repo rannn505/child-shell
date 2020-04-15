@@ -1,0 +1,18 @@
+<svg id="nsh" 
+  xmlns="http://www.w3.org/2000/svg" 
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 180 205" width="180px" height="205px">
+  <defs>
+    <linearGradient id="grad" gradientUnits="userSpaceOnUse" x1="26.5854" y1="30.7778" x2="93.585403" y2="90.277802">
+      <stop offset="0" style="stop-color:#2D4664" id="stop1581" />
+      <stop offset="0.1689" style="stop-color:#29405B" id="stop1583" />
+      <stop offset="0.4445" style="stop-color:#1E2F43" id="stop1585" />
+      <stop offset="0.7902" style="stop-color:#0C131B" id="stop1587" />
+      <stop offset="1" style="stop-color:#000000" id="stop1589" />
+    </linearGradient>
+  </defs>
+  <polygon id="node" style="clip-rule:evenodd;fill:url(#grad);fill-rule:evenodd;stroke:#ffffff;stroke-width:5px;" points="90,15 165,58.75 165,148.25 90,190 15,148.25 15,58.75"/>
+  <g style="fill:none;stroke:#ffffff;stroke-width:5;transform:translate(60px,82.5px);">
+    <polyline points="0,0 20,20 20,20 0,40"/>
+    <polyline points="20,40 60,40"/>
+  </g>
+</svg>

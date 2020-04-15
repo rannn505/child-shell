@@ -1,21 +1,17 @@
-# temp
-tmp/**
+node_modules
 
-# dependency
-node_modules/**
+coverage
+.nyc_output
 
-# assets
-assets/img/**
-assets/tmp/**
-assets/edit/**
+dist
 
-# coverage
-coverage/**
-.nyc_output/**
+website/translated_docs
+website/build/
+website/node_modules
+website/i18n/*
 
-# idea
-.vscode/**
-.idea/**
+tmp
+lib/tmp
 
-# links
-links.txt
+.vscode
+.idea

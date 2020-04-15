@@ -51,10 +51,10 @@ script:
   - npm run lint
   - npm run test
 after_success: npm run coverage
-deploy:
-  provider: npm
-  email: "rannn505@outlook.com"
-  api_key: "UuLITFEY1xvsz7HYkImWQSYYh6a8Q/jNn9X2OMecT5IUGxLBzT7BK11O7Fi2ZQSH2vdCTNasP3XPqKu6ogPKP7UKQCqpVoPLzzUr/2jVpgSj4fUjb5K0Tw8V7Z4+3YAm4rT8nsK9GVZHthp677e3lkTuRWvIsLOxq1epV137fvVhswt9rC0hHC9S3PtRG7BmFtyo7hFmE2xGbJoPfkmHuAHU6shKJWio9MlNSunpJ1erbT0z8Vqu0ryVMN0sa6v9ZaLD1w6Zw+BRE7knNCk2e9hY0yhlkXLViy0vVrn6Ut+UYfjafLHKa4x8Ms9Q96ZzLarUf47GaEFlavWxnLjEWOST80HpQe6tvmtxLQlU2kKSzdyPiFysadfvnQPOL3D9lunSPp+KJGWvbuAPQKBBtJivaSGV9+BQjKn/ujZvaNNSty2kGgNQYugKqCHrs7M+l0nazyT34H6QakA2KhgfFVN3mAOZvAT4f/CLLOHhVl87seMSQTGp8J9vxUWnscHxggFnZtVu8cRzI6lMuu/VyqEYL5TtO3b9J7cuH+zy5a4FIFhrO2Kgxqk/OnxfHoD7IAr0WDuCQy9rvu6UVBhTV5ZbLacOxWPnktwcJAj6QZBPCjPFrlrRA2XuEXMAmsE+PzJAfxbKsT+82qiXIBgaXEd8BwtuUtHHu4A29nT0QK4="
-  on:
-    branch: master
-    tags: true
+# deploy:
+#   provider: npm
+#   email: "rannn505@outlook.com"
+#   api_key: "UuLITFEY1xvsz7HYkImWQSYYh6a8Q/jNn9X2OMecT5IUGxLBzT7BK11O7Fi2ZQSH2vdCTNasP3XPqKu6ogPKP7UKQCqpVoPLzzUr/2jVpgSj4fUjb5K0Tw8V7Z4+3YAm4rT8nsK9GVZHthp677e3lkTuRWvIsLOxq1epV137fvVhswt9rC0hHC9S3PtRG7BmFtyo7hFmE2xGbJoPfkmHuAHU6shKJWio9MlNSunpJ1erbT0z8Vqu0ryVMN0sa6v9ZaLD1w6Zw+BRE7knNCk2e9hY0yhlkXLViy0vVrn6Ut+UYfjafLHKa4x8Ms9Q96ZzLarUf47GaEFlavWxnLjEWOST80HpQe6tvmtxLQlU2kKSzdyPiFysadfvnQPOL3D9lunSPp+KJGWvbuAPQKBBtJivaSGV9+BQjKn/ujZvaNNSty2kGgNQYugKqCHrs7M+l0nazyT34H6QakA2KhgfFVN3mAOZvAT4f/CLLOHhVl87seMSQTGp8J9vxUWnscHxggFnZtVu8cRzI6lMuu/VyqEYL5TtO3b9J7cuH+zy5a4FIFhrO2Kgxqk/OnxfHoD7IAr0WDuCQy9rvu6UVBhTV5ZbLacOxWPnktwcJAj6QZBPCjPFrlrRA2XuEXMAmsE+PzJAfxbKsT+82qiXIBgaXEd8BwtuUtHHu4A29nT0QK4="
+#   on:
+#     branch: master
+#     tags: true

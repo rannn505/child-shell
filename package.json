@@ -2,28 +2,63 @@
   "name": "node-powershell",
   "version": "4.0.0",
   "description": "Easily run PowerShell from your NodeJS app",
-  "main": "./lib/index.js",
+  "license": "MIT",
+  "homepage": "http://rannn505.github.io/node-powershell/",
+  "repository": "github:rannn505/node-powershell",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "bugs": "https://github.com/rannn505/node-powershell/issues",
+  "main": "./dist/index.js",
   "files": [
-    "lib",
+    "dist",
     "docs",
-    "example",
-    "test"
+    "examples",
+    "lib"
   ],
-  "directories": {
-    "lib": "lib",
-    "docs": "docs",
-    "example": "example",
-    "test": "test"
-  },
   "scripts": {
-    "test": "nyc mocha",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "eslint lib/",
-    "start": "cd ./example && node example.js"
+    "clean": "npx rimraf dist coverage",
+    "format": "prettier --write \"lib/**/*.{ts}\" \"**/*.md\"",
+    "lint": "eslint --ext ts lib --fix",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "npm test -- --coverage",
+    "build": "npm run clean && tsc",
+    "build:watch": "npm run build -- -w",
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run clean && npm run format && npm run lint && npm test",
+    "examples": "npm run build && npx ts-node examples",
+    "start": "npm run examples"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rannn505/node-powershell.git"
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "dependencies": {
+    "ms": "^2.1.2",
+    "p-queue": "^6.3.0",
+    "rxjs": "^6.5.5",
+    "shortid": "^2.2.15",
+    "signale": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/ms": "^0.7.31",
+    "@types/node": "^13.11.1",
+    "@types/shortid": "0.0.29",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.3",
+    "jest": "^25.3.0",
+    "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.3.1",
+    "ts-node": "^8.8.1",
+    "typescript": "^3.8.3"
   },
   "keywords": [
     "node-powershell",
@@ -56,26 +91,5 @@
     "PowerShell Core 6.0",
     "PowerShell 6.0",
     "pwsh"
-  ],
-  "author": "Ran Cohen <rannn505@outlook.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rannn505/node-powershell/issues"
-  },
-  "homepage": "http://rannn505.github.io/node-powershell/",
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "shortid": "^2.2.14"
-  },
-  "devDependencies": {
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.0",
-    "eslint": "^5.9.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "mocha": "^4.0.1",
-    "nyc": "^13.1.0",
-    "sinon": "^7.2.3"
-  }
+  ]
 }

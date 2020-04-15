@@ -22,7 +22,7 @@ All powershell options from [here](https://docs.microsoft.com/en-us/powershell/s
 All pwsh options from [here](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pwsh?view=powershell-6) are supported.
 
 > * Both powershell and pwsh options should be passed in camel-case format. 
-> * Both powershell and pwsh processes will be launched with the `noLogo` and `noExit` flags. Overriding this behavior is not recommended.
+> * Both powershell and pwsh processes will be launched with the `noLogo`, `noExit` and `command -` flags. Overriding this behavior is not recommended.
 
 #### Returns
 
