@@ -1,7 +1,7 @@
-import { IProcessOptions, IShellProcessOptions } from '../shell/options';
+import { IShellProcessOptions, ShellOptions } from '../shell/options';
 import { PSExecutableType } from './enums/PSExecutableType';
 
-interface IPowerShellOptions {
+interface IPowerShellProcessOptions {
   sta: boolean;
   mta: boolean;
   command: string;
@@ -24,20 +24,16 @@ interface IPowerShellOptions {
   windowStyle: string;
   workingDirectory: string;
 }
-export type PowerShellOptions = IProcessOptions & Partial<IPowerShellOptions>;
+export type PowerShellProcessOptions = IShellProcessOptions & Partial<IPowerShellProcessOptions>;
 
-interface IPowerShellProcessOptions {
+interface IPowerShellOptions {
+  port: string;
+  verbose: boolean;
   pwsh: boolean;
   pwshPrev: boolean;
   executable: PSExecutableType;
-  processOptions: PowerShellOptions;
+  processOptions: PowerShellProcessOptions;
 }
-export type PowerShellProcessOptions = IShellProcessOptions & Partial<IPowerShellProcessOptions>;
+export type PowerShellOptions = ShellOptions & Partial<IPowerShellOptions>;
 
-interface INodePowerShellOptions {
-  port: string;
-  verbose: boolean;
-}
-export type NodePowerShellOptions = Partial<INodePowerShellOptions>;
-
-export type options = NodePowerShellOptions & PowerShellProcessOptions;
+export type options = PowerShellOptions;

@@ -85,7 +85,7 @@ export class PSTypeConverter {
     const objType = toType(obj);
     const PSObjectClass = JS_TO_PS_TYPES_MAPPING[objType];
     if (!PSObjectClass) {
-      throw new Error('type not found');
+      throw new Error('Type not found');
     }
     return new PSObjectClass(obj);
   }

@@ -1,9 +1,9 @@
 import { generate } from 'shortid';
-import { AccumulatorStream } from './AccumulatorStream';
+import { AccumulateStream } from './AccumulateStream';
 
 export const DOMAIN_EVENT = 'domain';
 
-export class DomainStream extends AccumulatorStream {
+export class DomainStream extends AccumulateStream {
   readonly delimiter: string;
   private firstDelimiterOccurrence: number;
   private secondDelimiterOccurrence: number;

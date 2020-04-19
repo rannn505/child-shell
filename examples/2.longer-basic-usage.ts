@@ -1,13 +1,13 @@
-/* eslint-disable no-console */
+import { PowerShell, PSCommand } from '../dist/index';
 
-import { NodePowerShell, PSCommand } from '../dist/index';
-
-(async (): Promise<void> => {
+export default (async (): Promise<void> => {
   try {
-    const ps = new NodePowerShell({
-      processOptions: {
-        shit: true,
-      },
+    const ps = new PowerShell({
+      // processOptions: {
+      //   executionPolicy: 'Bypass',
+      //   noProfile: true,
+      //   noLogo: true,
+      // },
     });
 
     const cmd1 = new PSCommand()
@@ -17,7 +17,8 @@ import { NodePowerShell, PSCommand } from '../dist/index';
       .addStatement()
       .addCommand('$a += "is awesome"')
       .addStatement()
-      .addCommand('$a');
+      .addCommand('echo')
+      .addArgument('$a');
     const res1 = await ps.addCommand(cmd1).invoke();
     console.log(res1);
 
@@ -29,7 +30,7 @@ import { NodePowerShell, PSCommand } from '../dist/index';
     const res3 = await ps.addCommand(cmd3).invoke();
     console.log(res3);
 
-    ps.dispose();
+    await ps.kill();
   } catch (error) {
     console.log(error);
   }

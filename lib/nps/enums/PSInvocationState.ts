@@ -1,9 +1,9 @@
 export enum PSInvocationState {
-  NotStarted,
-  Running,
-  Stopping,
-  Stopped,
-  Completed,
-  Failed,
-  Disconnected,
+  NotStarted = 'NotStarted',
+  Running = 'Running',
+  Stopping = 'Stopping',
+  Stopped = 'Stopped',
+  Completed = 'Completed',
+  Failed = 'Failed',
+  Disconnected = 'Disconnected',
 }

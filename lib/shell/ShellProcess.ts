@@ -1,17 +1,20 @@
 import { EOL } from 'os';
 import { spawn, SpawnOptions, ChildProcess } from 'child_process';
+import { Writable } from 'stream';
 import { once } from 'events';
 import PQueue from 'p-queue';
 import ms from 'ms';
-import { Subject } from 'rxjs';
+import { Subject, fromEvent, from, race } from 'rxjs';
+import { map, first, mapTo, delay, tap } from 'rxjs/operators';
 import { ProcessError, InvocationError } from '../common/errors';
 import { IStdioObject, IShellCommandResult } from '../common/types';
-import { IShellProcessOptions, IProcessOptions } from './options';
-import { DomainStream, DOMAIN_EVENT } from './DomainStream';
+import { ShellOptions, IShellProcessOptions } from './options';
+import { DomainStream, DOMAIN_EVENT } from './streams/DomainStream';
+import { RotateStream, ROTATE_EVENT } from './streams/RotateStream';
 
 export abstract class ShellProcess {
   private isExited: boolean;
-  private exitPromise: Promise<string>;
+  private exitObserver: Subject<string>;
   private resultsEncoding: BufferEncoding;
   private killSignal: NodeJS.Signals;
 
@@ -20,12 +23,11 @@ export abstract class ShellProcess {
   protected spawnOptions: SpawnOptions;
   protected invocationQueue: PQueue;
   protected readonly process: ChildProcess;
-
   readonly streams: IStdioObject;
   readonly results: Subject<IShellCommandResult>;
   readonly history: IShellCommandResult[];
 
-  constructor(options: IShellProcessOptions) {
+  constructor(options: ShellOptions) {
     this.setExecutable(options);
     this.setProcessOptions(options);
     this.spawnOptions = options.spawnOptions;
@@ -34,9 +36,7 @@ export abstract class ShellProcess {
 
     this.beforeSpawn();
     this.process = spawn(this.executable, this.processOptions, this.spawnOptions);
-    this.afterSpawn();
-
-    this.exitPromise = this.setProcessExitListeners();
+    this.exitObserver = this.setProcessExitListeners();
     this.setProcessStdioEncoding(options);
     this.setProcessKillOptions(options);
 
@@ -47,17 +47,18 @@ export abstract class ShellProcess {
     };
     this.results = new Subject<IShellCommandResult>();
     this.history = [];
+
+    this.afterSpawn();
   }
 
   protected abstract setExecutable({ executable }: { executable?: string }): void;
-  protected abstract setProcessOptions({ processOptions }: { processOptions?: IProcessOptions }): void;
+  protected abstract setProcessOptions({ processOptions }: { processOptions?: IShellProcessOptions }): void;
   protected abstract writeToOut(input: string): string;
   protected abstract writeToErr(input: string): string;
   protected beforeSpawn(): void {}
   protected afterSpawn(): void {}
   protected beforeInvoke(): void {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected afterInvoke(hadErrors: boolean): void {}
+  protected afterInvoke(): void {}
   protected onActive(): void {}
   protected onIdle(): void {}
   protected afterExit(): void {}
@@ -81,39 +82,86 @@ export abstract class ShellProcess {
     this.invocationQueue.clear();
   }
 
-  private async setProcessExitListeners(): Promise<string> {
-    if (!this.process.pid) {
-      throw new ProcessError('process is no longer exists');
-    }
+  private setProcessExitListeners(): Subject<string> {
+    // create process exit observer
+    const subject = new Subject<string>();
 
-    const listeners = [once(this.process, 'error'), once(this.process, 'exit')];
+    // listen to stderr for catching starter errors
+    let useStderr = false;
+    const stderr = new RotateStream({ count: 5 });
+    this.process.stderr.pipe(stderr);
+    once(stderr, ROTATE_EVENT).then(() => {
+      // probably there is no starter error after 5 chunks so disable this listener
+      this.detachStdio(stderr);
+    });
+
+    // utils for building exit message
+    const { pid } = this.process;
+    const messagePrefix = `Process${pid ? ` ${pid}` : ''} exited with`;
+    const getMessageSuffix = (): string => (useStderr ? `\n${stderr.getContent().toString(this.resultsEncoding)}` : '');
+
+    // process listeners
+    const error$ = fromEvent(this.process, 'error')
+      .pipe(first())
+      .pipe(
+        map((err: Error) => {
+          throw new ProcessError(`${messagePrefix} error ${err.message}${getMessageSuffix()}`);
+        }),
+      );
+    const exit$ = fromEvent(this.process, 'exit')
+      .pipe(first())
+      .pipe(
+        map(([code, signal]: [number, string]) => {
+          if (signal && signal !== this.killSignal) {
+            throw new ProcessError(`${messagePrefix} signal ${signal}${getMessageSuffix()}`);
+          }
+
+          if (code && code !== 0) {
+            throw new ProcessError(`${messagePrefix} code ${code}${getMessageSuffix()}`);
+          }
+
+          return `${messagePrefix} code 0`;
+        }),
+      );
+    let inError$ = from(['']);
     if (this.process.stdin) {
-      listeners.push(once(this.process.stdin, 'error'));
-    }
-    const exitData = await Promise.race(listeners);
-
-    this.isExited = true;
-    this.clearInvocationQueue();
-    this.process.stdin.end();
-
-    this.afterExit();
-
-    const messagePrefix = `process ${this.process.pid} exited with`;
-    const [code, signal, err] = exitData;
-
-    if (signal && signal !== this.killSignal) {
-      throw new ProcessError(`${messagePrefix} signal ${signal}`);
-    }
-
-    if (code && code !== 0) {
-      throw new ProcessError(`${messagePrefix} code ${code}`);
+      // catch EPIPE error to avoid node crash ->
+      inError$ = fromEvent(this.process.stdin, 'error')
+        .pipe(first())
+        .pipe(
+          // mark useStderr as true ->
+          tap(() => {
+            useStderr = true;
+          }),
+          // silence it ->
+          mapTo(''),
+          // delay it so exit$ will win the race ->
+          delay(1000),
+        );
+      // exit result determined by $exit
     }
 
-    if (err) {
-      throw new ProcessError(`${messagePrefix} error ${err}`);
-    }
+    // clean after process exited
+    const onProcessExit = (): void => {
+      this.isExited = true;
+      this.clearInvocationQueue();
+      this.process.stdin.end();
+      this.detachStdio(stderr);
+      this.afterExit();
+    };
 
-    return `${messagePrefix} code 0`;
+    subject.subscribe({
+      error: () => onProcessExit(),
+      complete: () => onProcessExit(),
+    });
+
+    // Process exit scenarios:
+    // 1) ENOENT - spawn error - error$
+    // 2) EPIPE - bad process option - exit$
+    // 3) EXIT<code/signal> - process exit with either 0 or error - exit$
+    race(error$, exit$, inError$).subscribe(subject);
+
+    return subject;
   }
 
   private setProcessStdioEncoding({
@@ -150,11 +198,13 @@ export abstract class ShellProcess {
     return this.process.killed;
   }
 
-  private async invokeTask(command: string): Promise<IShellCommandResult> {
-    if (this.isExited) {
-      return;
-    }
+  private detachStdio(stream: Writable): void {
+    this.process.stdout.unpipe(stream);
+    this.process.stderr.unpipe(stream);
+    stream.end();
+  }
 
+  private async invokeTask(command: string): Promise<IShellCommandResult> {
     this.beforeInvoke();
 
     // 1: update history
@@ -174,7 +224,7 @@ export abstract class ShellProcess {
 
     // 3: race output and error
     const results = Promise.race([
-      this.exitPromise,
+      this.exitObserver.toPromise(),
       Promise.all([once(stdout, DOMAIN_EVENT), once(stderr, DOMAIN_EVENT)]),
     ]);
 
@@ -196,9 +246,8 @@ export abstract class ShellProcess {
     await results;
 
     // 5: clean
-    this.process.stdout.unpipe(stdout);
-    this.process.stderr.unpipe(stderr);
-    stdout.end(() => stderr.end());
+    this.detachStdio(stdout);
+    this.detachStdio(stderr);
 
     // 6: update history with results/error
     currentHistoryRecord.stdout = stdout.getContent();
@@ -211,27 +260,24 @@ export abstract class ShellProcess {
       currentHistoryRecord.result = currentHistoryRecord.stderr.toString(this.resultsEncoding);
     }
 
-    this.afterInvoke(currentHistoryRecord.hadErrors);
+    this.afterInvoke();
 
     // 7: return command result
     this.results.next(currentHistoryRecord);
-    // eslint-disable-next-line consistent-return
     return currentHistoryRecord;
   }
 
   async invoke(command: string): Promise<IShellCommandResult> {
     if (this.isExited) {
-      throw new InvocationError('invoke called after process exited');
+      throw new InvocationError('Invoke called after process exited');
     }
     return this.invocationQueue.add(() => this.invokeTask(command));
   }
 
-  kill(): boolean {
-    if (this.isExited) {
-      return true;
+  async kill(): Promise<string> {
+    if (!this.isExited) {
+      this.process.kill(this.killSignal);
     }
-
-    this.process.kill(this.killSignal);
-    return this.isSignalReceived();
+    return this.exitObserver.toPromise();
   }
 }

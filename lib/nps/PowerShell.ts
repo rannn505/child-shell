@@ -1,8 +1,10 @@
 import { isWin } from '../common/utils';
+import { IShellCommandResult } from '../common/types';
 import { ShellProcess } from '../shell/ShellProcess';
 import { PSExecutableType } from './enums/PSExecutableType';
 import { PSInvocationState } from './enums/PSInvocationState';
-import { PowerShellOptions } from './options';
+import { PowerShellOptions, PowerShellProcessOptions } from './options';
+import { PSCommand } from './PSCommand';
 import { PSOption } from './PSOption';
 
 // const DEFAULT_PROCESS_ERROR_MSG = `
@@ -11,8 +13,15 @@ import { PSOption } from './PSOption';
 //   https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell
 // `;
 
-export class PSProcess extends ShellProcess {
+export class PowerShell extends ShellProcess {
+  public command: PSCommand;
   public invocationStateInfo: PSInvocationState;
+
+  constructor(options: PowerShellOptions = {}) {
+    super(options);
+
+    this.command = new PSCommand();
+  }
 
   protected setExecutable({
     pwsh = false,
@@ -23,6 +32,7 @@ export class PSProcess extends ShellProcess {
     pwshPrev?: boolean;
     executable?: PSExecutableType;
   }): void {
+    // eslint-disable-next-line no-shadow
     const { PowerShell, PowerShellCore, PowerShellCorePreview } = PSExecutableType;
 
     if (process.env.NPS) {
@@ -56,8 +66,15 @@ export class PSProcess extends ShellProcess {
         this.executable = PowerShellCore;
         return;
       default:
-        throw new Error('unable to determine PS executable');
+        throw new Error('Unable to determine PS executable');
     }
+  }
+
+  private setExecutableSuffix(): void {
+    if (!isWin) {
+      return;
+    }
+    this.executable = `${this.executable}.exe`;
   }
 
   protected setProcessOptions({
@@ -67,7 +84,7 @@ export class PSProcess extends ShellProcess {
       command: '-', // need to be last
     },
   }: {
-    processOptions?: PowerShellOptions;
+    processOptions?: PowerShellProcessOptions;
   }): void {
     let powershellOptions: string[] = [];
     Object.keys(processOptions).forEach((opt: string) => {
@@ -85,31 +102,63 @@ export class PSProcess extends ShellProcess {
     return `[Console]::Error.WriteLine("${input}")`;
   }
 
-  private setExecutableSuffix(): void {
-    if (!isWin) {
-      return;
-    }
-    this.executable = `${this.executable}.exe`;
-  }
-
-  beforeSpawn(): void {
+  protected beforeSpawn(): void {
     this.setExecutableSuffix();
     this.invocationStateInfo = PSInvocationState.NotStarted;
   }
 
-  beforeInvoke(): void {
+  protected afterSpawn(): void {
+    // super.invoke('$PSVersionTable');
+  }
+
+  protected beforeInvoke(): void {
     this.invocationStateInfo = PSInvocationState.Running;
   }
 
-  afterInvoke(hadErrors: boolean): void {
-    this.invocationStateInfo = !hadErrors ? PSInvocationState.Completed : PSInvocationState.Failed;
+  protected afterInvoke(): void {
+    this.invocationStateInfo = this.history[0].hadErrors ? PSInvocationState.Failed : PSInvocationState.Completed;
   }
 
-  onIdle(): void {
+  protected onIdle(): void {
     this.invocationStateInfo = PSInvocationState.Stopped;
   }
 
-  afterExit(): void {
+  protected afterExit(): void {
     this.invocationStateInfo = PSInvocationState.Disconnected;
+  }
+
+  addCommand(command: string | PSCommand): PowerShell {
+    this.command = this.command.addCommand(command);
+    return this;
+  }
+
+  addArgument(argument: string): PowerShell {
+    this.command = this.command.addArgument(argument);
+    return this;
+  }
+
+  addParameter(name: string, value?: unknown): PowerShell {
+    this.command = this.command.addParameter(name, value);
+    return this;
+  }
+
+  addParameters(parameters: { name: string; value?: unknown }[] = []): PowerShell {
+    parameters.forEach((p) => this.addParameter(p.name, p.value));
+    return this;
+  }
+
+  clear(): PowerShell {
+    this.command = this.command.clear();
+    return this;
+  }
+
+  async invoke(): Promise<IShellCommandResult> {
+    const commandToInvoke = this.command.command;
+    this.clear();
+    return super.invoke(commandToInvoke);
+  }
+
+  dispose(): Promise<IShellCommandResult> {
+    return super.invoke('exit 0');
   }
 }

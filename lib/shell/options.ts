@@ -1,18 +1,20 @@
 import { SpawnOptions } from 'child_process';
 
-export interface IProcessOptions {
+export interface IShellProcessOptions {
   [key: string]: unknown;
 }
 
-export interface IShellProcessOptions {
-  executable?: string;
-  processOptions?: IProcessOptions;
-  spawnOptions?: SpawnOptions;
-  inputEncoding?: BufferEncoding;
-  outputEncoding?: BufferEncoding;
-  killSignal?: NodeJS.Signals;
-  killTimeout?: string;
-  killInvocationTimeout?: string;
+export interface IShellOptions {
+  executable: string;
+  processOptions: IShellProcessOptions;
+  spawnOptions: SpawnOptions;
+  inputEncoding: BufferEncoding;
+  outputEncoding: BufferEncoding;
+  killSignal: NodeJS.Signals;
+  killTimeout: string;
+  killInvocationTimeout: string;
 }
 
-export type options = IShellProcessOptions;
+export type ShellOptions = Partial<IShellOptions>;
+
+export type options = ShellOptions;

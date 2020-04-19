@@ -50,7 +50,7 @@ Improvements to the documentation are always welcome. You can find them in the [
 
 ### Examples
 
-Redux comes with some [examples](https://redux.js.org/introduction/examples) to demonstrate various concepts and best practices.
+`node-shell` comes with some [examples](/examples) to demonstrate various concepts and best practices.
 When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.
 
 ## Resources
@@ -59,6 +59,6 @@ When adding a new example, please adhere to the style and format of the existing
 - [Using Pull Requests](https://help.github.com/articles/about-pull-requests/)
 - [GitHub Help](https://help.github.com)
 - [JavaScript Standard Style](https://standardjs.com/)
-- [Code of Conduct for Open Source Projects]([CODE_OF_CONDUCT.md](https://www.contributor-covenant.org/))
+- [Code of Conduct for Open Source Projects](https://www.contributor-covenant.org/)
 
 Thank you for contributing :)

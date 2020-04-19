@@ -1,12 +1,12 @@
 import { Writable } from 'stream';
-import { trimBuffer } from '../common/utils';
+import { trimBuffer } from '../../common/utils';
 
 export const CHUNK_EVENT = 'chunk';
 
-export class AccumulatorStream extends Writable {
-  protected chunks: Buffer;
-  public chunkCounter: number;
+export class AccumulateStream extends Writable {
   private isTrimmed: boolean;
+  protected chunks: Buffer;
+  protected chunkCounter: number;
 
   constructor() {
     super();

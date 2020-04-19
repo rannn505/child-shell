@@ -1,12 +1,10 @@
-/* eslint-disable no-console */
+import { PowerShell } from '../dist/index';
 
-import { NodePowerShell } from '../dist/index';
-
-(async (): Promise<void> => {
-  const ps = new NodePowerShell();
+export default (async (): Promise<void> => {
+  const ps = new PowerShell();
 
   const res1 = await ps.addCommand('pwd').invoke();
   console.log(res1);
 
-  ps.dispose();
+  await ps.kill();
 })();
