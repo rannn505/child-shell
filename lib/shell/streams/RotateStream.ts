@@ -7,14 +7,16 @@ export const ROTATE_EVENT = 'rotate';
 type RotateStreamOptions = { size?: string; interval?: string; count?: number };
 
 export class RotateStream extends AccumulateStream {
-  readonly options: RotateStreamOptions;
+  private readonly options: RotateStreamOptions;
+  private readonly interval: NodeJS.Timeout;
+
   constructor(options: RotateStreamOptions = {}) {
     super();
 
     this.options = options;
 
     if (this.options.interval) {
-      setInterval(() => {
+      this.interval = setInterval(() => {
         this.rotate();
       }, ms(this.options.interval));
     }
@@ -37,6 +39,11 @@ export class RotateStream extends AccumulateStream {
       this.rotate();
     }
 
+    return cb();
+  }
+
+  _final(cb: Function): void {
+    clearInterval(this.interval);
     return cb();
   }
 }

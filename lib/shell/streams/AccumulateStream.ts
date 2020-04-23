@@ -20,7 +20,7 @@ export class AccumulateStream extends Writable {
     const newChunksLength = this.chunks.length + chunk.length;
     this.chunks = Buffer.concat([this.chunks, chunk], newChunksLength);
     this.chunkCounter += 1;
-    this.emit(CHUNK_EVENT, this.chunkCounter, this.chunks);
+    this.emit(CHUNK_EVENT, chunk, this.chunkCounter, this.chunks);
     return cb();
   }
 

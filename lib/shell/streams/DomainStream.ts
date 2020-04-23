@@ -7,6 +7,7 @@ export class DomainStream extends AccumulateStream {
   readonly delimiter: string;
   private firstDelimiterOccurrence: number;
   private secondDelimiterOccurrence: number;
+
   constructor(delimiter = generate()) {
     super();
 
