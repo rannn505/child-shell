@@ -1,0 +1,1 @@
+echo "Hey from script"

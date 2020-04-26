@@ -1,45 +1,18 @@
-import { Signale } from 'signale';
-import { isWin } from '../common/utils';
-import { ShellCommandResult } from '../common/types';
-import { ShellProcess } from '../shell/ShellProcess';
+import { isWin } from '../core/utils';
+import { ShellCommandResult } from '../core/types';
+import { Shell } from '../core/Shell';
+import { ShellHooks } from '../core/options';
 import { PSExecutableType } from './enums/PSExecutableType';
 import { PSInvocationState } from './enums/PSInvocationState';
-import { PowerShellOptions, PowerShellProcessOptions } from './options';
-import { PSCommand } from './PSCommand';
 import { PSOption } from './PSOption';
+import { PSCommand } from './PSCommand';
+import { PowerShellOptions, PowerShellProcessOptions } from './options';
 
-export class PowerShell extends ShellProcess {
-  public command: PSCommand;
+export class PowerShell extends Shell {
   public invocationStateInfo: PSInvocationState;
 
   constructor(options: PowerShellOptions = {}) {
-    super(options);
-    this.command = new PSCommand();
-
-    this.beforeSpawn = ({ executable }): void => {
-      this.setExecutableSuffix(executable);
-      this.invocationStateInfo = PSInvocationState.NotStarted;
-    };
-    this.afterSpawn = (): void => {
-      this.command.addCommand('$PSVersionTable');
-      this.invoke();
-    };
-    this.beforeInvoke = (): void => {
-      this.invocationStateInfo = PSInvocationState.Running;
-    };
-    this.afterInvoke = ({ result }): void => {
-      this.invocationStateInfo = result.hadErrors ? PSInvocationState.Failed : PSInvocationState.Completed;
-    };
-    this.onIdle = (): void => {
-      this.invocationStateInfo = PSInvocationState.Stopped;
-    };
-    this.afterExit = (): void => {
-      this.invocationStateInfo = PSInvocationState.Disconnected;
-    };
-  }
-
-  protected setLogger({ verbose = false }: { verbose?: boolean }): Signale {
-    return new Signale({ scope: 'NPS', disabled: !verbose, config: { displayTimestamp: true } });
+    super(options, 'NPS', PSCommand);
   }
 
   protected setExecutable({
@@ -107,6 +80,31 @@ export class PowerShell extends ShellProcess {
     return powershellOptions;
   }
 
+  protected setHooks(): ShellHooks {
+    return {
+      beforeSpawn: ({ executable }): void => {
+        this.setExecutableSuffix(executable);
+        this.invocationStateInfo = PSInvocationState.NotStarted;
+      },
+      afterSpawn: (): void => {
+        this.addCommand('$PSVersionTable');
+        this.invoke();
+      },
+      onIdle: (): void => {
+        this.invocationStateInfo = PSInvocationState.Stopped;
+      },
+      beforeInvoke: (): void => {
+        this.invocationStateInfo = PSInvocationState.Running;
+      },
+      afterInvoke: ({ result }): void => {
+        this.invocationStateInfo = result.hadErrors ? PSInvocationState.Failed : PSInvocationState.Completed;
+      },
+      afterExit: (): void => {
+        this.invocationStateInfo = PSInvocationState.Disconnected;
+      },
+    };
+  }
+
   protected writeToOut(input: string): string {
     return `[Console]::Out.WriteLine("${input}")`;
   }
@@ -115,38 +113,8 @@ export class PowerShell extends ShellProcess {
     return `[Console]::Error.WriteLine("${input}")`;
   }
 
-  addCommand(command: string | PSCommand): PowerShell {
-    this.command = this.command.addCommand(command);
-    return this;
-  }
-
-  addArgument(argument: string): PowerShell {
-    this.command = this.command.addArgument(argument);
-    return this;
-  }
-
-  addParameter(name: string, value?: unknown): PowerShell {
-    this.command = this.command.addParameter(name, value);
-    return this;
-  }
-
-  addParameters(parameters: { name: string; value?: unknown }[] = []): PowerShell {
-    parameters.forEach((p) => this.addParameter(p.name, p.value));
-    return this;
-  }
-
-  clear(): PowerShell {
-    this.command = this.command.clear();
-    return this;
-  }
-
-  async invoke(): Promise<ShellCommandResult> {
-    const commandToInvoke = this.command.command;
-    this.clear();
-    return super.invoke(commandToInvoke);
-  }
-
-  dispose(): Promise<ShellCommandResult> {
-    return super.invoke('exit 0');
+  public dispose(): Promise<ShellCommandResult> {
+    this.addCommand('exit 0');
+    return super.invoke();
   }
 }

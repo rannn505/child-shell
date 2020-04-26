@@ -2,31 +2,36 @@ import { EOL } from 'os';
 import { spawn, SpawnOptions, ChildProcess } from 'child_process';
 import { Writable } from 'stream';
 import { once } from 'events';
+
+import Debugger from 'debug';
 import PQueue from 'p-queue';
 import ms from 'ms';
 import { Subject, fromEvent, race, Observable } from 'rxjs';
 import { map, first, mapTo, delay, tap } from 'rxjs/operators';
-import { ProcessError, InvocationError } from '../common/errors';
-import { StdioObject, ShellCommandResult, ChildProcessExitData, ILogger } from '../common/types';
-import { CHUNK_EVENT } from './streams/AccumulateStream';
-import { DomainStream, DOMAIN_EVENT } from './streams/DomainStream';
-import { RotateStream, ROTATE_EVENT } from './streams/RotateStream';
+
+import { CHUNK_EVENT } from '../stream/AccumulateStream';
+import { DomainStream, DOMAIN_EVENT } from '../stream/DomainStream';
+import { RotateStream, ROTATE_EVENT } from '../stream/RotateStream';
+import { Dash } from './Parameter';
+import { Command } from './Command';
+import { ProcessError, InvocationError } from './errors';
+import { ShellStdioObject, ShellCommandResult, ShellExitData } from './types';
 import {
   ShellOptions,
-  ShellProcessOptions,
-  ShellProcessHooks,
-  BeforeInvokeHook,
-  BeforeSpawnHook,
-  AfterSpawnHook,
-  AfterInvokeHook,
-  OnActiveHook,
-  OnIdleHook,
-  AfterExitHook,
+  ProcessOptions,
+  ShellHooks,
+  BeforeSpawnHookParams,
+  AfterSpawnHookParams,
+  OnActiveHookParams,
+  OnIdleHookParams,
+  BeforeInvokeHookParams,
+  AfterInvokeHookParams,
+  AfterExitHookParams,
 } from './options';
 
-export abstract class ShellProcess {
-  private readonly logger: ILogger;
-  private readonly hooks: ShellProcessHooks;
+export abstract class Shell {
+  private readonly debugger: Debugger.Debugger;
+  private readonly hooks: { fromOptions: ShellHooks; fromDerived: ShellHooks };
   private readonly executable: string;
   private readonly processOptions: string[];
   private readonly spawnOptions: SpawnOptions;
@@ -34,41 +39,33 @@ export abstract class ShellProcess {
   private isExited: boolean;
   private readonly killSignal: NodeJS.Signals;
   private readonly process: ChildProcess;
-  private readonly exitObserver: Subject<ChildProcessExitData>;
+  private readonly exitObserver: Subject<ShellExitData>;
   private readonly resultsEncoding: BufferEncoding;
-  readonly streams: StdioObject;
+  readonly streams: ShellStdioObject;
   readonly results: Subject<ShellCommandResult>;
   readonly history: ShellCommandResult[];
+  public command: Command;
 
-  protected beforeSpawn: BeforeSpawnHook = (): void => {};
-  protected afterSpawn: AfterSpawnHook = (): void => {};
-  protected beforeInvoke: BeforeInvokeHook = (): void => {};
-  protected afterInvoke: AfterInvokeHook = (): void => {};
-  protected onActive: OnActiveHook = (): void => {};
-  protected onIdle: OnIdleHook = (): void => {};
-  protected afterExit: AfterExitHook = (): void => {};
-
-  constructor(options: ShellOptions) {
-    this.logger = this.setLogger(options);
-    this.hooks = options.hooks ?? {};
+  constructor(options: ShellOptions, namespace: string, CommandCtor = Command) {
+    this.debugger = this.setDebugger(options, namespace);
+    // eslint-disable-next-line no-console
+    this.debugger.log = console.log.bind(console);
     this.executable = this.setExecutable(options);
     this.processOptions = this.setProcessOptions(options);
     this.spawnOptions = options.spawnOptions;
+    this.hooks = {
+      fromOptions: options.hooks ?? {},
+      fromDerived: this.setHooks() ?? {},
+    };
     this.invocationQueue = this.setInvocationQueue(options);
     this.isExited = false;
 
-    this.logger.info(`Starting ${this.executable} ${this.processOptions.join(' ')}`);
+    this.debugger(`Starting ${this.executable} ${this.processOptions.join(' ')}`);
     this.beforeSpawn({
       executable: this.executable,
       processOptions: this.processOptions,
       spawnOptions: this.spawnOptions,
     });
-    this.hooks?.beforeSpawn?.({
-      executable: this.executable,
-      processOptions: this.processOptions,
-      spawnOptions: this.spawnOptions,
-    });
-
     this.process = spawn(this.executable, this.processOptions, this.spawnOptions);
 
     this.resultsEncoding = options.outputEncoding ?? 'utf-8';
@@ -84,17 +81,61 @@ export abstract class ShellProcess {
     };
     this.results = new Subject<ShellCommandResult>();
     this.history = [];
-
+    this.command = new CommandCtor();
     this.afterSpawn({ process: this.process });
-    this.hooks?.afterSpawn?.({ process: this.process });
   }
 
-  // eslint-disable-next-line no-empty-pattern
-  protected abstract setLogger({}: {}): ILogger;
   protected abstract setExecutable({ executable }: { executable?: string }): string;
-  protected abstract setProcessOptions({ processOptions }: { processOptions?: ShellProcessOptions }): string[];
+  protected abstract setProcessOptions({ processOptions }: { processOptions?: ProcessOptions }): string[];
+  protected abstract setHooks(): ShellHooks;
   protected abstract writeToOut(input: string): string;
   protected abstract writeToErr(input: string): string;
+
+  private beforeSpawn(params: BeforeSpawnHookParams): void {
+    this.hooks.fromDerived?.beforeSpawn?.call?.(this, params);
+    this.hooks.fromOptions?.beforeSpawn?.call?.(this, params);
+  }
+
+  private afterSpawn(params: AfterSpawnHookParams): void {
+    this.hooks.fromDerived?.afterSpawn?.call?.(this, params);
+    this.hooks.fromOptions?.afterSpawn?.call?.(this, params);
+  }
+
+  private onActive(params: OnActiveHookParams): void {
+    this.hooks.fromDerived?.onActive?.call?.(this, params);
+    this.hooks.fromOptions?.onActive?.call?.(this, params);
+  }
+
+  private onIdle(params: OnIdleHookParams): void {
+    this.hooks.fromDerived?.onIdle?.call?.(this, params);
+    this.hooks.fromOptions?.onIdle?.call?.(this, params);
+  }
+
+  private beforeInvoke(params: BeforeInvokeHookParams): void {
+    this.hooks.fromDerived?.beforeInvoke?.call?.(this, params);
+    this.hooks.fromOptions?.beforeInvoke?.call?.(this, params);
+  }
+
+  private afterInvoke(params: AfterInvokeHookParams): void {
+    this.hooks.fromDerived?.afterInvoke?.call?.(this, params);
+    this.hooks.fromOptions?.afterInvoke?.call?.(this, params);
+  }
+
+  private afterExit(params: AfterExitHookParams): void {
+    this.hooks.fromDerived?.afterExit?.call?.(this, params);
+    this.hooks.fromOptions?.afterExit?.call?.(this, params);
+  }
+
+  private setDebugger(
+    { debug, verbose }: { debug?: boolean; verbose?: boolean },
+    namespace: string,
+  ): Debugger.Debugger {
+    const _debugger = Debugger(namespace);
+    if (debug || verbose) {
+      Debugger.enable(`${namespace}:*`);
+    }
+    return _debugger;
+  }
 
   private setInvocationQueue({ killInvocationTimeout }: { killInvocationTimeout?: string }): PQueue {
     const timeout = killInvocationTimeout ? ms(killInvocationTimeout) : undefined;
@@ -107,11 +148,9 @@ export abstract class ShellProcess {
 
     invocationQueue.on('active', () => {
       this.onActive({ pending: invocationQueue.pending });
-      this.hooks?.onActive?.({ pending: invocationQueue.pending });
     });
     invocationQueue.onIdle().then(() => {
       this.onIdle({});
-      this.hooks?.onIdle?.({});
     });
 
     return invocationQueue;
@@ -123,9 +162,9 @@ export abstract class ShellProcess {
     this.invocationQueue.clear();
   }
 
-  private setProcessExitListeners(): Subject<ChildProcessExitData> {
+  private setProcessExitListeners(): Subject<ShellExitData> {
     // create process exit observer
-    const subject = new Subject<ChildProcessExitData>();
+    const subject = new Subject<ShellExitData>();
 
     // listen to stderr for catching starter errors
     let useStderr = false;
@@ -173,7 +212,7 @@ export abstract class ShellProcess {
         return { message: `${messagePrefix} code 0`, hadError: false, code: 0 };
       }),
     );
-    let inError$: Observable<ChildProcessExitData>;
+    let inError$: Observable<ShellExitData>;
     if (this.process.stdin) {
       // catch EPIPE error to avoid node crash ->
       inError$ = fromEvent(this.process.stdin, 'error').pipe(
@@ -192,18 +231,17 @@ export abstract class ShellProcess {
     }
 
     // clean after process exited
-    const onProcessExit = (exitData: ChildProcessExitData): void => {
+    const onProcessExit = (exitData: ShellExitData): void => {
       this.isExited = true;
       this.clearInvocationQueue();
       this.process.stdin.end();
       this.detachStdio(stderr);
-      this.logger.info(exitData.message);
+      this.debugger(exitData.message);
       this.afterExit({ exitData });
-      this.hooks?.afterExit?.({ exitData });
     };
 
     subject.subscribe({
-      next: (exitData: ChildProcessExitData) => onProcessExit(exitData),
+      next: (exitData: ShellExitData) => onProcessExit(exitData),
       error: (error: ProcessError) => onProcessExit(error.exitData),
       complete: () => {},
     });
@@ -259,13 +297,17 @@ export abstract class ShellProcess {
     const currentHistoryRecord = this.history[0];
 
     // 2: init and pipe output streams
-    const logOutput = (chunk: Buffer): void => this.logger.debug(chunk.toString(this.resultsEncoding));
     const stdout = new DomainStream();
     this.process.stdout.pipe(stdout);
-    stdout.on(CHUNK_EVENT, logOutput);
+    const stdoutDebugger = this.debugger.extend(this.executable);
+    stdout.on(CHUNK_EVENT, (chunk: Buffer): void => stdoutDebugger(chunk.toString(this.resultsEncoding)));
+
     const stderr = new DomainStream();
     this.process.stderr.pipe(stderr);
-    stderr.on(CHUNK_EVENT, logOutput);
+    const stderrDebugger = this.debugger.extend(this.executable);
+    // eslint-disable-next-line no-console
+    stderrDebugger.log = console.error.bind(console);
+    stderr.on(CHUNK_EVENT, (chunk: Buffer): void => stderrDebugger(chunk.toString(this.resultsEncoding)));
 
     // 3: race output and error
     const results = Promise.race([
@@ -273,10 +315,9 @@ export abstract class ShellProcess {
       Promise.all([once(stdout, DOMAIN_EVENT), once(stderr, DOMAIN_EVENT)]),
     ]);
 
-    this.logger.info('Starting command invocation...');
-    this.logger.debug(`  ${command}`);
+    this.debugger('Starting command invocation...');
+    this.debugger(`  ${command}`);
     this.beforeInvoke({ command });
-    this.hooks?.beforeInvoke?.({ command });
     const startTime = Date.now();
 
     // 4.1: write delimiter to process input
@@ -302,11 +343,11 @@ export abstract class ShellProcess {
     currentHistoryRecord.stderr = stderr.getContent();
     if (stderr.isEmpty()) {
       currentHistoryRecord.result = currentHistoryRecord.stdout.toString(this.resultsEncoding);
-      this.logger.success('Command invocation succeeded');
+      this.debugger('Command invocation succeeded');
     } else {
       currentHistoryRecord.hadErrors = true;
       currentHistoryRecord.result = currentHistoryRecord.stderr.toString(this.resultsEncoding);
-      this.logger.error('Command invocation failed');
+      this.debugger('Command invocation failed');
     }
 
     // 7: clean
@@ -315,19 +356,52 @@ export abstract class ShellProcess {
 
     // 8: return command result
     this.afterInvoke({ result: currentHistoryRecord });
-    this.hooks?.afterInvoke?.({ result: currentHistoryRecord });
     this.results.next(currentHistoryRecord);
     return currentHistoryRecord;
   }
 
-  async invoke(command: string): Promise<ShellCommandResult> {
+  public addCommand(command: string | Command): this {
+    this.command = this.command.addCommand(command);
+    return this;
+  }
+
+  public addScript(path: string): this {
+    this.command = this.command.addScript(path);
+    return this;
+  }
+
+  public addArgument(argument: string): this {
+    this.command = this.command.addArgument(argument);
+    return this;
+  }
+
+  public addParameter(dash: Dash, name: string, value?: unknown): this {
+    this.command = this.command.addParameter(dash, name, value);
+    return this;
+  }
+
+  public addParameters(parameters: { dash: Dash; name: string; value?: unknown }[] = []): this {
+    parameters.forEach((p) => this.addParameter(p.dash, p.name, p.value));
+    return this;
+  }
+
+  public clear(): this {
+    this.command = this.command.clear();
+    return this;
+  }
+
+  public async invoke(): Promise<ShellCommandResult> {
     if (this.isExited) {
       throw new InvocationError('Invoke called after process exited');
     }
-    return this.invocationQueue.add(() => this.invokeTask(command));
+    return this.invocationQueue.add(() => {
+      const commandToInvoke = this.command.line;
+      this.clear();
+      return this.invokeTask(commandToInvoke);
+    });
   }
 
-  async kill(): Promise<ChildProcessExitData> {
+  public async kill(): Promise<ShellExitData> {
     if (!this.isExited) {
       this.process.kill(this.killSignal);
     }

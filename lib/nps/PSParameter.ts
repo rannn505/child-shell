@@ -1,17 +1,8 @@
-import { ShellParameter } from '../shell/ShellParameter';
-import { PSObject, PSUndefined, PSTypeConverter } from './PSTypes';
+import { Parameter, Dash } from '../core/Parameter';
+import { PS_TYPES_MAP } from './PSTypeConverter';
 
-export class PSParameter extends ShellParameter {
-  constructor(name: string, value?: unknown) {
-    const psValue = value instanceof PSObject ? value : PSTypeConverter.convertToPSObject(value);
-    super(name, psValue);
-  }
-
-  protected setDash(): void {
-    this.dash = '-';
-  }
-
-  protected isSwitch(): boolean {
-    return this.value instanceof PSUndefined;
+export class PSParameter extends Parameter {
+  constructor(dash: Dash, name: string, value?: unknown) {
+    super(dash, name, value, PS_TYPES_MAP);
   }
 }

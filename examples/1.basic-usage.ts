@@ -1,4 +1,4 @@
-import { PowerShell } from '../dist/index';
+import { PowerShell } from '../dist/nps';
 
 export default (async (): Promise<void> => {
   const ps = new PowerShell();

@@ -1,4 +1,4 @@
-import { ChildProcessExitData } from './types';
+import { ShellExitData } from './types';
 
 export class BaseError extends Error {
   constructor(message = '') {
@@ -9,8 +9,8 @@ export class BaseError extends Error {
 }
 
 export class ProcessError extends BaseError {
-  exitData: ChildProcessExitData;
-  constructor(exitData: ChildProcessExitData) {
+  exitData: ShellExitData;
+  constructor(exitData: ShellExitData) {
     super(exitData.message);
     this.exitData = exitData;
   }

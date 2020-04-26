@@ -1,11 +1,7 @@
-const { PowerShell } = require('../dist/index');
+const { PowerShell } = require('../dist/nps/index');
 
 const test = async () => {
-  const ps = new PowerShell({
-    executionPolicy: "Bypass",
-    noProfile: true,
-    command: '-'
-  })
+  const ps = new PowerShell({debug: true});
 
   for (let index = 0; index < 10; index++) {
     const res = await ps.addCommand(`echo ${index}`).invoke()

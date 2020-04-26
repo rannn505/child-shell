@@ -1,5 +1,5 @@
 import { Writable } from 'stream';
-import { trimBuffer } from '../../common/utils';
+import { trimBuffer } from './utils';
 
 export const CHUNK_EVENT = 'chunk';
 

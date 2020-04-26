@@ -1,9 +1,8 @@
-import { ShellArgument } from '../shell/ShellArgument';
-import { PSObject, PSTypeConverter } from './PSTypes';
+import { Argument } from '../core/Argument';
+import { PS_TYPES_MAP } from './PSTypeConverter';
 
-export class PSArgument extends ShellArgument {
-  constructor(object: unknown) {
-    const psArgument = object instanceof PSObject ? object : PSTypeConverter.convertToPSObject(object);
-    super(psArgument);
+export class PSArgument extends Argument {
+  constructor(value: unknown) {
+    super(value, PS_TYPES_MAP);
   }
 }

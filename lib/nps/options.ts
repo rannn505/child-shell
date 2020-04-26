@@ -1,7 +1,7 @@
-import { ShellProcessOptions, ShellOptions } from '../shell/options';
+import { ProcessOptions, ShellOptions } from '../core/options';
 import { PSExecutableType } from './enums/PSExecutableType';
 
-export type PowerShellProcessOptions = ShellProcessOptions &
+export type PowerShellProcessOptions = ProcessOptions &
   Partial<{
     sta: boolean;
     mta: boolean;
@@ -29,7 +29,6 @@ export type PowerShellProcessOptions = ShellProcessOptions &
 export type PowerShellOptions = ShellOptions &
   Partial<{
     port: string;
-    verbose: boolean;
     pwsh: boolean;
     pwshPrev: boolean;
     executable: PSExecutableType;
