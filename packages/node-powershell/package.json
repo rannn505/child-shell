@@ -1,0 +1,27 @@
+{
+  "name": "node-powershell",
+  "version": "5.0.0",
+  "description": "> TODO: description",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/node-powershell#readme",
+  "license": "MIT",
+  "main": "lib/index.ts",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/node-powershell.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/rannn505/node-powershell/issues"
+  }
+}

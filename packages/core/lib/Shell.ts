@@ -48,8 +48,6 @@ export abstract class Shell {
 
   constructor(options: ShellOptions, namespace: string, CommandCtor = Command) {
     this.debugger = this.setDebugger(options, namespace);
-    // eslint-disable-next-line no-console
-    this.debugger.log = console.log.bind(console);
     this.executable = this.setExecutable(options);
     this.processOptions = this.setProcessOptions(options);
     this.spawnOptions = options.spawnOptions;
@@ -131,8 +129,10 @@ export abstract class Shell {
     namespace: string,
   ): Debugger.Debugger {
     const _debugger = Debugger(namespace);
+    // eslint-disable-next-line no-console
+    _debugger.log = console.log.bind(console);
     if (debug || verbose) {
-      Debugger.enable(`${namespace}:*`);
+      Debugger.enable(`${namespace}*`);
     }
     return _debugger;
   }

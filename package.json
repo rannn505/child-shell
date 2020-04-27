@@ -29,9 +29,7 @@
     "start": "npm run examples"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
+    "hooks": {}
   },
   "dependencies": {
     "bytes": "^3.1.0",
@@ -57,6 +55,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "jest": "^25.3.0",
+    "lerna": "^3.20.2",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
     "ts-jest": "^25.3.1",
