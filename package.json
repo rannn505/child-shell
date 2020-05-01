@@ -23,7 +23,7 @@
     "types:check": "npm run compile -- --dry",
     "examples": "npm run build && ts-node examples",
     "start": "npm run examples",
-    "prepublishOnly": "npm run clean:all && npm run types:check && npm run format:check && npm run lint:check && npm test"
+    "prepublishOnly": "npm run types:check && npm run format:check && npm run lint:check && npm test"
   },
   "husky": {
     "hooks": {

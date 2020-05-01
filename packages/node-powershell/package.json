@@ -59,5 +59,6 @@
   },
   "dependencies": {
     "core": "^5.0.0-alpha.0"
-  }
+  },
+  "gitHead": "01fdfa80cf0684473258179e51f7a88550909647"
 }
