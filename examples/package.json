@@ -1,10 +1,9 @@
 {
-  "private": true,
-  "version": "0.0.0",
   "name": "examples",
+  "version": "0.0.0",
+  "private": true,
   "dependencies": {
     "node-powershell": "^5.0.0",
     "node-bash": "^5.0.0"
-  },
-  "scripts": {}
+  }
 }

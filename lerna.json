@@ -1,10 +1,5 @@
 {
   "version": "5.0.0",
   "npmClient": "npm",
-  "packages": ["packages/*", "examples"],
-  "command": {
-    "publish": {
-      "ignoreChanges": ["*.md", "*.txt", "test/**", "**/test/**", "@(!(package)).json"]
-    }
-  }
+  "packages": ["packages/*", "examples"]
 }
