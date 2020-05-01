@@ -1,7 +1,1 @@
-'use strict';
-
-module.exports = nodeBash;
-
-function nodeBash() {
-    // TODO
-}
+export class Bash {}

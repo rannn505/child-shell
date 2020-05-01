@@ -1,4 +1,4 @@
-import { Command } from '../core/Command';
+import { Command } from 'core';
 import { PSArgument } from './PSArgument';
 import { PSParameter } from './PSParameter';
 

@@ -1,11 +1,11 @@
 # `node-bash`
 
-> TODO: description
+> Easily run Bash from your NodeJS app
 
 ## Usage
 
 ```
-const nodeBash = require('node-bash');
+import { Bash } from 'node-bash';
 
-// TODO: DEMONSTRATE API
+const sh = new Bash();
 ```

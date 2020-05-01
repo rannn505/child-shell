@@ -18,31 +18,34 @@ const Shell = require('node-powershell');
 
 const ps = new Shell({
   executionPolicy: 'Bypass',
-  noProfile: true
+  noProfile: true,
 });
 
 ps.addCommand('echo node-powershell');
 ps.invoke()
-.then(output => {
-  console.log(output);
-})
-.catch(err => {
-  console.log(err);
-});
+  .then((output) => {
+    console.log(output);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 ```
 
 ## Documentation
-[**Documentation**](https://rannn505.gitbook.io/node-powershell/)  
+
+[**Documentation**](https://rannn505.gitbook.io/node-powershell/)
 
 ## PowerShell 6
+
 [**Microsoft**](https://docs.microsoft.com/en-us/powershell/scripting/powershell-scripting?view=powershell-6)<br/>
 [**GitHub**](https://github.com/PowerShell/PowerShell)
 
 ## TODO
+
 - [x] Full pwsh support.
 - [x] New docs & homepage.
 - [x] PSCommand class.
-- [x] CI improvements. 
+- [x] CI improvements.
 - [ ] Postinstall script.
 - [ ] Improve error handling.
 - [ ] More examples.
@@ -52,4 +55,3 @@ ps.invoke()
 ## License
 
 [MIT](https://github.com/rannn505/node-powershell/tree/fa9e41f1aa785e0a4614213bd5a965e0a46b4804/LICENSE/README.md) © [Ran Cohen](https://github.com/rannn505)
-

@@ -1,4 +1,4 @@
-import { ProcessOptions, ShellOptions } from '../core/options';
+import { ProcessOptions, ShellOptions } from 'core';
 import { PSExecutableType } from './enums/PSExecutableType';
 
 export type PowerShellProcessOptions = ProcessOptions &

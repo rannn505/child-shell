@@ -19,22 +19,23 @@ Some questions take a long time to get an answer. **If your question gets closed
 
 The following is a detailed list of all [npm scripts](https://docs.npmjs.com/misc/scripts) that will help you develope to `node-shell`:
 
-| Script      	| Use to                  	| Snippet                 	| Command                                                 	|
-|-------------	|-------------------------	|-------------------------	|---------------------------------------------------------	|
-| clean       	| refresh .               	| `$ npm run clean`       	| npx rimraf dist coverage                                	|
-| format      	| make the code look sexy 	| `$ npm run format`      	| prettier --write \"{lib,test}/**/*.{js,ts}\" \"**/*.md\ 	|
-| lint        	| find potential bugs     	| `$ npm run lint`        	| eslint --ext js,ts lib test --fix                       	|
-| test        	| run UTs                 	| `$ npm test`            	| jest                                                    	|
-| test:watch  	| watch UTs               	| `$ npm run test:watch`  	| npm test -- --watch                                     	|
-| test:cov    	| get coverage numbers    	| `$ npm run test:cov`    	| npm test -- --coverage                                  	|
-| build       	| just build              	| `$ npm run build`       	| npm run clean && tsc                                    	|
-| build:watch 	| watch build             	| `$ npm run build:watch` 	| npm run build -- -w                                     	|
-| examples    	| run all examples        	| `$ npm run examples `   	| npx ts-node examples/index.ts                           	|
-| start       	| same as examples        	| `$ npm start`           	| npm run examples                                        	|
+| Script      | Use to                  | Snippet                 | Command                                                    |
+| ----------- | ----------------------- | ----------------------- | ---------------------------------------------------------- |
+| clean       | refresh .               | `$ npm run clean`       | npx rimraf dist coverage                                   |
+| format      | make the code look sexy | `$ npm run format`      | prettier --write \"{lib,test}/**/\*.{js,ts}\" \"**/\*.md\  |
+| lint        | find potential bugs     | `$ npm run lint`        | eslint --ext js,ts lib test --fix                          |
+| test        | run UTs                 | `$ npm test`            | jest                                                       |
+| test:watch  | watch UTs               | `$ npm run test:watch`  | npm test -- --watch                                        |
+| test:cov    | get coverage numbers    | `$ npm run test:cov`    | npm test -- --coverage                                     |
+| build       | just build              | `$ npm run build`       | npm run clean && tsc                                       |
+| build:watch | watch build             | `$ npm run build:watch` | npm run build -- -w                                        |
+| examples    | run all examples        | `$ npm run examples`    | npx ts-node examples/index.ts                              |
+| start       | same as examples        | `$ npm start`           | npm run examples                                           |
 
 ### Sending a Pull Request
 
 The workflow looks like this:
+
 - Open a new issue in the [issue tracker](https://github.com/rannn505/node-powershell/issues).
 - Fork the repo.
 - Create a new feature branch based off the `master` branch.

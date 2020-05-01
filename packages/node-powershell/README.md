@@ -1,11 +1,11 @@
 # `node-powershell`
 
-> TODO: description
+> Easily run PowerShell from your NodeJS app
 
 ## Usage
 
 ```
-const nodePowershell = require('node-powershell');
+import { PowerShell, PSCommand } from 'node-powershell';
 
-// TODO: DEMONSTRATE API
+const ps = new PowerShell();
 ```

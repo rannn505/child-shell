@@ -1,17 +1,23 @@
+.DS_STORE
+.vscode
+.idea
+
 node_modules
-
 coverage
-.nyc_output
-
+.eslintcache
+*.tsbuildinfo
 dist
 
-website/translated_docs
-website/build/
+website/blog
+website/build
 website/node_modules
-website/i18n/*
+website/i18n/*.js
+website/translated_docs
+website/static
 
 tmp
 lib/tmp
 
-.vscode
-.idea
+lerna-debug.log
+npm-debug.log*
+yarn-error.log*

@@ -1,4 +1,4 @@
-import { Types, toType } from '../core/utils';
+import { Types, toType } from 'core';
 
 export class PSOption {
   public name: string;

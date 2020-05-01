@@ -1,4 +1,5 @@
 import {
+  Types,
   convertTo,
   TypesMap,
   SObject,
@@ -9,8 +10,7 @@ import {
   SDate,
   SNull,
   SUndefined,
-} from '../core/TypeConverter';
-import { Types } from '../core/utils';
+} from 'core';
 
 export class PSNumber extends SObject {}
 

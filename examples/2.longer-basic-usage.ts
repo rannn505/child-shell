@@ -1,4 +1,5 @@
-import { PowerShell, PSCommand } from '../dist/nps';
+/* eslint-disable no-console */
+import { PowerShell, PSCommand } from 'node-powershell';
 
 export default (async (): Promise<void> => {
   try {

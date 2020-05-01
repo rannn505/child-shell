@@ -1,4 +1,4 @@
-import { Parameter, Dash } from '../core/Parameter';
+import { Parameter, Dash } from 'core';
 import { PS_TYPES_MAP } from './PSTypeConverter';
 
 export class PSParameter extends Parameter {

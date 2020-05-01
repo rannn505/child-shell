@@ -9,9 +9,7 @@ import ms from 'ms';
 import { Subject, fromEvent, race, Observable } from 'rxjs';
 import { map, first, mapTo, delay, tap } from 'rxjs/operators';
 
-import { CHUNK_EVENT } from '../stream/AccumulateStream';
-import { DomainStream, DOMAIN_EVENT } from '../stream/DomainStream';
-import { RotateStream, ROTATE_EVENT } from '../stream/RotateStream';
+import { CHUNK_EVENT, DOMAIN_EVENT, DomainStream, ROTATE_EVENT, RotateStream } from 'streams';
 import { Dash } from './Parameter';
 import { Command } from './Command';
 import { ProcessError, InvocationError } from './errors';

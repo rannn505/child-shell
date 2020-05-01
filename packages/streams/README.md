@@ -1,11 +1,12 @@
 # `streams`
 
-> TODO: description
+> Helpful writable stream implementations
 
 ## Usage
 
 ```
-const streams = require('streams');
+import { AccumulateStream, RotateStream } from 'streams';
 
-// TODO: DEMONSTRATE API
+const acc = new AccumulateStream();
+const rot = new RotateStream();
 ```

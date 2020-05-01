@@ -1,4 +1,5 @@
-import { PowerShell } from '../dist/nps';
+/* eslint-disable no-console */
+import { PowerShell } from 'node-powershell';
 
 export default (async (): Promise<void> => {
   const ps = new PowerShell();

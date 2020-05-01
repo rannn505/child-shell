@@ -1,7 +1,7 @@
-'use strict';
+// 'use strict';
 
-const nodePowershell = require('..');
+// const nodePowershell = require('..');
 
-describe('node-powershell', () => {
-    it('needs tests');
-});
+// describe('node-powershell', () => {
+//   it('needs tests');
+// });

@@ -1,7 +1,7 @@
-'use strict';
+// 'use strict';
 
-const streams = require('..');
+// const streams = require('..');
 
-describe('streams', () => {
-    it('needs tests');
-});
+// describe('streams', () => {
+//   it('needs tests');
+// });

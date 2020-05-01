@@ -1,27 +1,36 @@
 {
   "name": "node-bash",
   "version": "5.0.0",
-  "description": "> TODO: description",
+  "description": "Easily run Bash from your NodeJS app",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/node-bash#readme",
   "license": "MIT",
-  "main": "lib/index.ts",
+  "main": "dist",
+  "types": "dist",
   "directories": {
     "doc": "doc",
     "lib": "lib",
     "test": "test"
   },
   "files": [
-    "lib"
+    "doc",
+    "dist"
+  ],
+  "keywords": [
+    "node-bash",
+    "sh",
+    "bash"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rannn505/node-powershell.git"
+    "url": "git+https://github.com/rannn505/node-powershell.git",
+    "directory": "packages/node-bash"
   },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
+  "scripts": {},
   "bugs": {
     "url": "https://github.com/rannn505/node-powershell/issues"
+  },
+  "dependencies": {
+    "core": "^5.0.0"
   }
 }

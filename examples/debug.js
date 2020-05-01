@@ -1,14 +1,14 @@
-const { PowerShell } = require('../dist/nps/index');
+// const { PowerShell } = require('../dist/nps/index');
 
-const test = async () => {
-  const ps = new PowerShell({debug: true});
+// const test = async () => {
+//   const ps = new PowerShell({ debug: true });
 
-  for (let index = 0; index < 10; index++) {
-    const res = await ps.addCommand(`echo ${index}`).invoke()
-    console.log("im index and res: %n %s", index, res)
-  }
-}
-test();
+//   for (let index = 0; index < 10; index++) {
+//     const res = await ps.addCommand(`echo ${index}`).invoke();
+//     console.log('im index and res: %n %s', index, res);
+//   }
+// };
+// test();
 
 // (async () => {
 //   try {

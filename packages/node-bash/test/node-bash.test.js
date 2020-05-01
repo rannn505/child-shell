@@ -1,7 +1,7 @@
-'use strict';
+// 'use strict';
 
-const nodeBash = require('..');
+// const nodeBash = require('..');
 
-describe('node-bash', () => {
-    it('needs tests');
-});
+// describe('node-bash', () => {
+//   it('needs tests');
+// });

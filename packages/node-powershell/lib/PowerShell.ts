@@ -1,7 +1,4 @@
-import { isWin } from '../core/utils';
-import { ShellCommandResult } from '../core/types';
-import { Shell } from '../core/Shell';
-import { ShellHooks } from '../core/options';
+import { isWin, ShellCommandResult, Shell, ShellHooks } from 'core';
 import { PSExecutableType } from './enums/PSExecutableType';
 import { PSInvocationState } from './enums/PSInvocationState';
 import { PSOption } from './PSOption';
@@ -55,6 +52,7 @@ export class PowerShell extends Shell {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private setExecutableSuffix(executable: string): void {
     if (!isWin) {
       return;

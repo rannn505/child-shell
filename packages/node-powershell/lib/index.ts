@@ -1,5 +1,4 @@
-export * from '../core/errors';
-export * from '../core/types';
+export { InvocationError, ProcessOptions, ShellStdioObject, ShellCommandResult, ShellExitData } from 'core';
 
 export * from './enums/PSExecutableType';
 export * from './enums/PSInvocationState';
