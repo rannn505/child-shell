@@ -1,6 +1,5 @@
 {
   "name": "examples",
-  "version": "0.0.0",
   "private": true,
   "dependencies": {
     "node-powershell": "^5.0.0",
