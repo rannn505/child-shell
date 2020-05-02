@@ -1,4 +1,4 @@
-import { Argument } from 'core';
+import { Argument } from '@nsh/core';
 import { PS_TYPES_MAP } from './PSTypeConverter';
 
 export class PSArgument extends Argument {

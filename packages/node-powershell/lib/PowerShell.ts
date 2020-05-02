@@ -1,4 +1,4 @@
-import { isWin, ShellCommandResult, Shell, ShellHooks } from 'core';
+import { isWin, ShellCommandResult, Shell, ShellHooks } from '@nsh/core';
 import { PSExecutableType } from './enums/PSExecutableType';
 import { PSInvocationState } from './enums/PSInvocationState';
 import { PSOption } from './PSOption';

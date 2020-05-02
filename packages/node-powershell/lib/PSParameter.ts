@@ -1,4 +1,4 @@
-import { Parameter, Dash } from 'core';
+import { Parameter, Dash } from '@nsh/core';
 import { PS_TYPES_MAP } from './PSTypeConverter';
 
 export class PSParameter extends Parameter {

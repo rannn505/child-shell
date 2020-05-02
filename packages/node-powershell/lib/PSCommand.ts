@@ -1,4 +1,4 @@
-import { Command } from 'core';
+import { Command } from '@nsh/core';
 import { PSArgument } from './PSArgument';
 import { PSParameter } from './PSParameter';
 
