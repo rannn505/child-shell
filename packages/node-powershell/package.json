@@ -1,6 +1,6 @@
 {
   "name": "node-powershell",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.0-next.0",
   "description": "Easily run PowerShell from your NodeJS app",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/node-powershell#readme",
@@ -51,6 +51,6 @@
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
   "dependencies": {
-    "@nsh/core": "^5.0.0-alpha.0"
+    "@nsh/core": "^5.0.0-next.0"
   }
 }
