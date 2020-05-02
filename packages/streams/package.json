@@ -25,6 +25,9 @@
   "bugs": {
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "bytes": "^3.1.0",
     "ms": "^2.1.2",

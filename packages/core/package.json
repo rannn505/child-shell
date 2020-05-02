@@ -25,7 +25,11 @@
   "bugs": {
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
+    "@nsh/streams": "^5.0.0-alpha.0",
     "debug": "^4.1.1",
     "ms": "^2.1.2",
     "p-queue": "^6.3.0",
