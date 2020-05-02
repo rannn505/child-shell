@@ -2,7 +2,6 @@
   "name": "examples",
   "private": true,
   "dependencies": {
-    "node-powershell": "^5.0.0-alpha.0",
-    "node-bash": "^5.0.0-alpha.0"
+    "node-powershell": "^5.0.0-next.0"
   }
 }
