@@ -1,9 +1,9 @@
 {
-  "name": "node-sh",
+  "name": "node-bash",
   "version": "5.0.0-alpha.0",
-  "description": "Easily run Bourne shell from your NodeJS app",
+  "description": "Easily run Bash from your NodeJS app",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/node-sh#readme",
+  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/node-bash#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -18,22 +18,35 @@
   ],
   "keywords": [
     "node-shell",
-    "Bourne shell",
+    "node-bash",
+    "bash",
     "node-sh",
     "sh",
-    "bash",
-    "zsh"
+    "zsh",
+    "Bourne shell",
+    "spwan",
+    "cmd",
+    "command",
+    "script",
+    "commandline",
+    "shell",
+    "terminal",
+    "cross-platform",
+    "unix",
+    "linux",
+    "macos",
+    "windows"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rannn505/node-powershell.git",
-    "directory": "packages/node-sh"
+    "directory": "packages/node-bash"
   },
   "scripts": {},
   "bugs": {
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
   "dependencies": {
-    "core": "^5.0.0-alpha.0"
+    "@nsh/core": "^5.0.0-alpha.0"
   }
 }

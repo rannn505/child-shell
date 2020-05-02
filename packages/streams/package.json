@@ -1,7 +1,6 @@
 {
-  "name": "streams",
+  "name": "@nsh/streams",
   "version": "5.0.0-alpha.0",
-  "private": true,
   "description": "Helpful writable stream implementations",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/streams#readme",

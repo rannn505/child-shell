@@ -3,6 +3,6 @@
   "private": true,
   "dependencies": {
     "node-powershell": "^5.0.0-alpha.0",
-    "node-sh": "^5.0.0-alpha.0"
+    "node-bash": "^5.0.0-alpha.0"
   }
 }
