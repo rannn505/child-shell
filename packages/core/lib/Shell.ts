@@ -9,7 +9,7 @@ import ms from 'ms';
 import { Subject, fromEvent, race, Observable } from 'rxjs';
 import { map, first, mapTo, delay, tap } from 'rxjs/operators';
 
-import { CHUNK_EVENT, DOMAIN_EVENT, DomainStream, ROTATE_EVENT, RotateStream } from '@nsh/writables';
+import { CHUNK_EVENT, DOMAIN_EVENT, DomainStream, ROTATE_EVENT, RotateStream } from '@nbsh/writables';
 import { Dash } from './Parameter';
 import { Command } from './Command';
 import { ProcessError, InvocationError } from './errors';

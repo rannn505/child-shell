@@ -1,4 +1,4 @@
-import { Types, toType } from '@nsh/to-type';
+import { Types, toType } from '@nbsh/to-type';
 
 interface IType {
   readonly value: unknown;
@@ -6,7 +6,7 @@ interface IType {
   toString(): string;
 }
 
-export class SObject implements IType {
+export class SHObject implements IType {
   // eslint-disable-next-line no-useless-constructor
   constructor(readonly value: unknown) {}
 
@@ -19,7 +19,7 @@ export class SObject implements IType {
   }
 }
 
-export class SString extends SObject {
+export class SString extends SHObject {
   toString(): string {
     const isIncludesDoubleQuotes = (this.value as string).includes('"');
 
@@ -30,58 +30,66 @@ export class SString extends SObject {
   }
 }
 
-export class SBoolean extends SObject {}
-
-export class SCustomObject extends SObject {
+export class SCustomObject extends SHObject {
   toString(): string {
     return JSON.stringify(this.value as Record<string, unknown>);
   }
 }
 
-export class SArray extends SObject {
+export class SArray extends SHObject {
   toString(): string {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return (this.value as []).map((el: unknown) => convertTo(el).toString()).join(',');
   }
 }
 
-export class SDate extends SObject {
+export class SNull extends SHObject {
   toString(): string {
-    return (this.value as Date).toLocaleString();
+    return 'null';
   }
 }
 
-export class SNull extends SObject {}
-
-export class SUndefined extends SObject {
+export class SUndefined extends SHObject {
   toString(): string {
     return '';
   }
 }
 
-export type TypesMap = { [key in Types]: typeof SObject };
+export type TypesMap = { [key in Types]: typeof SHObject };
 
 export const DEFAULT_TYPES_MAP: TypesMap = {
-  [Types.Number]: SObject,
+  [Types.Symbol]: SHObject,
+  [Types.Number]: SHObject,
+  [Types.BigInt]: SHObject,
   [Types.String]: SString,
-  [Types.Boolean]: SBoolean,
+  [Types.Boolean]: SHObject,
+  [Types.Undefined]: SUndefined,
+  [Types.Null]: SNull,
   [Types.Object]: SCustomObject,
   [Types.Array]: SArray,
-  [Types.Date]: SDate,
+  [Types.Unit]: SHObject,
+  [Types.Date]: SHObject,
+  [Types.Map]: undefined,
+  [Types.WeakMap]: undefined,
+  [Types.Set]: undefined,
+  [Types.WeakSet]: undefined,
   [Types.Regexp]: SString,
-  [Types.Null]: SNull,
-  [Types.Undefined]: SUndefined,
-  [Types.Error]: SObject,
+  [Types.Error]: undefined,
+  [Types.Function]: undefined,
+  [Types.Arguments]: undefined,
+  [Types.JSON]: undefined,
+  [Types.Math]: undefined,
+  [Types.Global]: undefined,
 };
 
-export const convertTo = (object: unknown, typesMap = DEFAULT_TYPES_MAP): SObject => {
-  if (object instanceof SObject) {
+export const convertTo = (object: unknown, typesMap: Partial<TypesMap> = {}): SHObject => {
+  if (object instanceof SHObject) {
     return object;
   }
 
-  const typeString = toType(object);
+  const typeString = toType(object) as Types;
 
-  const ObjectClass = typesMap[typeString];
+  const ObjectClass = { ...DEFAULT_TYPES_MAP, ...typesMap }[typeString];
   if (!ObjectClass) {
     throw new Error('Type not found');
   }

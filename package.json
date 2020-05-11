@@ -14,7 +14,7 @@
     "lint": "eslint . --cache --fix --ext js,ts,md --ignore-path .gitignore",
     "lint:check": "eslint . --cache --ext js,ts,md --ignore-path .gitignore",
     "pretest": "npm run build",
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "compile": "lerna exec --ignore examples -- tsc --build",

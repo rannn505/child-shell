@@ -29,8 +29,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nsh/writables": "^5.0.0-next.0",
-    "@nsh/to-type": "^5.0.0-next.0",
+    "@nbsh/to-type": "^5.0.0-next.0",
+    "@nbsh/writables": "^5.0.0-next.0",
     "debug": "^4.1.1",
     "ms": "^2.1.2",
     "p-queue": "^6.3.0",

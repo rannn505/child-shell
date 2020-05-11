@@ -1,22 +1,7 @@
-import {
-  Types,
-  convertTo,
-  TypesMap,
-  SObject,
-  SString,
-  SBoolean,
-  SCustomObject,
-  SArray,
-  SDate,
-  SNull,
-  SUndefined,
-} from '@nbsh/core';
+import { convertTo, TypesMap, SHObject, SCustomObject, SArray, SNull } from '@nbsh/core';
+import { Types } from '@nbsh/to-type';
 
-export class PSNumber extends SObject {}
-
-export class PSString extends SString {}
-
-export class PSBoolean extends SBoolean {
+export class PSBoolean extends SHObject {
   toString(): string {
     return (this.value as boolean) ? '$True' : '$False';
   }
@@ -35,7 +20,11 @@ export class PSArray extends SArray {
   }
 }
 
-export class PSDate extends SDate {}
+export class PSDate extends SHObject {
+  toString(): string {
+    return (this.value as Date).toLocaleString();
+  }
+}
 
 export class PSNull extends SNull {
   toString(): string {
@@ -43,19 +32,13 @@ export class PSNull extends SNull {
   }
 }
 
-export class PSUndefined extends SUndefined {}
+export class PSError extends SHObject {}
 
-export class PSError extends SObject {}
-
-export const PS_TYPES_MAP: TypesMap = {
-  [Types.Number]: PSNumber,
-  [Types.String]: PSString,
+export const PS_TYPES_MAP: Partial<TypesMap> = {
   [Types.Boolean]: PSBoolean,
   [Types.Object]: PSCustomObject,
   [Types.Array]: PSArray,
   [Types.Date]: PSDate,
-  [Types.Regexp]: PSString,
   [Types.Null]: PSNull,
-  [Types.Undefined]: PSUndefined,
   [Types.Error]: PSError,
 };

@@ -52,6 +52,6 @@
   },
   "dependencies": {
     "@nbsh/core": "^5.0.0-next.0",
-    "@nsh/to-type": "^5.0.0-next.0"
+    "@nbsh/to-type": "^5.0.0-next.0"
   }
 }
