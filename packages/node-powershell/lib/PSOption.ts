@@ -1,4 +1,4 @@
-import { Types, toType } from '@nsh/core';
+import { Types, toType } from '@nsh/to-type';
 
 export class PSOption {
   public name: string;

@@ -1,4 +1,4 @@
-import { Types, toType } from './utils';
+import { Types, toType } from '@nsh/to-type';
 
 interface IType {
   readonly value: unknown;

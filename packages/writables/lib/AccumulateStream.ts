@@ -1,5 +1,5 @@
 import { Writable } from 'stream';
-import { trimBuffer } from './utils';
+import { trimBuffer } from '@nbsh/buffer-trim';
 
 export const CHUNK_EVENT = 'chunk';
 

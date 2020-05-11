@@ -1,9 +1,9 @@
 {
-  "name": "@nbsh/core",
+  "name": "@nbsh/writables",
   "version": "5.0.0-next.0",
-  "description": "Base shell wrapper classes",
+  "description": "Useful implementations for writable stream",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/core#readme",
+  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/writables#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -19,7 +19,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rannn505/node-powershell.git",
-    "directory": "packages/core"
+    "directory": "packages/writables"
   },
   "scripts": {},
   "bugs": {
@@ -29,16 +29,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@nsh/writables": "^5.0.0-next.0",
-    "@nsh/to-type": "^5.0.0-next.0",
-    "debug": "^4.1.1",
+    "@nbsh/buffer-trim": "^5.0.0-next.0",
+    "bytes": "^3.1.0",
     "ms": "^2.1.2",
-    "p-queue": "^6.3.0",
-    "rxjs": "^6.5.5"
+    "shortid": "^2.2.15"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.5",
+    "@types/bytes": "^3.1.0",
     "@types/ms": "^0.7.31",
-    "@types/node": "^13.13.4"
+    "@types/node": "^13.13.4",
+    "@types/shortid": "0.0.29"
   }
 }

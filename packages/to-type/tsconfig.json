@@ -6,7 +6,5 @@
     "rootDir": "lib"
   },
 
-  "references": [{ "path": "../writables" }, { "path": "../to-type" }],
-
   "include": ["lib/**/*"]
 }

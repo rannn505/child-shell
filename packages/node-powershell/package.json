@@ -51,6 +51,7 @@
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
   "dependencies": {
-    "@nsh/core": "^5.0.0-next.0"
+    "@nbsh/core": "^5.0.0-next.0",
+    "@nsh/to-type": "^5.0.0-next.0"
   }
 }

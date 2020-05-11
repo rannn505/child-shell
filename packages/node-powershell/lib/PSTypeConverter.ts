@@ -10,7 +10,7 @@ import {
   SDate,
   SNull,
   SUndefined,
-} from '@nsh/core';
+} from '@nbsh/core';
 
 export class PSNumber extends SObject {}
 

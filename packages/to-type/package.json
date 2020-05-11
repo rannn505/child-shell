@@ -1,9 +1,9 @@
 {
-  "name": "@nsh/streams",
+  "name": "@nbsh/to-type",
   "version": "5.0.0-next.0",
-  "description": "Helpful writable stream implementations",
+  "description": "Fixes JavaScript typeof operator using Symbol.toStringTag",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/streams#readme",
+  "homepage": "http://rannn505.github.io/node-shell/tree/master/toType#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -19,7 +19,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rannn505/node-powershell.git",
-    "directory": "packages/streams"
+    "directory": "packages/to-type"
   },
   "scripts": {},
   "bugs": {
@@ -28,15 +28,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "bytes": "^3.1.0",
-    "ms": "^2.1.2",
-    "shortid": "^2.2.15"
-  },
-  "devDependencies": {
-    "@types/bytes": "^3.1.0",
-    "@types/ms": "^0.7.31",
-    "@types/node": "^13.13.4",
-    "@types/shortid": "0.0.29"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

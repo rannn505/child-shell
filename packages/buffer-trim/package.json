@@ -1,9 +1,9 @@
 {
-  "name": "@nbsh/core",
+  "name": "@nbsh/buffer-trim",
   "version": "5.0.0-next.0",
-  "description": "Base shell wrapper classes",
+  "description": "Removes whitespace and line-terminator characters from buffer edges",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/core#readme",
+  "homepage": "http://rannn505.github.io/node-shell/tree/master/buffer-trim#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -19,7 +19,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rannn505/node-powershell.git",
-    "directory": "packages/core"
+    "directory": "packages/buffer-trim"
   },
   "scripts": {},
   "bugs": {
@@ -28,17 +28,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@nsh/writables": "^5.0.0-next.0",
-    "@nsh/to-type": "^5.0.0-next.0",
-    "debug": "^4.1.1",
-    "ms": "^2.1.2",
-    "p-queue": "^6.3.0",
-    "rxjs": "^6.5.5"
-  },
-  "devDependencies": {
-    "@types/debug": "^4.1.5",
-    "@types/ms": "^0.7.31",
-    "@types/node": "^13.13.4"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
