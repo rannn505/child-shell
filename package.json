@@ -1,9 +1,9 @@
 {
-  "name": "node-shell",
+  "name": "nbsh",
   "private": true,
-  "description": "Easily run any shell from your NodeJS app",
+  "description": "Node.JS bindings for shell",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-shell/",
+  "homepage": "http://rannn505.github.io/nbsh/",
   "license": "MIT",
   "scripts": {
     "clean": "lerna exec -- rimraf dist tsconfig.tsbuildinfo coverage",

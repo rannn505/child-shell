@@ -17,6 +17,7 @@
     "dist"
   ],
   "keywords": [
+    "nbsh",
     "node-shell",
     "node-powershell",
     "powershell",

@@ -3,7 +3,7 @@
   "version": "5.0.0-next.0",
   "description": "Removes whitespace and line-terminator characters from buffer edges",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-shell/tree/master/buffer-trim#readme",
+  "homepage": "http://rannn505.github.io/node-powershell/tree/master/buffer-trim#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",

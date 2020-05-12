@@ -3,7 +3,7 @@
   "version": "5.0.0-next.0",
   "description": "Fixes JavaScript typeof operator using Symbol.toStringTag",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-shell/tree/master/toType#readme",
+  "homepage": "http://rannn505.github.io/node-powershell/tree/master/toType#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
