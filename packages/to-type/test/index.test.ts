@@ -20,8 +20,13 @@ describe('to-type', () => {
     [/a-z/, Types.Regexp],
     [new TypeError(), Types.Error],
     [(): void => {}, Types.Function],
-    // eslint-disable-next-line prettier/prettier, prefer-rest-params
-    [(function fn(): IArguments { return arguments })(), Types.Arguments],
+    [
+      (function fn(): IArguments {
+        // eslint-disable-next-line prefer-rest-params
+        return arguments;
+      })(),
+      Types.Arguments,
+    ],
     [JSON, Types.JSON],
     [Math, Types.Math],
   ];
