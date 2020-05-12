@@ -1,6 +1,6 @@
 {
   "name": "@nbsh/core",
-  "version": "5.0.0-next.0",
+  "version": "5.0.0-next.1",
   "description": "Base shell wrapper classes",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/core#readme",
@@ -29,8 +29,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nbsh/to-type": "^5.0.0-next.0",
-    "@nbsh/writables": "^5.0.0-next.0",
+    "@nbsh/to-type": "^5.0.0-next.1",
+    "@nbsh/writables": "^5.0.0-next.1",
     "debug": "^4.1.1",
     "ms": "^2.1.2",
     "p-queue": "^6.3.0",
