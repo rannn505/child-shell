@@ -65,6 +65,7 @@
   "homepage": "http://rannn505.github.io/node-powershell/",
   "dependencies": {
     "chalk": "^2.4.1",
+    "is-wsl": "^2.2.0",
     "shortid": "^2.2.14"
   },
   "devDependencies": {
