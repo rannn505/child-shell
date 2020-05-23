@@ -1,7 +1,7 @@
 {
   "name": "nbsh",
   "private": true,
-  "description": "Node.JS bindings for shell",
+  "description": "Node.js bindings for shell",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "http://rannn505.github.io/nbsh/",
   "license": "MIT",
