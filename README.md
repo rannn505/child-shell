@@ -35,8 +35,8 @@
   <a href="https://github.com/rannn505/node-powershell/stargazers">
     <img alt="GitHub Stars" src="https://img.shields.io/github/stars/rannn505/node-powershell?style=social">
   </a>
-  <a href="">
-    <img alt="patron" src="">
+  <a href="https://www.patreon.com/bePatron?u=35319292">
+    <img alt="Become a patron" src="https://img.shields.io/badge/Become%20a-patron-E85B46?style=flat-square">
   </a>
 </p>
 
