@@ -22,6 +22,6 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci || npm i
       - run: npm run types:check
-      # - run: npm run format:check
+      - run: npm run format:check
       - run: npm run lint:check
       - run: npm test
