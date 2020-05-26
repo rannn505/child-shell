@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master, next]
+    branches: [master, next, github-action]
 
 jobs:
   build:
