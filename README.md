@@ -52,7 +52,7 @@
 [Node.js](https://github.com/nodejs/node/blob/master/README.md) is one of the successful, widely-used, and popular open-source projects on this earth.
 It was created to allow it's users to run JavaScript everywhere.
 
-[Shell](https://en.wikipedia.org/wiki/Shell_(computing)) is the most usable user program on any computer, it is an integral part of our work and almost every task starts and ends with a command execution.
+[Shell](<https://en.wikipedia.org/wiki/Shell_(computing)>) is the most usable user program on any computer, it is an integral part of our work and almost every task starts and ends with a command execution.
 It was created to allow it's users to interact with their OS.
 
 [NbSH](https://www.npmjs.com/org/nbsh) creates a comprehensive binding between the two, exposes a proven yet easy API to interact with any shell directly from node runtime.
