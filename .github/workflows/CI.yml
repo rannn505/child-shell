@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node: [6.9.0, 12.13.0]
+        node: [10, 12]
 
     steps:
       - uses: actions/checkout@v2
@@ -20,13 +20,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - name: Install package dependencies == 6
-        if: matrix.node == '6.9.0'
-        run: npm i
-      - name: Install package dependencies != 6
-        if: matrix.node != '6.9.0'
-        run: npm ci
-      - run: npm run types:check
-      # - run: npm run format:check
+      # - name: Install package dependencies == 6
+      #   if: matrix.node == '6.9.0'
+      #   run: npm i
+      # - name: Install package dependencies != 6
+      #   if: matrix.node != '6.9.0'
+      #   run: npm ci
+      # - run: npm run types:check
+      - run: npm ci
+      - run: npm run format:check
       - run: npm run lint:check
       - run: npm test
