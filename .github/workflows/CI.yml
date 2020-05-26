@@ -20,11 +20,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - name: Install package dependencies '= 6'
-        if: matrix.node == 6
+      - name: Install package dependencies = 6
+        if: matrix.node == 6.9.0
         run: npm i
-      - name: Install package dependencies '> 6'
-        if: matrix.node > 6
+      - name: Install package dependencies > 6
+        if: matrix.node > 6.9.0
         run: npm ci
       - run: npm run types:check
       # - run: npm run format:check
