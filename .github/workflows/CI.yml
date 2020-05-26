@@ -28,6 +28,6 @@ jobs:
       #   run: npm ci
       # - run: npm run types:check
       - run: npm ci
-      - run: npm run format:check
+      # - run: npm run format:check - windows problems
       - run: npm run lint:check
       - run: npm test
