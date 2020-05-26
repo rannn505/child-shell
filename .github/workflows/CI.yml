@@ -9,11 +9,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        #,windows-latest]
+        os: [ubuntu-latest, macos-latest]
         node: [6, 12]
 
     steps:
       - uses: actions/checkout@v2
+      # powershell is already install on GitHub-hosted runners
+      # https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
         with:
