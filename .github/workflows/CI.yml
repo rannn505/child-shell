@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [master, next, github-action]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
+        node: [10, 12]
+
+    steps:
+      - uses: actions/checkout@v2
+      # powershell is already install on GitHub-hosted runners
+      # https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      # - name: Install package dependencies == 6
+      #   if: matrix.node == '6.9.0'
+      #   run: npm i
+      # - name: Install package dependencies != 6
+      #   if: matrix.node != '6.9.0'
+      #   run: npm ci
+      - run: npm ci
+      - run: npm run types:check
+      - run: npm run format:check
+      - run: npm run lint:check
+      - run: npm test

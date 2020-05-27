@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Lerna" src="https://raw.githubusercontent.com/rannn505/node-powershell/node-shell/logo/logo.svg?sanitize=true" width="128">
+  <img alt="Lerna" src="https://raw.githubusercontent.com/rannn505/node-powershell/node-shell/logo/logo.svg?sanitize=true&style=flat-square" width="128">
 </p>
 
 <h3 align="center">🔗 Node.js bindings for shell (NbSH)</h3>
@@ -15,16 +15,16 @@
 
 <p align="center">
   <a href="">
-    <img alt="github actions" src="">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/rannn505/node-powershell/CI?style=flat-square">
   </a>
   <a href="">
-    <img alt="codecov" src="">
+    <img alt="Coverage" src="">
   </a>
   <a href="https://lerna.js.org/">
     <img alt="Lerna" src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square">
   </a>
   <a href="https://github.com/rannn505/node-powershell/blob/node-shell/LICENSE">
-    <img alt="GitHub License" src="https://img.shields.io/github/license/rannn505/node-powershell?color=%23000000&style=flat-square">
+    <img alt="License" src="https://img.shields.io/github/license/rannn505/node-powershell?color=%23000000&style=flat-square">
   </a>
 </p>
 
@@ -52,7 +52,7 @@
 [Node.js](https://github.com/nodejs/node/blob/master/README.md) is one of the successful, widely-used, and popular open-source projects on this earth.
 It was created to allow it's users to run JavaScript everywhere.
 
-[Shell](https://en.wikipedia.org/wiki/Shell_(computing)) is the most usable user program on any computer, it is an integral part of our work and almost every task starts and ends with a command execution.
+[Shell](<https://en.wikipedia.org/wiki/Shell_(computing)>) is the most usable user program on any computer, it is an integral part of our work and almost every task starts and ends with a command execution.
 It was created to allow it's users to interact with their OS.
 
 [NbSH](https://www.npmjs.com/org/nbsh) creates a comprehensive binding between the two, exposes a proven yet easy API to interact with any shell directly from node runtime.
