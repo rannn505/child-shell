@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Lerna" src="https://raw.githubusercontent.com/rannn505/node-powershell/node-shell/logo/logo.svg?sanitize=true&style=flat-square" width="128">
+  <img alt="NbSH" src="https://raw.githubusercontent.com/rannn505/node-powershell/node-shell/logo/logo.svg?sanitize=true" width="128">
 </p>
 
 <h3 align="center">🔗 Node.js bindings for shell (NbSH)</h3>
@@ -20,8 +20,23 @@
   <a href="">
     <img alt="Coverage" src="">
   </a>
+    <a href="https://npm-stat.com/charts.html?package=@nbsh/core">
+    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/@nbsh/core.svg?style=flat-square">
+  </a>
+  <a href="https://github.com/rannn505/node-powershell/stargazers">
+    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/rannn505/node-powershell?style=social">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://jestjs.io/">
+    <img alt="Jest" src="https://img.shields.io/badge/tested_with-jest-99424f.svg?style=flat-square">
+  </a>
   <a href="https://lerna.js.org/">
     <img alt="Lerna" src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square">
+  </a>
+  <a href="https://prettier.io/">
+    <img alt="Prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
   </a>
   <a href="https://github.com/rannn505/node-powershell/blob/node-shell/LICENSE">
     <img alt="License" src="https://img.shields.io/github/license/rannn505/node-powershell?color=%23000000&style=flat-square">
@@ -29,12 +44,6 @@
 </p>
 
 <p align="center">
-  <a href="https://npm-stat.com/charts.html?package=@nbsh/core">
-    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/@nbsh/core.svg?style=flat-square">
-  </a>
-  <a href="https://github.com/rannn505/node-powershell/stargazers">
-    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/rannn505/node-powershell?style=social">
-  </a>
   <a href="https://www.patreon.com/bePatron?u=35319292">
     <img alt="Become a patron" src="https://img.shields.io/badge/Become%20a-patron-E85B46?style=flat-square">
   </a>
