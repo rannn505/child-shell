@@ -27,8 +27,17 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,ts,md}": "npm run lint"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "devEngines": {
+    "node": ">= 8.0.0"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
@@ -42,9 +51,10 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-markdown": "^1.0.2",
     "eslint-plugin-prettier": "^3.1.2",
-    "husky": "^4.2.3",
+    "husky": "^4.2.5",
     "jest": "^25.3.0",
     "lerna": "^3.20.2",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
     "ts-jest": "^25.3.1",
