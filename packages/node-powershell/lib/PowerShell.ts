@@ -1,12 +1,13 @@
 import { platform } from 'os';
 import { ShellCommandResult, Shell, ShellHooks } from '@nbsh/core';
+import isWsl from 'is-wsl';
 import { PSExecutableType } from './enums/PSExecutableType';
 import { PSInvocationState } from './enums/PSInvocationState';
 import { PSOption } from './PSOption';
 import { PSCommand } from './PSCommand';
 import { PowerShellOptions, PowerShellProcessOptions } from './options';
 
-const isWin = platform() === 'win32';
+const isWin = platform() === 'win32' || isWsl;
 
 export class PowerShell extends Shell {
   public invocationStateInfo: PSInvocationState;
