@@ -6,9 +6,9 @@
   "homepage": "http://rannn505.github.io/nbsh/",
   "license": "MIT",
   "scripts": {
+    "bootstrap": "npx lerna bootstrap --hoist --strict",
     "clean": "lerna exec -- rimraf dist tsconfig.tsbuildinfo coverage",
     "clean:all": "npm run clean && lerna exec -- rimraf node_modules && rimraf node_modules .eslintcache",
-    "bootstrap": "lerna bootstrap --hoist --strict",
     "format": "prettier --write '**/*.{js,ts,md}' --ignore-path .gitignore",
     "format:check": "prettier --check '**/*.{js,ts,md}' --ignore-path .gitignore",
     "lint": "eslint . --cache --fix --ext js,ts,md --ignore-path .gitignore",
