@@ -65,7 +65,7 @@ It was created to allow it's users to run JavaScript everywhere.
 It was created to allow it's users to interact with their OS.
 
 [NbSH](https://www.npmjs.com/org/nbsh) creates a comprehensive binding between the two, exposes a proven yet easy API to interact with any shell directly from node runtime.
-Combine JavaScript code with shell based scripts to complete any type of task you ever imagined.s
+Combine JavaScript code with shell based scripts to complete any type of task you ever imagined.
 
 ## Documentation
 
