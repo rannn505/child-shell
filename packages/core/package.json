@@ -29,6 +29,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@nbsh/buffer-trim": "^5.0.0-next.1",
     "@nbsh/to-type": "^5.0.0-next.1",
     "@nbsh/writables": "^5.0.0-next.1",
     "debug": "^4.1.1",

@@ -4,7 +4,7 @@ import { AccumulateStream } from './AccumulateStream';
 
 export const ROTATE_EVENT = 'rotate';
 
-type RotateStreamOptions = { size?: string; interval?: string; count?: number };
+type RotateStreamOptions = { size?: string; interval?: string; count?: number; symbol?: string };
 
 export class RotateStream extends AccumulateStream {
   private readonly options: RotateStreamOptions;
@@ -23,7 +23,10 @@ export class RotateStream extends AccumulateStream {
   }
 
   private rotate(): void {
-    this.emit(ROTATE_EVENT, this.chunkCounter, this.chunks);
+    this.emit(ROTATE_EVENT, {
+      count: this.chunkCounter,
+      chunks: this.chunks,
+    });
     this.chunks = Buffer.from([]);
     this.chunkCounter = 0;
   }
@@ -33,9 +36,9 @@ export class RotateStream extends AccumulateStream {
 
     const isSizeDone = this.options.size && bytes(this.options.size) <= this.chunks.byteLength;
     const isCountDone = this.options.count && this.options.count <= this.chunkCounter;
-    const isDone = isSizeDone || isCountDone;
+    const isSymbolDone = this.chunks.indexOf(this.options.symbol);
 
-    if (isDone) {
+    if (isSizeDone || isCountDone || isSymbolDone) {
       this.rotate();
     }
 

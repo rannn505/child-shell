@@ -41,7 +41,10 @@ export class DomainStream extends AccumulateStream {
       );
 
       // 5: emit domain
-      this.emit(DOMAIN_EVENT, this.chunkCounter, this.chunks);
+      this.emit(DOMAIN_EVENT, {
+        count: this.chunkCounter,
+        chunks: this.chunks,
+      });
     }
 
     // 6: call _write cb

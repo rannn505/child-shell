@@ -31,7 +31,15 @@ describe('AccumulateStream', () => {
 
     // Assert:
     expect(handler).toHaveBeenCalledTimes(2);
-    expect(handler).toHaveBeenNthCalledWith(1, Buffer.from(DATA), 1, Buffer.from(DATA));
-    expect(handler).toHaveBeenNthCalledWith(2, Buffer.from(DATA), 2, Buffer.from(`${DATA}${DATA}`));
+    expect(handler).toHaveBeenNthCalledWith(1, {
+      chunk: Buffer.from(DATA),
+      count: 1,
+      chunks: Buffer.from(DATA),
+    });
+    expect(handler).toHaveBeenNthCalledWith(2, {
+      chunk: Buffer.from(DATA),
+      count: 2,
+      chunks: Buffer.from(`${DATA}${DATA}`),
+    });
   });
 });
