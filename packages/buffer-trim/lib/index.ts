@@ -1,8 +1,7 @@
-import { EOL } from 'os';
-
-const eol = EOL.charCodeAt(0);
+const bn = '\n'.charCodeAt(0);
+const br = '\r'.charCodeAt(0);
 const space = ' '.charCodeAt(0);
-export const isWhitespaceByte = (byte: number): boolean => byte === eol || byte === space;
+export const isWhitespaceByte = (byte: number): boolean => byte === bn || byte === br || byte === space;
 
 export const trimBufferStart = (buf: Buffer): Buffer => {
   let start = 0;
