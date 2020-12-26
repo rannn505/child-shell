@@ -1,19 +1,19 @@
-# `buffer-trim`
+# `trim-buffer`
 
 > Removes whitespace and line-terminator characters from buffer edges
 
 ## Installation
 
 ```bash
-$ npm i -S @nbsh/buffer-trim
-$ yarn add @nbsh/buffer-trim
+$ npm i -S trim-buffer
+$ yarn add trim-buffer
 ```
 
 ## Usage
 
 ```js
 import { EOL } from 'os';
-import { trimBufferStart, trimBufferEnd, trimBuffer } from '@nbsh/buffer-trim';
+import { trimBufferStart, trimBufferEnd, trimBuffer } from 'trim-buffer';
 
 const trimmable = Buffer.from(` trimme${EOL}`); // Buffer(8) [32, 116, 114, 105, 109, 109, 101, 10]
 trimBufferStart(trimmable); // Buffer(7) [116, 114, 105, 109, 109, 101, 10]

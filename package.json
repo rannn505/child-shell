@@ -1,14 +1,13 @@
 {
-  "name": "nbsh",
+  "name": "child-shell",
   "private": true,
   "description": "Node.js bindings for shell",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/nbsh/",
+  "homepage": "https://rannn505.github.io/child-shell/",
   "license": "MIT",
   "scripts": {
-    "bootstrap": "npx lerna bootstrap --hoist --strict",
-    "clean": "lerna exec -- rimraf dist tsconfig.tsbuildinfo coverage",
-    "clean:all": "npm run clean && lerna exec -- rimraf node_modules && rimraf node_modules .eslintcache",
+    "clean": "rimraf **/dist **/tsconfig.tsbuildinfo",
+    "clean:all": "npm run clean && rimraf coverage .eslintcache ./**/node_modules",
     "format": "prettier --write '**/*.{js,ts,md}' --ignore-path .gitignore",
     "format:check": "prettier --check '**/*.{js,ts,md}' --ignore-path .gitignore",
     "lint": "eslint . --cache --fix --ext js,ts,md --ignore-path .gitignore",
@@ -17,12 +16,10 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
-    "compile": "lerna exec --ignore examples -- tsc --build",
-    "build": "npm run clean && npm run bootstrap && npm run compile",
-    "build:watch": "npm run build && tsc --build --watch",
-    "types:check": "npm run compile -- --dry",
-    "examples": "npm run build && ts-node examples",
-    "start": "npm run examples",
+    "build": "tsc --build",
+    "build:watch": "npm run build -- --watch",
+    "types:check": "npm run build -- --dry",
+    "start": "npm run build && ts-node examples",
     "prepublishOnly": "npm run types:check && npm run format:check && npm run lint:check && npm test"
   },
   "husky": {
@@ -31,7 +28,11 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,md}": "npm run lint"
+    "*.{js,ts}": [
+      "eslint --cache --ext js,ts --ignore-path .gitignore",
+      "tsc --noEmit",
+      "prettier --check --ignore-path .gitignore"
+    ]
   },
   "engines": {
     "node": ">= 8.0.0"

@@ -3,7 +3,8 @@
 
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "lib"
+    "rootDir": "lib",
+    "composite": true,
   },
 
   "include": ["lib/**/*"]

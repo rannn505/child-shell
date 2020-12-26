@@ -1,7 +1,7 @@
 import { EOL } from 'os';
 import { trimBufferStart, trimBufferEnd, trimBuffer } from '../lib';
 
-describe('buffer-trim', () => {
+describe('trim-buffer', () => {
   const TRIMMABLE = 'trimmable';
   const examples = [
     `${EOL}${TRIMMABLE}`,
