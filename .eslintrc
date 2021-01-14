@@ -18,7 +18,7 @@
   ],
   "plugins": ["markdown"],
   "rules": {
-    "@typescript-eslint/interface-name-prefix": ["error", "always"],
+    "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/no-empty-function": "off",
     "import/no-unresolved": "off",
     "import/extensions": "off",

@@ -3,10 +3,9 @@
 
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "lib"
+    "rootDir": "lib",
+    "composite": true,
   },
-
-  "references": [{ "path": "../buffer-trim" }],
 
   "include": ["lib/**/*"]
 }

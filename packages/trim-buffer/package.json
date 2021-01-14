@@ -18,14 +18,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rannn505/node-powershell.git",
+    "url": "git+https://github.com/rannn505/child-shell.git",
     "directory": "packages/trim-buffer"
   },
   "scripts": {},
   "bugs": {
-    "url": "https://github.com/rannn505/node-powershell/issues"
+    "url": "https://github.com/rannn505/child-shell/issues"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.4"
   }
 }

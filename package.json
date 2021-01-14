@@ -12,7 +12,6 @@
     "format:check": "prettier --check '**/*.{js,ts,md}' --ignore-path .gitignore",
     "lint": "eslint . --cache --fix --ext js,ts,md --ignore-path .gitignore",
     "lint:check": "eslint . --cache --ext js,ts,md --ignore-path .gitignore",
-    "pretest": "npm run build",
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
@@ -30,7 +29,6 @@
   "lint-staged": {
     "*.{js,ts}": [
       "eslint --cache --ext js,ts --ignore-path .gitignore",
-      "tsc --noEmit",
       "prettier --check --ignore-path .gitignore"
     ]
   },
