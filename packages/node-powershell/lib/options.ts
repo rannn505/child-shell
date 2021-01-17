@@ -1,4 +1,4 @@
-import { ProcessOptions, ShellOptions } from '@nbsh/core';
+import { ProcessOptions, ShellOptions } from 'child-shell';
 import { PSExecutableType } from './enums/PSExecutableType';
 
 export type PowerShellProcessOptions = ProcessOptions &

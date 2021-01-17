@@ -151,19 +151,23 @@ describe('AccumulateStream', () => {
     expect(phraseEventHandler).toHaveBeenCalledWith({ buffer: Buffer.from(`${DATA}${DATA}`) });
   });
 
-  test('accumulator option', async () => {
-    const pass = new PassThrough();
+  test('custom option', async () => {
+    const EVENT_NAME = 'even-chunk';
     let i = 0;
+    const pass = new PassThrough();
     const as = new AccumulateStream({
-      accumulator: (): boolean => {
-        i += 1;
-        return i % 2 === 0;
+      custom: {
+        event: EVENT_NAME,
+        isDone: (): boolean => {
+          i += 1;
+          return i % 2 === 0;
+        },
       },
     });
     const dataEventHandler = jest.fn();
     as.on('data', dataEventHandler);
     const accumulatorEventHandler = jest.fn();
-    as.on('accumulator', accumulatorEventHandler);
+    as.on(EVENT_NAME, accumulatorEventHandler);
 
     pass.pipe(as);
     pass.write(DATA);

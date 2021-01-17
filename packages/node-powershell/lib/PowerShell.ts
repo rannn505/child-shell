@@ -1,5 +1,5 @@
 import { platform } from 'os';
-import { ShellCommandResult, Shell, ShellHooks } from '@nbsh/core';
+import { ShellCommandResult, Shell, ShellHooks } from 'child-shell';
 import isWsl from 'is-wsl';
 import { PSExecutableType } from './enums/PSExecutableType';
 import { PSInvocationState } from './enums/PSInvocationState';

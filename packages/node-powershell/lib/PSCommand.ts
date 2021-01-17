@@ -1,4 +1,4 @@
-import { Command } from '@nbsh/core';
+import { Command } from 'child-shell';
 import { PSArgument } from './PSArgument';
 import { PSParameter } from './PSParameter';
 

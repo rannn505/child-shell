@@ -30,13 +30,11 @@
   },
   "dependencies": {
     "bytes": "^3.1.0",
-    "ms": "^2.1.2",
-    "shortid": "^2.2.15"
+    "ms": "^2.1.2"
   },
   "devDependencies": {
     "@types/bytes": "^3.1.0",
     "@types/ms": "^0.7.31",
-    "@types/node": "^13.13.4",
-    "@types/shortid": "0.0.29"
+    "@types/node": "^13.13.4"
   }
 }

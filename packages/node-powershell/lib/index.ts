@@ -1,4 +1,4 @@
-export { InvocationError, ProcessOptions, ShellStdioObject, ShellCommandResult, ShellExitData } from '@nbsh/core';
+export { InvocationError, ProcessError, ShellCommandResult } from 'child-shell';
 
 export * from './enums/PSExecutableType';
 export * from './enums/PSInvocationState';

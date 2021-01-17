@@ -1,11 +1,11 @@
-# `core`
+# `child-shell`
 
 > TODO: description
 
 ## Usage
 
 ```
-const core = require('core');
+const child-shell = require('child-shell');
 
 // TODO: DEMONSTRATE API
 ```

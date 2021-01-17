@@ -5,11 +5,11 @@
 <h3 align="center">🔗 Node.js bindings for shell (NbSH)</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@nbsh/core">
-    <img alt="npm@latest" src="https://img.shields.io/npm/v/@nbsh/core/latest?color=%2329405B&style=flat-square">
+  <a href="https://www.npmjs.com/package/child-shell">
+    <img alt="npm@latest" src="https://img.shields.io/npm/v/child-shell/latest?color=%2329405B&style=flat-square">
   </a>
-  <a href="https://www.npmjs.com/package/@nbsh/core">
-    <img alt="npm@next" src="https://img.shields.io/npm/v/@nbsh/core/next?color=%230C131B&style=flat-square">
+  <a href="https://www.npmjs.com/package/child-shell">
+    <img alt="npm@next" src="https://img.shields.io/npm/v/child-shell/next?color=%230C131B&style=flat-square">
   </a>
 </p>
 
@@ -20,8 +20,8 @@
   <a href="">
     <img alt="Coverage" src="">
   </a>
-    <a href="https://npm-stat.com/charts.html?package=@nbsh/core">
-    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/@nbsh/core.svg?style=flat-square">
+    <a href="https://npm-stat.com/charts.html?package=child-shell">
+    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/child-shell.svg?style=flat-square">
   </a>
   <a href="https://github.com/rannn505/node-powershell/stargazers">
     <img alt="GitHub Stars" src="https://img.shields.io/github/stars/rannn505/node-powershell?style=social">

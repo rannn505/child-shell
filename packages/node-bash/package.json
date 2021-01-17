@@ -48,6 +48,6 @@
     "url": "https://github.com/rannn505/node-powershell/issues"
   },
   "dependencies": {
-    "@nbsh/core": "^5.0.0-next.1"
+    "child-shell": "^5.0.0-next.1"
   }
 }

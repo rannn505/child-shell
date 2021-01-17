@@ -1,4 +1,4 @@
-import { convertTo, TypesMap, SHObject, SCustomObject, SArray, SNull } from '@nbsh/core';
+import { convertTo, TypesMap, SHObject, SCustomObject, SArray, SNull } from 'child-shell';
 import { Types } from '@nbsh/to-type';
 
 export class PSBoolean extends SHObject {

@@ -1,4 +1,4 @@
-import { Argument } from '@nbsh/core';
+import { Argument } from 'child-shell';
 import { PS_TYPES_MAP } from './PSTypeConverter';
 
 export class PSArgument extends Argument {

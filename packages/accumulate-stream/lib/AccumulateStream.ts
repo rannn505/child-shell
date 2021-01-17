@@ -7,18 +7,22 @@ export type AccumulateStreamOptions = {
   size?: string;
   interval?: string;
   phrase?: string;
-  accumulator?: (stream: AccumulateStream) => boolean;
+  custom?: {
+    event: string;
+    isDone: (this: AccumulateStream, chunk: Buffer, encoding: BufferEncoding) => boolean;
+  };
   emitFlush?: boolean;
 };
 
-export type AccumulateStreamEvents = 'chunk' | 'count' | 'size' | 'interval' | 'phrase' | 'accumulator';
+export type AccumulateStreamEvents = 'chunk' | 'count' | 'size' | 'interval' | 'phrase' | string;
 
 export class AccumulateStream extends Transform {
   protected buffer: Buffer;
   protected chunksCounter: number;
 
-  private readonly options: AccumulateStreamOptions;
   private readonly interval?: NodeJS.Timeout;
+
+  public readonly options: AccumulateStreamOptions;
 
   constructor(options: AccumulateStreamOptions = {}) {
     super({
@@ -29,9 +33,7 @@ export class AccumulateStream extends Transform {
       allowHalfOpen: false,
     });
     this.options = options;
-
-    this.buffer = Buffer.from([]);
-    this.chunksCounter = 0;
+    this.reset();
 
     if (this.options?.interval) {
       this.interval = setInterval(() => {
@@ -39,6 +41,11 @@ export class AccumulateStream extends Transform {
         this.drain();
       }, ms(this.options.interval));
     }
+  }
+
+  private reset(): void {
+    this.buffer = Buffer.from([]);
+    this.chunksCounter = 0;
   }
 
   private accumulate(chunk: Buffer): void {
@@ -49,8 +56,7 @@ export class AccumulateStream extends Transform {
 
   private drain(): void {
     this.push(this.getBuffer());
-    this.buffer = Buffer.from([]);
-    this.chunksCounter = 0;
+    this.reset();
   }
 
   private emitEvent(event: AccumulateStreamEvents): void {
@@ -78,12 +84,16 @@ export class AccumulateStream extends Transform {
       this.emitEvent('phrase');
     }
 
-    const isAccumulatorDone = this.options?.accumulator && this.options.accumulator(this);
-    if (isAccumulatorDone) {
-      this.emitEvent('accumulator');
+    const isCustomDone =
+      this.options?.custom &&
+      this.options.custom?.event &&
+      this.options.custom?.isDone &&
+      this.options.custom.isDone.call(this, chunk, encoding);
+    if (isCustomDone) {
+      this.emitEvent(this.options.custom.event);
     }
 
-    const isDone = isSizeDone || isCountDone || isPhraseDone || isAccumulatorDone;
+    const isDone = isSizeDone || isCountDone || isPhraseDone || isCustomDone;
     if (isDone) {
       this.drain();
     }

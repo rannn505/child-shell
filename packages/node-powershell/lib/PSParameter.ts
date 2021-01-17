@@ -1,4 +1,4 @@
-import { Parameter, Dash } from '@nbsh/core';
+import { Parameter, Dash } from 'child-shell';
 import { PS_TYPES_MAP } from './PSTypeConverter';
 
 export class PSParameter extends Parameter {

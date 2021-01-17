@@ -6,7 +6,7 @@
     "rootDir": "lib"
   },
 
-  "references": [{ "path": "../core" }, { "path": "../to-type" }],
+  "references": [{ "path": "../child-shell" }],
 
   "include": ["lib/**/*"]
 }
