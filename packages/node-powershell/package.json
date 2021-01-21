@@ -3,7 +3,7 @@
   "version": "5.0.0-next.1",
   "description": "Easily run PowerShell from your NodeJS app",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/node-powershell/tree/master/packages/node-powershell#readme",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/node-powershell#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -16,6 +16,22 @@
     "doc",
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/child-shell.git",
+    "directory": "packages/node-powershell"
+  },
+  "bugs": {
+    "url": "https://github.com/rannn505/child-shell/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {},
+  "dependencies": {
+    "child-shell": "^5.0.0-next.1",
+    "is-wsl": "^2.2.0"
+  },
   "keywords": [
     "nbsh",
     "node-shell",
@@ -41,18 +57,5 @@
     "linux",
     "macos",
     "windows"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rannn505/node-powershell.git",
-    "directory": "packages/node-powershell"
-  },
-  "scripts": {},
-  "bugs": {
-    "url": "https://github.com/rannn505/node-powershell/issues"
-  },
-  "dependencies": {
-    "child-shell": "^5.0.0-next.1",
-    "is-wsl": "^2.2.0"
-  }
+  ]
 }

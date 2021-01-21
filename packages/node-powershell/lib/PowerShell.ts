@@ -1,6 +1,6 @@
 import { platform } from 'os';
 import isWsl from 'is-wsl';
-import { ShellOptions, ShellCommandResult, Shell } from 'child-shell';
+import { ShellOptions, Shell } from 'child-shell';
 import { PSCommand } from './PSCommand';
 
 const isWin = platform() === 'win32' || isWsl;

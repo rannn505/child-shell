@@ -3,7 +3,7 @@
   "version": "5.0.0-next.1",
   "description": "Useful implementations for writable stream",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "http://rannn505.github.io/child-shell/tree/master/packages/accumulate-stream#readme",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/accumulate-stream#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -21,13 +21,13 @@
     "url": "git+https://github.com/rannn505/child-shell.git",
     "directory": "packages/accumulate-stream"
   },
-  "scripts": {},
   "bugs": {
     "url": "https://github.com/rannn505/child-shell/issues"
   },
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {},
   "dependencies": {
     "bytes": "^3.1.0",
     "ms": "^2.1.2"

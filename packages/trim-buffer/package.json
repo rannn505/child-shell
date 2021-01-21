@@ -3,7 +3,7 @@
   "version": "5.0.0-next.1",
   "description": "Removes whitespace and line-terminator characters from buffer edges",
   "author": "Ran Cohen <rannn505@outlook.com>",
-  "homepage": "https://rannn505.github.io/child-shell/tree/master/trim-buffer#readme",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/trim-buffer#readme",
   "license": "MIT",
   "main": "dist",
   "types": "dist",
@@ -21,13 +21,13 @@
     "url": "git+https://github.com/rannn505/child-shell.git",
     "directory": "packages/trim-buffer"
   },
-  "scripts": {},
   "bugs": {
     "url": "https://github.com/rannn505/child-shell/issues"
   },
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {},
   "devDependencies": {
     "@types/node": "^13.13.4"
   }
