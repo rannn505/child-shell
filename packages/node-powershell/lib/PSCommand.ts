@@ -1,10 +1,10 @@
 import { Command } from 'child-shell';
-import { PSArgument } from './PSArgument';
-import { PSParameter } from './PSParameter';
+import { PSTypeConverter } from './PSTypeConverter';
 
 export class PSCommand extends Command {
   constructor();
-  constructor(line = '', ArgumentCtor = PSArgument, ParameterCtor = PSParameter) {
-    super(line, ArgumentCtor, ParameterCtor);
+  constructor(line?: string);
+  constructor(line = '') {
+    super(line, new PSTypeConverter());
   }
 }

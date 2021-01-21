@@ -1,63 +1,62 @@
-import { Serializer } from './Serializer';
-
-export type Operator = '|' | ';' | '&' | '||' | '&&';
+import { JavaScriptTypeConverter } from './JavaScriptTypeConverter';
 
 export type Dash = '-' | '--';
 
-const serializer = new Serializer();
+export type Parameter = { dash: Dash; name: string; value?: unknown };
 
 export class Command {
+  protected readonly typeConverter: JavaScriptTypeConverter;
+  protected readonly pipeOperator: string;
+  protected readonly callOperator: string;
+
   public readonly line: string;
 
   constructor();
-  constructor(line: string);
-  constructor(line = '') {
+  constructor(line?: string, typeConverter?: JavaScriptTypeConverter, pipeOperator?: string, callOperator?: string);
+
+  constructor(line = '', typeConverter = new JavaScriptTypeConverter(), pipeOperator = '|', callOperator = '.') {
     this.line = line;
+    this.typeConverter = typeConverter;
+    this.pipeOperator = pipeOperator;
+    this.callOperator = callOperator;
   }
 
-  private createNewCommand(newCommand?: string): this {
+  private create(line?: string): this {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return new (this.constructor as any)(newCommand);
+    return new (this.constructor as any)(line, this.typeConverter, this.pipeOperator, this.callOperator);
   }
 
-  addCommand(command: Command | string, operator: Operator = '|'): this {
-    const newCommandLine = command instanceof Command ? command.line : (command as string);
-    let newCommand = newCommandLine;
-    const isEndsWithOperator = ['|', ';', '&', '||', '&&'].some((op) => this.line.endsWith(op));
-    if (this.line && isEndsWithOperator) {
-      newCommand = `${this.line} ${newCommandLine}`;
-    } else if (this.line) {
-      newCommand = `${this.line} ${operator} ${newCommandLine}`;
-    }
-
-    return this.createNewCommand(newCommand);
+  public addCommand(command: Command | string): this {
+    const addition = command instanceof Command ? command.line : (command as string);
+    return this.create(`${this.line} ${this.pipeOperator} ${addition}`);
   }
 
-  addScript(path: string): this {
-    const newCommand = `. ${path}`;
-    return this.addCommand(newCommand);
+  public addScript(path: string): this {
+    return this.addCommand(`${this.callOperator} ${path}`);
   }
 
-  addArgument(value: unknown): this {
-    const argument = serializer.serialize(value);
-    const newCommand = `${this.line} ${argument}`;
-
-    return this.createNewCommand(newCommand);
+  public addArgument(argument: unknown): this {
+    const addition = this.typeConverter.convert(argument);
+    return this.create(`${this.line} ${addition}`.trim());
   }
 
-  addParameter(dash: Dash, name: string, value?: unknown): this {
-    const parameterValue = serializer.serialize(value);
-    const parameter = parameterValue ? `${dash}${name} ${parameterValue}` : `${dash}${name}`;
-    const newCommand = `${this.line} ${parameter.toString()}`;
-
-    return this.createNewCommand(newCommand);
+  public addParameter(parameter: Parameter): this {
+    const { dash, name, value } = parameter;
+    const parameterValue = this.typeConverter.convert(value);
+    const addition = parameterValue ? `${dash}${name} ${parameterValue}` : `${dash}${name}`;
+    return this.create(`${this.line} ${addition}`);
   }
 
-  clear(): this {
-    return this.createNewCommand();
+  public addParameters(parameters: Parameter[] = []): this {
+    parameters.forEach((parameter) => this.addParameter(parameter));
+    return this;
   }
 
-  clone(): this {
-    return this.createNewCommand(this.line);
+  public clear(): this {
+    return this.create();
+  }
+
+  public clone(): this {
+    return this.create(this.line);
   }
 }

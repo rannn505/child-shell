@@ -25,6 +25,7 @@
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.ts", "**/*.test.js"] }],
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "func-names": "off",
     "no-useless-constructor": "off",
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",

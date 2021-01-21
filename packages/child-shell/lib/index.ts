@@ -1,6 +1,7 @@
-export * from './options';
 export * from './errors';
 
-export * from './Serializer';
+export * from './TypeConverter';
+export * from './JavaScriptTypeConverter';
+
 export * from './Command';
 export * from './Shell';

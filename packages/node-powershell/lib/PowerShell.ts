@@ -1,19 +1,32 @@
 import { platform } from 'os';
-import { ShellCommandResult, Shell, ShellHooks } from 'child-shell';
 import isWsl from 'is-wsl';
-import { PSExecutableType } from './enums/PSExecutableType';
-import { PSInvocationState } from './enums/PSInvocationState';
-import { PSOption } from './PSOption';
+import { ShellOptions, ShellCommandResult, Shell } from 'child-shell';
 import { PSCommand } from './PSCommand';
-import { PowerShellOptions, PowerShellProcessOptions } from './options';
 
 const isWin = platform() === 'win32' || isWsl;
 
-export class PowerShell extends Shell {
-  public invocationStateInfo: PSInvocationState;
+export enum PSExecutableType {
+  PowerShell = 'powershell',
+  PowerShellCore = 'pwsh',
+  PowerShellCorePreview = 'pwsh-preview',
+}
 
+export type PowerShellOptions = ShellOptions & {
+  pwsh?: boolean;
+  pwshPrev?: boolean;
+  executable?: PSExecutableType;
+};
+
+export class PowerShell extends Shell {
   constructor(options: PowerShellOptions = {}) {
-    super(options, 'NPS', PSCommand);
+    const addDefaultOption = options;
+    addDefaultOption.executableOptions = [
+      { dash: '-', name: 'noLogo' },
+      { dash: '-', name: 'noExit' },
+      { dash: '-', name: 'command', value: '-' },
+    ];
+
+    super(options, PSCommand);
   }
 
   protected setExecutable({
@@ -52,71 +65,28 @@ export class PowerShell extends Shell {
       case PowerShellCorePreview:
         return PowerShellCore;
       default:
-        throw new Error('Unable to determine PS executable');
+        throw new Error('Unable to determine PowerShell executable');
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private setExecutableSuffix(executable: string): void {
-    if (!isWin) {
-      return;
-    }
-    // eslint-disable-next-line no-param-reassign
-    executable = `${executable}.exe`;
-  }
-
-  protected setProcessOptions({
-    processOptions = {
-      noLogo: true,
-      noExit: true,
-      command: '-', // need to be last
-    },
-  }: {
-    processOptions?: PowerShellProcessOptions;
-  }): string[] {
-    let powershellOptions: string[] = [];
-    Object.keys(processOptions).forEach((opt: string) => {
-      const psOption = new PSOption(opt, processOptions[opt]);
-      powershellOptions = [...powershellOptions, ...psOption.toArray()];
-    });
-    return powershellOptions;
-  }
-
-  protected setHooks(): ShellHooks {
-    return {
-      beforeSpawn: ({ executable }): void => {
-        this.setExecutableSuffix(executable);
-        this.invocationStateInfo = PSInvocationState.NotStarted;
-      },
-      afterSpawn: (): void => {
-        this.addCommand('$PSVersionTable');
-        this.invoke();
-      },
-      onIdle: (): void => {
-        this.invocationStateInfo = PSInvocationState.Stopped;
-      },
-      beforeInvoke: (): void => {
-        this.invocationStateInfo = PSInvocationState.Running;
-      },
-      afterInvoke: ({ result }): void => {
-        this.invocationStateInfo = result.hadErrors ? PSInvocationState.Failed : PSInvocationState.Completed;
-      },
-      afterExit: (): void => {
-        this.invocationStateInfo = PSInvocationState.Disconnected;
-      },
-    };
-  }
-
-  protected writeToOut(input: string): string {
+  protected writeToOutput(input: string): string {
     return `[Console]::Out.WriteLine("${input}")`;
   }
 
-  protected writeToErr(input: string): string {
+  protected writeToError(input: string): string {
     return `[Console]::Error.WriteLine("${input}")`;
   }
 
-  public dispose(): Promise<ShellCommandResult> {
-    this.addCommand('exit 0');
-    return super.invoke();
-  }
+  // private setExecutableSuffix(executable: string): void {
+  //   if (!isWin) {
+  //     return;
+  //   }
+  //   // eslint-disable-next-line no-param-reassign
+  //   executable = `${executable}.exe`;
+  // }
+
+  // public dispose(): Promise<ShellCommandResult> {
+  //   this.addCommand('exit 0');
+  //   return super.invoke();
+  // }
 }
