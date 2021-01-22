@@ -3,7 +3,7 @@
 </p>
 
 <h3 align="center"> Child Shell </h3>
-<p align="center"> A Node.js bindings for shell 🔗 </p>
+<p align="center"> 🔗 A Node.js bindings for shell 🔗 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/child-shell">
