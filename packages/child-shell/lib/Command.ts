@@ -28,6 +28,9 @@ export class Command {
 
   public addCommand(command: Command | string): this {
     const addition = command instanceof Command ? command.line : (command as string);
+    if (!this.line) {
+      return this.create(addition);
+    }
     return this.create(`${this.line} ${this.pipeOperator} ${addition}`);
   }
 

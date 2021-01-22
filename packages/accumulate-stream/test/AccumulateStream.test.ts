@@ -53,9 +53,11 @@ describe('AccumulateStream', () => {
     expect(chunkEventHandler).toHaveBeenCalledTimes(2);
     expect(chunkEventHandler).toHaveBeenNthCalledWith(1, {
       buffer: Buffer.from(DATA),
+      chunk: Buffer.from(DATA),
     });
     expect(chunkEventHandler).toHaveBeenNthCalledWith(2, {
       buffer: Buffer.from(`${DATA}${DATA}`),
+      chunk: Buffer.from(DATA),
     });
   });
 
@@ -100,7 +102,10 @@ describe('AccumulateStream', () => {
     expect(dataEventHandler).toHaveBeenCalledTimes(2);
     expect(dataEventHandler).toHaveBeenCalledWith(Buffer.from(`${DATA}${DATA}`));
     expect(sizeEventHandler).toHaveBeenCalledTimes(2);
-    expect(sizeEventHandler).toHaveBeenCalledWith({ buffer: Buffer.from(`${DATA}${DATA}`) });
+    expect(sizeEventHandler).toHaveBeenCalledWith({
+      buffer: Buffer.from(`${DATA}${DATA}`),
+      size: 8,
+    });
   });
 
   test('interval option', async () => {

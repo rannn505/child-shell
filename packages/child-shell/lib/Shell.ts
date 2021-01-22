@@ -48,6 +48,12 @@ export type ShellStdioObject = {
   stderr: Readable;
 };
 
+export type ShellDebuggers = {
+  comment: Debugger.Debugger;
+  command: Debugger.Debugger;
+  output: Debugger.Debugger;
+};
+
 export type ShellCommandResult = {
   command: string;
 
@@ -65,7 +71,7 @@ export abstract class Shell {
   private readonly executableOptions: string[];
   private readonly spawnOptions: SpawnOptions;
   private readonly invocationQueue: PQueue;
-  private readonly debugger: Debugger.Debugger;
+  private readonly debuggers: ShellDebuggers;
   private readonly process: ChildProcess;
   private isExited: boolean;
   private readonly exitPromise: Promise<void>;
@@ -88,8 +94,8 @@ export abstract class Shell {
     this.spawnOptions = { ...options.spawnOptions, stdio: 'pipe', detached: false, shell: false };
     this.invocationQueue = this.setInvocationQueue(options);
 
-    this.debugger = this.setDebugger(options);
-    this.debugger(`Starting ${this.executable} ${this.executableOptions.join(' ')}`);
+    this.debuggers = this.setDebuggers(options);
+    this.debuggers.comment(`starting shell with command "${this.executable} ${this.executableOptions.join(' ')}"`);
 
     this.process = spawn(this.executable, this.executableOptions, this.spawnOptions);
 
@@ -123,7 +129,7 @@ export abstract class Shell {
     let firstDelimiterOccurrence = -1;
     let secondDelimiterOccurrence = -1;
 
-    const as = new AccumulateStream({
+    const accumulator = new AccumulateStream({
       custom: {
         event: delimiter,
         isDone(chunk): boolean {
@@ -140,10 +146,14 @@ export abstract class Shell {
         },
       },
     });
-    stream.pipe(as);
 
-    const [accumulatedOutput] = await once(as, 'data');
-    this.detachStream(as);
+    accumulator.on('chunk', ({ chunk }: { chunk: Buffer }): void =>
+      this.debuggers.output(trimBuffer(chunk).toString(this.resultsEncoding)),
+    );
+
+    stream.pipe(accumulator);
+    const [accumulatedOutput] = await once(accumulator, 'data');
+    this.detachStream(accumulator);
 
     // slice and trim output buffer
     return trimBuffer(accumulatedOutput.slice(firstDelimiterOccurrence + delimiter.length, secondDelimiterOccurrence));
@@ -179,7 +189,7 @@ export abstract class Shell {
     this.invocationQueue.clear();
   }
 
-  private setDebugger({ debug, verbose }: { debug?: boolean; verbose?: boolean }): Debugger.Debugger {
+  private setDebuggers({ debug, verbose }: { debug?: boolean; verbose?: boolean }): ShellDebuggers {
     const namespace = this.executable.toUpperCase();
     const _debugger = Debugger(namespace);
     // eslint-disable-next-line no-console
@@ -188,7 +198,12 @@ export abstract class Shell {
     if (debug || verbose) {
       Debugger.enable(`${namespace}*`);
     }
-    return _debugger;
+
+    return {
+      comment: _debugger.extend(' #'),
+      command: _debugger.extend(' $'),
+      output: _debugger.extend(' >'),
+    };
   }
 
   private setProcessExitListeners(): Promise<void> {
@@ -232,7 +247,7 @@ export abstract class Shell {
       this.clearInvocationQueue();
       this.process.stdin.end();
       this.detachStream(stderr);
-      this.debugger('Shell process exited');
+      this.debuggers.comment(`shell exited with code ${this.process.exitCode}`);
     });
   }
 
@@ -258,6 +273,9 @@ export abstract class Shell {
   }
 
   private async invokeCommand(command: string): Promise<ShellCommandResult> {
+    this.debuggers.comment('starting command invocation');
+    this.debuggers.command(command);
+
     // 1: update history with current command
     this.history.unshift({
       command,
@@ -270,19 +288,13 @@ export abstract class Shell {
     const stdoutDelimiter = generate();
     const stdoutPromise = this.bulkReadStream(this.process.stdout, stdoutDelimiter);
     const stderrDelimiter = generate();
-    const stderrPromise = this.bulkReadStream(this.process.stdout, stderrDelimiter);
+    const stderrPromise = this.bulkReadStream(this.process.stderr, stderrDelimiter);
 
     // 3: race output and error
     const isOutputDone = Promise.all([stdoutPromise, stderrPromise]);
     const isCommandDone = Promise.race([this.exitPromise, isOutputDone]);
 
-    // 4: attach output streams to debugger
-    this.debugger('Starting command invocation...');
-    this.debugger(`  ${command}`);
-    this.process.stdout.on('data', (chunk: Buffer): void => this.debugger(chunk.toString(this.resultsEncoding)));
-    this.process.stderr.on('data', (chunk: Buffer): void => this.debugger(chunk.toString(this.resultsEncoding)));
-
-    // 5: write delimiter then command then delimiter to process input so bulkReadStream will detect the exact command output
+    // 4: write delimiter then command then delimiter to process input so bulkReadStream will detect the exact command output
     this.process.stdin.write(this.writeToError(stderrDelimiter));
     this.process.stdin.write(EOL);
     this.process.stdin.write(this.writeToOutput(stdoutDelimiter));
@@ -295,10 +307,10 @@ export abstract class Shell {
     this.process.stdin.write(EOL);
 
     try {
-      // 6: wait for command to finish
+      // 5: wait for command to finish
       await isCommandDone; // [EXIT] process crushed -> throw ProcessError
     } finally {
-      // 7: calculate results and update history
+      // 6: calculate results and update history
       currentHistoryRecord.duration = Date.now() - currentHistoryRecord.startTime;
       if (!this.isExited) {
         currentHistoryRecord.stdout = await stdoutPromise;
@@ -306,21 +318,21 @@ export abstract class Shell {
         if (currentHistoryRecord.stderr.length === 0) {
           // [EXIT] invocation succeeded -> return result
           currentHistoryRecord.result = currentHistoryRecord.stdout.toString(this.resultsEncoding);
-          this.debugger('Command invocation succeeded');
+          this.debuggers.comment('command invocation succeeded');
         } else {
           // [EXIT] invocation failed -> throwOnInvocationError ? throws InvocationError : return failed result
           currentHistoryRecord.hadErrors = true;
           currentHistoryRecord.result = currentHistoryRecord.stderr.toString(this.resultsEncoding);
-          this.debugger('Command invocation failed');
+          this.debuggers.comment('command invocation failed');
         }
       } else {
         // [EXIT] user killed process gracefully -> return partial result
-        this.debugger('Command invocation stopped');
+        this.debuggers.comment('command invocation stopped');
         currentHistoryRecord.result = 'process exited before command invocation finished';
       }
     }
 
-    // 8: return command result
+    // 7: return command result
     if (this.throwOnInvocationError && currentHistoryRecord.hadErrors) {
       throw new InvocationError(currentHistoryRecord.result);
     }
@@ -359,7 +371,7 @@ export abstract class Shell {
 
   public async invoke(): Promise<ShellCommandResult> {
     if (this.isExited) {
-      throw new InvocationError('Invoke called after process exited');
+      throw new InvocationError('invoke called after process exited');
     }
     return this.invocationQueue.add(() => {
       const commandToInvoke = this.command.line;

@@ -6,6 +6,7 @@
   "homepage": "https://rannn505.github.io/child-shell/",
   "license": "MIT",
   "scripts": {
+    "bootstrap": "npx lerna bootstrap --hoist --strict",
     "clean": "rimraf **/dist **/tsconfig.tsbuildinfo",
     "clean:all": "npm run clean && rimraf coverage .eslintcache ./**/node_modules",
     "format": "prettier --write '**/*.{js,ts,md}' --ignore-path .gitignore",
@@ -15,7 +16,7 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
-    "build": "tsc --build",
+    "build": "lerna exec -- tsc --build",
     "build:watch": "npm run build -- --watch",
     "types:check": "npm run build -- --dry",
     "start": "npm run build && ts-node examples",

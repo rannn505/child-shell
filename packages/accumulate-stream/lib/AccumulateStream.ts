@@ -59,15 +59,16 @@ export class AccumulateStream extends Transform {
     this.reset();
   }
 
-  private emitEvent(event: AccumulateStreamEvents): void {
+  private emitEvent(event: AccumulateStreamEvents, data = {}): void {
     this.emit(event, {
       buffer: this.getBuffer(),
+      ...data,
     });
   }
 
   _transform(chunk: Buffer, encoding: BufferEncoding, cb: TransformCallback): void {
     this.accumulate(chunk);
-    this.emitEvent('chunk');
+    this.emitEvent('chunk', { chunk });
 
     const isCountDone = this.options?.count && this.options.count <= this.chunksCounter;
     if (isCountDone) {
@@ -76,7 +77,7 @@ export class AccumulateStream extends Transform {
 
     const isSizeDone = this.options?.size && bytes(this.options.size) <= this.buffer.byteLength;
     if (isSizeDone) {
-      this.emitEvent('size');
+      this.emitEvent('size', { size: this.buffer.byteLength });
     }
 
     const isPhraseDone = this.options?.phrase && this.buffer.includes(this.options.phrase);

@@ -1,14 +1,18 @@
-// const { PowerShell } = require('../dist/nps/index');
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { PowerShell } = require('../packages/node-powershell');
 
-// const test = async () => {
-//   const ps = new PowerShell({ debug: true });
+const test = async () => {
+  const ps = new PowerShell({ debug: true });
 
-//   for (let index = 0; index < 10; index++) {
-//     const res = await ps.addCommand(`echo ${index}`).invoke();
-//     console.log('im index and res: %n %s', index, res);
-//   }
-// };
-// test();
+  for (let index = 0; index < 10; index += 1) {
+    /* eslint-disable no-await-in-loop */
+    const res = await ps.addCommand(`echo ${index}`).invoke();
+    console.log('im index and res: %n %s', index, res);
+  }
+
+  await ps.kill();
+};
+test();
 
 // (async () => {
 //   try {
