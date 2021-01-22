@@ -6,18 +6,18 @@ Please read and follow these instructions to ensure that your contribution is as
 
 ### Reporting Issues
 
-Before opening an issue, please search the [issue tracker](https://github.com/rannn505/node-powershell/issues) to make sure your issue hasn't already been reported.
-I use it, and mainly its label feature to keep track of bugs and improvements to `NbSH` itself, its examples, and its documentation. I encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc. If a topic has been discussed before, I will ask you to join the previous discussion.
+Before opening an issue, please search the [issue tracker](https://github.com/rannn505/child-shell/issues) to make sure your issue hasn't already been reported.
+I use it, and mainly its label feature to keep track of bugs and improvements to **child-shell** itself, its examples, and its documentation. I encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc. If a topic has been discussed before, I will ask you to join the previous discussion.
 
 ### Asking Questions
 
-**For support or usage questions like “how do I do X with NbSH” and “my code doesn't work”, please search and ask on [StackOverflow with a NbSH tag](https://stackoverflow.com/questions/tagged/nbsh?sort=votes&pageSize=50) first.**
+**For support or usage questions like “how do I do X with child-shell” and “my code doesn't work”, please search and ask on [StackOverflow with a child-shell tag](https://stackoverflow.com/questions/tagged/child-shell?sort=votes&pageSize=50) first.**
 
 Some questions take a long time to get an answer. **If your question gets closed or you don't get a reply on StackOverflow for longer than a week or two,** I encourage you to post an issue linking to your question. I will label and close your issue but this will give people watching the repo an opportunity to see your question and reply to it on StackOverflow if they know the answer.
 
 ### Development
 
-The following is a detailed list of all [npm scripts](https://docs.npmjs.com/misc/scripts) that will help you develope to `NbSH`:
+The following is a detailed list of all [npm scripts](https://docs.npmjs.com/misc/scripts) that will help you develope to **child-shell**:
 
 | Script      | Use to                  | Snippet                 | Command                                                    |
 | ----------- | ----------------------- | ----------------------- | ---------------------------------------------------------- |
@@ -36,7 +36,7 @@ The following is a detailed list of all [npm scripts](https://docs.npmjs.com/mis
 
 The workflow looks like this:
 
-- Open a new issue in the [issue tracker](https://github.com/rannn505/node-powershell/issues).
+- Open a new issue in the [issue tracker](https://github.com/rannn505/child-shell/issues).
 - Fork the repo.
 - Create a new feature branch based off the `master` branch.
 - Make sure all tests pass and there are no linting errors.
@@ -51,7 +51,7 @@ Improvements to the documentation are always welcome. You can find them in the [
 
 ### Examples
 
-`NbSH` comes with some [examples](/examples) to demonstrate various concepts and best practices.
+**child-shell** comes with some [examples](/examples) to demonstrate various concepts and best practices.
 When adding a new example, please adhere to the style and format of the existing examples, and try to reuse as much code as possible.
 
 ## Resources

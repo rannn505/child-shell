@@ -32,7 +32,7 @@
     "child-shell": "^5.0.0-next.1"
   },
   "keywords": [
-    "nbsh",
+    "child-shell",
     "node-shell",
     "node-bash",
     "bash",

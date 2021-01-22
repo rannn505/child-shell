@@ -33,7 +33,7 @@
     "is-wsl": "^2.2.0"
   },
   "keywords": [
-    "nbsh",
+    "child-shell",
     "node-shell",
     "node-powershell",
     "powershell",
