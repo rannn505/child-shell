@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-import { Bash } from 'node-bash';
+import { Bash, SHCommand  } from 'node-bash';
 
-const bash = new Bash();
+const sh = new Bash();
 ```

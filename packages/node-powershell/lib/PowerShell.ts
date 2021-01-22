@@ -1,9 +1,7 @@
 import { platform } from 'os';
 import isWsl from 'is-wsl';
-import { ShellOptions, Shell } from 'child-shell';
+import { ExecutableOptions, ShellOptions, Shell } from 'child-shell';
 import { PSCommand } from './PSCommand';
-
-const isWin = platform() === 'win32' || isWsl;
 
 export enum PSExecutableType {
   PowerShell = 'powershell',
@@ -11,21 +9,51 @@ export enum PSExecutableType {
   PowerShellCorePreview = 'pwsh-preview',
 }
 
+// https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_exe
+export type PSExecutableOptions = ExecutableOptions &
+  Partial<{
+    '-PSConsoleFile': string;
+    '-Version': '2.0' | '3.0';
+    '-NoLogo': boolean;
+    '-NoExit': boolean;
+    '-Sta': boolean;
+    '-Mta': boolean;
+    '-NoProfile': boolean;
+    '-NonInteractive': boolean;
+    '-InputFormat': 'Text' | 'XML';
+    '-OutputFormat': 'Text' | 'XML';
+    '-WindowStyle': string;
+    '-ConfigurationName': string;
+    // https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies
+    '-ExecutionPolicy':
+      | 'AllSigned'
+      | 'Bypass'
+      | 'Default'
+      | 'RemoteSigned'
+      | 'Restricted'
+      | 'Undefined'
+      | 'Unrestricted'
+      | string;
+  }>;
+
 export type PowerShellOptions = ShellOptions & {
   pwsh?: boolean;
   pwshPrev?: boolean;
   executable?: PSExecutableType;
+  executableOptions?: PSExecutableOptions;
 };
 
-export class PowerShell extends Shell {
-  constructor(options: PowerShellOptions = {}) {
-    const addDefaultOption = options;
-    addDefaultOption.executableOptions = [
-      { dash: '-', name: 'noLogo' },
-      { dash: '-', name: 'noExit' },
-      { dash: '-', name: 'command', value: '-' },
-    ];
+const isWin = platform() === 'win32' || isWsl;
 
+export class PowerShell extends Shell {
+  constructor(psOptions: PowerShellOptions = {}) {
+    const options = psOptions;
+    options.executableOptions = {
+      '-NoLogo': true,
+      ...psOptions.executableOptions,
+      '-NoExit': true,
+      '-Command': '-',
+    };
     super(options, PSCommand);
   }
 

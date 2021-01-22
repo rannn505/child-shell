@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const { Bash } = require('../packages/node-Bash');
 const { PowerShell } = require('../packages/node-powershell');
 
-const test = async () => {
-  const ps = new PowerShell({ debug: true });
-
+const test = async (shell) => {
   for (let index = 0; index < 10; index += 1) {
     /* eslint-disable no-await-in-loop */
-    const res = await ps.addCommand(`echo ${index}`).invoke();
+    const res = await shell.addCommand(`echo ${index}`).invoke();
     console.log('im index and res: %n %s', index, res);
   }
 
-  await ps.kill();
+  await shell.addCommand('exit 0').invoke();
 };
-test();
+// test(new PowerShell({ debug: true }));
+test(new Bash({ debug: true }));
+
+// export const getVersion = new PSCommand('$PSVersionTable.PSEdition + " " + $PSVersionTable.PSVersion');
 
 // (async () => {
 //   try {

@@ -11,11 +11,11 @@ import { AccumulateStream } from 'accumulate-stream';
 import { trimBuffer } from 'trim-buffer';
 
 import { ProcessError, InvocationError } from './errors';
-import { Command, Parameter, Dash } from './Command';
+import { Command, Parameter } from './Command';
 
-export type ExecutableOption = { dash: Dash; name: string; value?: string };
-
-export type ExecutableOptions = ExecutableOption[];
+export type ExecutableOptions = {
+  [key: string]: boolean | string;
+};
 
 export type ShellSpawnOptions = Omit<
   SpawnOptions,
@@ -159,15 +159,22 @@ export abstract class Shell {
     return trimBuffer(accumulatedOutput.slice(firstDelimiterOccurrence + delimiter.length, secondDelimiterOccurrence));
   }
 
-  private setExecutableOptions({ executableOptions = [] }: { executableOptions?: ExecutableOptions }): string[] {
+  private setExecutableOptions({ executableOptions = {} }: { executableOptions?: ExecutableOptions }): string[] {
     let options: string[] = [];
-    executableOptions.forEach((option: ExecutableOption) => {
-      const { dash, name, value } = option;
-      let addition: string[] = [`${dash}${name}`];
-      if (value) {
-        addition = [...addition, value];
+    Object.entries(executableOptions).forEach(([name, value]) => {
+      if (!name.startsWith('-') && name.startsWith('--')) {
+        throw new TypeError(`option ${name} must starts with a dash "-" | "--"`);
       }
-      options = [...options, ...addition];
+      switch (typeof value) {
+        case 'string':
+          options = [...options, name, value as string];
+          break;
+        case 'boolean':
+          options = (!value as boolean) ? options : [...options, name];
+          break;
+        default:
+          throw new TypeError(`option ${name} value must be string or boolean`);
+      }
     });
     return options;
   }
