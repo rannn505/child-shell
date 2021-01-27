@@ -1,6 +1,6 @@
 {
   "name": "child-shell",
-  "version": "5.0.0-next.3",
+  "version": "5.0.0-next.2",
   "description": "Base shell wrapper classes",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/child-shell#readme",
@@ -29,13 +29,13 @@
   },
   "scripts": {},
   "dependencies": {
-    "accumulate-stream": "^5.0.0-next.3",
+    "accumulate-stream": "^5.0.0-next.2",
     "debug": "^4.1.1",
     "kind-of": "^6.0.3",
     "ms": "^2.1.2",
     "p-queue": "^6.3.0",
     "shortid": "^2.2.15",
-    "trim-buffer": "^5.0.0-next.3"
+    "trim-buffer": "^5.0.0-next.2"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
