@@ -65,7 +65,6 @@ export type ShellCommandResult = {
   startTime: number;
   duration?: number;
 };
-type bla = 'bla';
 
 export abstract class Shell {
   private readonly executable: string;
