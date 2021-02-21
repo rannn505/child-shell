@@ -1,6 +1,6 @@
 module.exports = {
   '**/*.{js,ts}?(x)': (filenames) => [
-    'tsc -p tsconfig.json --noEmit',
+    'npm run types:check'
     `eslint --cache --ext js,ts --ignore-path .gitignore ${filenames.join(' ')}`,
     `prettier --check --ignore-path .gitignore ${filenames.join(' ')}`,
   ]
