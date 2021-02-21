@@ -26,7 +26,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "dsfdsf"
+      "pre-commit": "lint-staged -c lint-staged.config.js"
     }
   },
   "engines": {
@@ -56,5 +56,8 @@
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.5"
+  },
+  "lint-staged": {
+    "*.{js,ts,md}": "eslint --cache --fix"
   }
 }
