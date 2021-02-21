@@ -33,9 +33,6 @@
   <a href="https://jestjs.io/">
     <img alt="Jest" src="https://img.shields.io/badge/tested_with-jest-99424f.svg?style=flat-square">
   </a>
-  <a href="https://lerna.js.org/">
-    <img alt="Lerna" src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square">
-  </a>
   <a href="https://prettier.io/">
     <img alt="Prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
   </a>

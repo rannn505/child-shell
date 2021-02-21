@@ -63,3 +63,6 @@ When adding a new example, please adhere to the style and format of the existing
 - [Code of Conduct for Open Source Projects](https://www.contributor-covenant.org/)
 
 Thank you for contributing :)
+
+<!-- 
+npm i -D eslint @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-config-airbnb-base eslint-config-prettier eslint-plugin-import eslint-plugin-jest eslint-plugin-markdown eslint-plugin-prettier husky jest lint-staged prettier rimraf ts-jest ts-node typescript  -->

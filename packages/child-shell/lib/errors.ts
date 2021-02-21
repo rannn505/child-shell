@@ -11,7 +11,7 @@ export class BaseError extends Error {
 export class ProcessError extends BaseError {
   public readonly originalError?: Error;
   public readonly exitCode?: number;
-  public readonly signalCode?: number;
+  public readonly signalCode?: string;
   public readonly message: string;
 
   constructor(process: ChildProcess, originalError?: Error) {

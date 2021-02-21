@@ -3,14 +3,15 @@
     "target": "ES6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "dist",
-    "rootDir": ".",
+    "incremental": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
-    "removeComments": true
+    "removeComments": true,
   },
   "exclude": ["node_modules", "dist"]
 }

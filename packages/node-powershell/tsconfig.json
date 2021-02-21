@@ -1,12 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-
   "compilerOptions": {
+    "rootDir": "lib",
     "outDir": "dist",
-    "rootDir": "lib"
   },
-
   "references": [{ "path": "../child-shell" }],
-
   "include": ["lib/**/*"]
 }

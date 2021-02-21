@@ -11,6 +11,5 @@ dist
 tmp
 lib/tmp
 
-lerna-debug.log
 npm-debug.log*
 yarn-error.log*
