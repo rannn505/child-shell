@@ -1,11 +1,3 @@
 # `child-shell`
 
-> TODO: description
-
-## Usage
-
-```
-const child-shell = require('child-shell');
-
-// TODO: DEMONSTRATE API
-```
+> Base shell wrapper classes. see [documentation](https:/<>).

@@ -1,9 +1,8 @@
 <p align="center">
   <img alt="child-shell" src="https://raw.githubusercontent.com/rannn505/node-powershell/node-shell/logo/logo.svg?sanitize=true" width="128">
 </p>
-
 <h3 align="center"> Child Shell </h3>
-<p align="center"> 🔗 A Node.js bindings for shell 🔗 </p>
+<p align="center"> Node.js bindings 🔗 for shell </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/child-shell">
@@ -62,7 +61,7 @@ It was created to allow it's users to run JavaScript everywhere.
 [Shell](<https://en.wikipedia.org/wiki/Shell_(computing)>) is the most usable user program on any computer, it is an integral part of our work and almost every task starts and ends with a command execution.
 It was created to allow it's users to interact with their OS.
 
-**child-shell** creates a comprehensive binding between the two, exposes a proven yet easy API to interact with any shell directly from node runtime.
+**[child-shell](https://<>)** creates a comprehensive binding between the two, exposes a proven yet easy API to interact with any shell directly from node runtime.
 Combine JavaScript code with shell based scripts to complete any type of task you ever imagined.
 
 ## Documentation
@@ -73,18 +72,18 @@ Learn about using [child-shell on the official site!](https://<>)
 - [Configuring child-shell](https://<>/docs/configuration)
 - [Useful Tips](https://<>/docs/tips)
 - [API Reference](https://<>/docs/en/api)
-- Currently Supported Shells:
-  - [Bash Documentation](https://www.gnu.org/software/bash/)
-  - [PowerShell Documentation](https://docs.microsoft.com/en-us/powershell/)
+- Shell Libraries:
+  - [node-bash](/packages/node-bash)
+  - [node-powershell](/packages/node-powershell)
 
 ## Contributing
 
 Development of **child-shell** happens transparently on its [GitHub repo](https://github.com/rannn505/child-shell).<br/>
 Read the [contributing guide](CONTRIBUTING.md) to learn how to propose bugfixes and improvements, and how to build and test your changes.<br/>
-Future plans for **child-shell** are visible on its [Trello board](https://trello.com/b/EH2GO5PA).
+Future plans for **child-shell** are visible on its [board](https://github.com/rannn505/child-shell/projects/1).
 These plans are subject to frequent changes, and will be greatly affected by your feedback.
 
 ## License
 
-**child-shell** © is [MIT licensed](./LICENSE).<br/>
+**child-shell** © is [MIT licensed](LICENSE.md).<br/>
 Created by [rannn505](https://github.com/rannn505).

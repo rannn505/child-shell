@@ -14,33 +14,28 @@ $ yarn add accumulate-stream
 ```js
 import { createReadStream } from 'fs';
 import { once } from 'events';
-import { AccumulateStream, RotateStream, DomainStream, DOMAIN_EVENT, ROTATE_EVENT } from 'accumulate-stream';
+import { AccumulateStream } from 'accumulate-stream';
 
 (async (): void => {
   // file.txt: (2kb)
-  // accumulate-stream
-  // streams are awesome. streams are awesome.
-  // streams are awesome. streams are awesome.
+  // streams are awesome.
+  // streams are awesome.
   // ... ...
-  // accumulate-stream
   const readable = createReadStream('file.txt');
-
-  const acc = new AccumulateStream();
-  const rot = new RotateStream({ size: '1kb', count: 2 });
-  const dom = new DomainStream('accumulate-stream');
-
-  readable.pipe(acc);
-  readable.pipe(rot);
-  readable.pipe(dom);
+  const as = new AccumulateStream({ size: '1kb', phrase: 'awesome' });
+  readable.pipe(accumulateStream);
 
   // will be emitted every 1kb and 2 writes
-  rot.on(ROTATE_EVENT, () => console.log(rot.getContent().toString()));
+	as.on('chunk', ({ buffer }) => (console.log(`emitted every chunk write - ${buffer.toString()}`)));
+	as.on('size', ({ buffer }) => (console.log(`emitted every 1kb of chunks - ${buffer.toString()}`)));
+	as.on('phrase', ({ buffer }) => (console.log(`emitted whenever "stream" phrase is detected in chunk - ${buffer.toString()}`)));
+	as.on('data', ({ buffer }) => (console.log(`emitted whenever one of the conditions is met - ${buffer.toString()}`)));
 
-  // will be emitted when 'accumulate-stream' written for the second time
-  await once(dom, DOMAIN_EVENT);
-
-  console.log(acc.getContent().toString());
+	await once(as, 'data');
+  console.log(as.getBuffer().toString()); // streams are awesome.
 })();
 ```
 
-## [TBD]: API
+## API
+
+// [TBD]

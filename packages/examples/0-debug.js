@@ -1,6 +1,26 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Bash } = require('../packages/node-Bash');
-const { PowerShell } = require('../packages/node-powershell');
+
+// // manually-disposed, long-running process
+// async () => {
+//   const ps = new PowerShell();
+//   try {
+//     await ps.invoke('echo node-powershell');
+//     // continue to use ps ...
+//   } catch (e) {
+//     console.log(e);
+//   } finally {
+//     await ps.dispose();
+//   }
+// })();
+
+// // self-disposed, quick-invoked process
+// async () => {
+//   try {
+// 	  await PowerShell.invoke('echo node-powershell');
+//   } catch (e) {
+//     console.log(e);
+//   }
+// })();
 
 const test = async (shell) => {
   for (let index = 0; index < 10; index += 1) {
