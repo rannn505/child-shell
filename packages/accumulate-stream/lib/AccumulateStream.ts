@@ -110,7 +110,7 @@ export class AccumulateStream extends Transform {
     return cb();
   }
 
-  _final(cb: Function): void {
+  _final(cb: TransformCallback): void {
     if (this.interval) {
       clearInterval(this.interval);
     }

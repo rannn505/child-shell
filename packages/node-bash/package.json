@@ -31,6 +31,7 @@
   "dependencies": {
     "child-shell": "^5.0.0-next.3"
   },
+  "devDependencies": {},
   "keywords": [
     "child-shell",
     "node-shell",

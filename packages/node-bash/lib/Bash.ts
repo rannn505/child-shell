@@ -1,5 +1,4 @@
-import { ExecutableOptions, ShellOptions, Shell } from 'child-shell';
-import { SHCommand } from './SHCommand';
+import { ExecutableOptions, InvocationResult, ShellOptions, Shell } from 'child-shell';
 
 // https://man7.org/linux/man-pages/man1/bash.1.html
 export type BashExecutableOptions = ExecutableOptions &
@@ -16,29 +15,21 @@ export type BashExecutableOptions = ExecutableOptions &
     '--verbose': boolean;
   }>;
 
-export type BashOptions = Omit<
-  ShellOptions & {
-    executableOptions?: BashExecutableOptions;
-  },
-  'executable'
->;
+export type BashOptions = ShellOptions & {
+  executableOptions?: BashExecutableOptions;
+};
 
 export class Bash extends Shell {
-  constructor(bashOptions: BashOptions = {}) {
-    const options = bashOptions;
-    options.executableOptions = {
-      ...bashOptions.executableOptions,
-      '-i': false,
-      '-s': true,
-    };
-    super(options, SHCommand);
-  }
-
-  protected setExecutable(): string {
-    if (process.env.NSH) {
-      return process.env.NSH;
-    }
-    return 'bash';
+  constructor(options: BashOptions = {}) {
+    super({
+      executable: 'bash',
+      ...options,
+      executableOptions: {
+        ...options.executableOptions,
+        '-i': false,
+        '-s': true,
+      },
+    });
   }
 
   protected writeToOutput(input: string): string {
@@ -48,4 +39,19 @@ export class Bash extends Shell {
   protected writeToError(input: string): string {
     return `>&2 echo "${input}"`;
   }
+
+  public static convert(object: unknown): string {
+    return Shell.convert(object, new Map([]));
+  }
+
+  public static async invoke(command: string, options?: BashOptions): Promise<InvocationResult> {
+    return Shell.invoke(command, options, Bash);
+  }
+
+  public static async $(literals: readonly string[], ...args: unknown[]): Promise<InvocationResult> {
+    return Bash.invoke(Bash.command(literals, args));
+  }
 }
+
+export const { $ } = Bash;
+export const sh$ = $;

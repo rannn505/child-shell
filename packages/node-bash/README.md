@@ -14,10 +14,11 @@ $ yarn add node-bash
 ## Usage
 
 ```javascript
-import { Bash } from 'node-bash';
-Bash.invoke('echo node-bash');
-// See child-shell documentation and examples for more detailed use cases ...
+import { $ } from 'node-bash';
+$`echo "hello from Bash"`;
 ```
+
+> See **child-shell** [documentation](https:/<>) and [playground](/packages/playground/index.ts) for more use cases
 
 ## Resources
 

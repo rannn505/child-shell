@@ -14,13 +14,15 @@ $ yarn add node-powershell
 ## Usage
 
 ```javascript
-import { PowerShell } from 'node-powershell';
-PowerShell.invoke('echo node-powershell');
-// See child-shell documentation and examples for more detailed use cases ...
+import { $ } from 'node-powershell';
+$`echo "hello from PowerShell"`;
 ```
+
+> See **child-shell** [documentation](https:/<>) and [playground](/packages/playground/index.ts) for more use cases
 
 ## Resources
 
 - [child-shell Documentation](https:/<>)
-- [PowerShell Documentation](https://docs.microsoft.com/en-us/powershell/)
+- [PowerShell Documentation](https://microsoft.com/PowerShell)
+- [PowerShell Repo](https://github.com/PowerShell/PowerShell)
 - [Node.js Documentation](https://nodejs.org/en/docs/)

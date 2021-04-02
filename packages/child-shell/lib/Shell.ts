@@ -1,17 +1,29 @@
 import { EOL } from 'os';
+import { inspect } from 'util';
 import { spawn, ChildProcess, SpawnOptions } from 'child_process';
 import { Readable, Writable } from 'stream';
 import { once } from 'events';
-
+import kindOf from 'kind-of';
 import Debugger from 'debug';
+import pTimeout from 'p-timeout';
 import PQueue from 'p-queue';
-import ms from 'ms';
-import { generate } from 'shortid';
+import { nanoid } from 'nanoid';
 import { AccumulateStream } from 'accumulate-stream';
 import { trimBuffer } from 'trim-buffer';
-
+import { JavaScriptTypes, Converters, SHELL_CONVERTERS } from './Converters';
 import { ProcessError, InvocationError } from './errors';
-import { Command, Parameter } from './Command';
+
+export type StdioObject = {
+  stdin: Writable;
+  stdout: Readable;
+  stderr: Readable;
+};
+
+export type Debuggers = {
+  comment: Debugger.Debugger;
+  command: Debugger.Debugger;
+  output: Debugger.Debugger;
+};
 
 export type ExecutableOptions = {
   [key: string]: boolean | string;
@@ -22,6 +34,16 @@ export type ShellSpawnOptions = Omit<
   'argv0' | 'stdio' | 'detached' | 'serialization' | 'shell' | 'timeout'
 >;
 
+export type InvocationResult = {
+  command: string;
+  raw: string;
+  hadErrors: boolean;
+  startTime: number;
+  duration?: number;
+  stdout?: Buffer;
+  stderr?: Buffer;
+};
+
 export type ShellOptions = {
   // executable must support reading from stdin (-c -) and can be either:
   // 1) a globally installed executable like "bash", "pwsh", etc.. that appears on $PATH
@@ -29,103 +51,66 @@ export type ShellOptions = {
   executable?: string;
   executableOptions?: ExecutableOptions;
   spawnOptions?: ShellSpawnOptions;
-
   inputEncoding?: BufferEncoding;
   outputEncoding?: BufferEncoding;
-
-  killSignal?: NodeJS.Signals;
-  killTimeout?: string;
-  invocationTimeout?: string;
-  throwOnInvocationError?: boolean;
-
   debug?: boolean;
-  verbose?: boolean;
+  disposeTimeout?: number;
+  invocationTimeout?: number;
+  throwOnInvocationError?: boolean;
 };
 
-export type ShellStdioObject = {
-  stdin: Writable;
-  stdout: Readable;
-  stderr: Readable;
-};
-
-export type ShellDebuggers = {
-  comment: Debugger.Debugger;
-  command: Debugger.Debugger;
-  output: Debugger.Debugger;
-};
-
-export type ShellCommandResult = {
-  command: string;
-
-  hadErrors: boolean;
-  stdout?: Buffer;
-  stderr?: Buffer;
-  result?: string;
-
-  startTime: number;
-  duration?: number;
-};
+export type ShellCtor = new (options: ShellOptions) => Shell;
 
 export abstract class Shell {
   private readonly executable: string;
   private readonly executableOptions: string[];
   private readonly spawnOptions: SpawnOptions;
   private readonly invocationQueue: PQueue;
-  private readonly debuggers: ShellDebuggers;
+  private static readonly enabledDebuggers: string[] = [];
+  private readonly debuggers: Debuggers;
   private readonly process: ChildProcess;
-  private isExited: boolean;
+  private isExited = false;
   private readonly exitPromise: Promise<void>;
   private readonly resultsEncoding: BufferEncoding;
-  private readonly killSignal: NodeJS.Signals;
+  private readonly invocationTimeout: number;
   private readonly throwOnInvocationError: boolean;
 
-  public readonly streams: ShellStdioObject;
-  public readonly history: ShellCommandResult[];
-
-  public command: Command;
-
-  protected abstract setExecutable({ executable }: { executable?: string }): string;
   protected abstract writeToOutput(input: string): string;
   protected abstract writeToError(input: string): string;
 
-  constructor(options: ShellOptions, CommandCtor = Command) {
+  public readonly streams: StdioObject;
+  public readonly history: InvocationResult[] = [];
+
+  constructor(options: ShellOptions = {}) {
     this.executable = this.setExecutable(options);
     this.executableOptions = this.setExecutableOptions(options);
     this.spawnOptions = { ...options.spawnOptions, stdio: 'pipe', detached: false, shell: false };
-    this.invocationQueue = this.setInvocationQueue(options);
-
-    this.debuggers = this.setDebuggers(options);
-    this.debuggers.comment(`starting shell with command "${this.executable} ${this.executableOptions.join(' ')}"`);
+    this.invocationQueue = this.setInvocationQueue();
 
     this.process = spawn(this.executable, this.executableOptions, this.spawnOptions);
 
-    this.isExited = false;
+    this.debuggers = this.setDebuggers(options);
+    this.debuggers.comment(`shell process started: "${this.executable} ${this.executableOptions.join(' ')}"`);
     this.exitPromise = this.setProcessExitListeners();
-
     this.resultsEncoding = options.outputEncoding ?? 'utf-8';
     this.setProcessStdioEncoding(options);
-
-    this.killSignal = options.killSignal ?? 'SIGTERM';
     this.setProcessKillOptions(options);
+    this.invocationTimeout = options.invocationTimeout;
     this.throwOnInvocationError = options.throwOnInvocationError ?? true;
-
     this.streams = {
       stdin: this.process.stdin,
       stdout: this.process.stdout,
       stderr: this.process.stderr,
     };
-    this.history = [];
-
-    this.command = new CommandCtor();
   }
 
-  private detachStream(stream: Writable): void {
+  private detachStreamFromOutput(stream: Writable): void {
     this.process.stdout.unpipe(stream);
     this.process.stderr.unpipe(stream);
     stream.end();
   }
 
-  private async bulkReadStream(stream: Readable, delimiter: string): Promise<Buffer> {
+  private async readBulkFromOutput(stream: Readable, delimiter: string): Promise<Buffer> {
     let firstDelimiterOccurrence = -1;
     let secondDelimiterOccurrence = -1;
 
@@ -153,41 +138,48 @@ export abstract class Shell {
 
     stream.pipe(accumulator);
     const [accumulatedOutput] = await once(accumulator, 'data');
-    this.detachStream(accumulator);
+    this.detachStreamFromOutput(accumulator);
 
     // slice and trim output buffer
     return trimBuffer(accumulatedOutput.slice(firstDelimiterOccurrence + delimiter.length, secondDelimiterOccurrence));
+  }
+
+  protected setExecutable({ executable }: { executable?: string }): string {
+    if (!executable) {
+      throw new Error(`unable to determine shell executable
+${inspect(
+  { platform: process.platform, SHELL: process.env.SHELL, PATH: process.env.PATH, ...process.versions },
+  { compact: true, depth: 5, breakLength: 80 },
+)}`);
+    }
+    return executable;
   }
 
   private setExecutableOptions({ executableOptions = {} }: { executableOptions?: ExecutableOptions }): string[] {
     let options: string[] = [];
     Object.entries(executableOptions).forEach(([name, value]) => {
       if (!name.startsWith('-') && name.startsWith('--')) {
-        throw new TypeError(`option ${name} must starts with a dash "-" | "--"`);
+        throw new Error(`option ${name} must starts with a dash "-" | "--"`);
       }
       switch (typeof value) {
         case 'string':
           options = [...options, name, value as string];
           break;
         case 'boolean':
-          options = (!value as boolean) ? options : [...options, name];
+          options = (!value as boolean) ? [...options] : [...options, name];
           break;
         default:
-          throw new TypeError(`option ${name} value must be string or boolean`);
+          throw new Error(`option ${name} value must be string or boolean`);
       }
     });
     return options;
   }
 
-  private setInvocationQueue({ invocationTimeout }: { invocationTimeout?: string }): PQueue {
-    const timeout = invocationTimeout ? ms(invocationTimeout) : undefined;
-    const invocationQueue = new PQueue({
+  private setInvocationQueue(): PQueue {
+    return new PQueue({
       concurrency: 1,
-      timeout,
-      throwOnTimeout: false,
       autoStart: true,
     });
-    return invocationQueue;
   }
 
   private clearInvocationQueue(): void {
@@ -196,14 +188,15 @@ export abstract class Shell {
     this.invocationQueue.clear();
   }
 
-  private setDebuggers({ debug, verbose }: { debug?: boolean; verbose?: boolean }): ShellDebuggers {
-    const namespace = this.executable.toUpperCase();
+  private setDebuggers({ debug }: { debug?: boolean }): Debuggers {
+    const namespace = `${this.executable.split('/')?.pop()?.toUpperCase()}:${this.process.pid}`;
     const _debugger = Debugger(namespace);
     // eslint-disable-next-line no-console
     _debugger.log = console.log.bind(console);
 
-    if (debug || verbose) {
-      Debugger.enable(`${namespace}*`);
+    if (debug) {
+      Shell.enabledDebuggers.push(`${namespace}*`);
+      Debugger.enable(Shell.enabledDebuggers.join(','));
     }
 
     return {
@@ -221,7 +214,7 @@ export abstract class Shell {
     this.process.stderr.pipe(stderr);
     once(stderr, 'data').then(() => {
       // probably there is no starter error after 3 chunks so disable this listener
-      this.detachStream(stderr);
+      this.detachStreamFromOutput(stderr);
     });
 
     // set up process exit listeners
@@ -231,10 +224,11 @@ export abstract class Shell {
     const processExitPromise = once(this.process, 'exit').then(([code, signal]: [number, NodeJS.Signals]) => {
       const error = !useStderrOnExit ? undefined : new Error(stderr.getBuffer().toString(this.resultsEncoding));
 
-      if (signal && signal !== this.killSignal) {
+      if (signal && signal !== 'SIGTERM') {
         throw new ProcessError(this.process, error);
       }
-      if (code && code !== 0) {
+      // code 143 === SIGTERM
+      if (code && code !== 0 && code !== 143) {
         throw new ProcessError(this.process, error);
       }
     });
@@ -245,16 +239,16 @@ export abstract class Shell {
       });
     }
 
-    // Process exit scenarios:
-    // 1) ENOENT - spawn error - error$
-    // 2) EPIPE - bad process option - exit$
-    // 3) EXIT<code/signal> - process exit with either 0 or error - exit$
+    // ordered process exit scenarios:
+    // ENOENT - spawn error - `error` listener
+    // EPIPE - bad process option - `exit` listener
+    // EXIT<code/signal> - process exit with either 0 or error - `exit` listener
     return Promise.race([processErrorPromise, processExitPromise]).finally(() => {
       this.isExited = true;
       this.clearInvocationQueue();
       this.process.stdin.end();
-      this.detachStream(stderr);
-      this.debuggers.comment(`shell exited with code ${this.process.exitCode}`);
+      this.detachStreamFromOutput(stderr);
+      this.debuggers.comment(`shell process exited`);
     });
   }
 
@@ -270,133 +264,139 @@ export abstract class Shell {
     this.process.stderr.setEncoding(outputEncoding);
   }
 
-  private setProcessKillOptions({ killTimeout }: { killTimeout?: string }): void {
-    const timeout = killTimeout ? ms(killTimeout) : undefined;
-    if (timeout) {
-      setTimeout(() => {
-        this.kill();
-      }, timeout);
+  private setProcessKillOptions({ disposeTimeout }: { disposeTimeout?: number }): void {
+    if (disposeTimeout) {
+      setTimeout(async () => {
+        await this.dispose();
+      }, disposeTimeout);
     }
   }
 
-  private async invokeCommand(command: string): Promise<ShellCommandResult> {
+  private async invokeCommand(command: string): Promise<InvocationResult> {
     this.debuggers.comment('starting command invocation');
     this.debuggers.command(command);
 
-    // 1: update history with current command
+    // update history with current command
     this.history.unshift({
       command,
+      raw: '',
       hadErrors: false,
       startTime: Date.now(),
     });
     const currentHistoryRecord = this.history[0];
 
-    // 2: init output stream readers and bulk delimiters
-    const stdoutDelimiter = generate();
-    const stdoutPromise = this.bulkReadStream(this.process.stdout, stdoutDelimiter);
-    const stderrDelimiter = generate();
-    const stderrPromise = this.bulkReadStream(this.process.stderr, stderrDelimiter);
+    // generate output bulk delimiter
+    const bulkDelimiter = nanoid();
 
-    // 3: race output and error
-    const isOutputDone = Promise.all([stdoutPromise, stderrPromise]);
-    const isCommandDone = Promise.race([this.exitPromise, isOutputDone]);
+    // init bulk readers for both output streams
+    const outputPromise = Promise.all([
+      this.readBulkFromOutput(this.process.stdout, bulkDelimiter),
+      this.readBulkFromOutput(this.process.stderr, bulkDelimiter),
+    ]);
 
-    // 4: write delimiter then command then delimiter to process input so bulkReadStream will detect the exact command output
-    this.process.stdin.write(this.writeToError(stderrDelimiter));
+    // race output and error
+    let isCommandFailed = false;
+    let isCommandTimedOut = false;
+    const isCommandDone = Promise.race([this.exitPromise, outputPromise]);
+
+    // write delimiter then command then delimiter to process input so `readBulkFromOutput` will detect the exact command output
+    this.process.stdin.write(this.writeToError(bulkDelimiter));
     this.process.stdin.write(EOL);
-    this.process.stdin.write(this.writeToOutput(stdoutDelimiter));
+    this.process.stdin.write(this.writeToOutput(bulkDelimiter));
     this.process.stdin.write(EOL);
     this.process.stdin.write(command);
     this.process.stdin.write(EOL);
-    this.process.stdin.write(this.writeToError(stderrDelimiter));
+    this.process.stdin.write(this.writeToError(bulkDelimiter));
     this.process.stdin.write(EOL);
-    this.process.stdin.write(this.writeToOutput(stdoutDelimiter));
+    this.process.stdin.write(this.writeToOutput(bulkDelimiter));
     this.process.stdin.write(EOL);
 
     try {
-      // 5: wait for command to finish
-      await isCommandDone; // [EXIT] process crushed -> throw ProcessError
+      // wait for command to finish and apply timeout if needed
+      // [EXIT] process crushed -> throw ProcessError
+      if (!this.invocationTimeout) {
+        await isCommandDone;
+      } else {
+        await pTimeout(isCommandDone, this.invocationTimeout, () => {
+          isCommandTimedOut = true;
+        });
+      }
     } finally {
-      // 6: calculate results and update history
+      // calculate results and update history
       currentHistoryRecord.duration = Date.now() - currentHistoryRecord.startTime;
       if (!this.isExited) {
-        currentHistoryRecord.stdout = await stdoutPromise;
-        currentHistoryRecord.stderr = await stderrPromise;
-        if (currentHistoryRecord.stderr.length === 0) {
-          // [EXIT] invocation succeeded -> return result
-          currentHistoryRecord.result = currentHistoryRecord.stdout.toString(this.resultsEncoding);
-          this.debuggers.comment('command invocation succeeded');
+        if (!isCommandTimedOut) {
+          const [stdout, stderr] = await outputPromise;
+          currentHistoryRecord.stdout = stdout;
+          currentHistoryRecord.stderr = stderr;
+          isCommandFailed = stderr.length !== 0;
+          if (!isCommandFailed) {
+            // [EXIT] invocation succeeded -> return result
+            currentHistoryRecord.raw = currentHistoryRecord.stdout.toString(this.resultsEncoding);
+            this.debuggers.comment('command invocation succeeded');
+          } else {
+            // [EXIT] invocation failed -> return failed result
+            currentHistoryRecord.hadErrors = true;
+            currentHistoryRecord.raw = currentHistoryRecord.stderr.toString(this.resultsEncoding);
+            this.debuggers.comment('command invocation failed');
+          }
         } else {
-          // [EXIT] invocation failed -> throwOnInvocationError ? throws InvocationError : return failed result
+          // [EXIT] invocationTimeout reached -> return partial failed result
           currentHistoryRecord.hadErrors = true;
-          currentHistoryRecord.result = currentHistoryRecord.stderr.toString(this.resultsEncoding);
-          this.debuggers.comment('command invocation failed');
+          this.debuggers.comment('command invocation timed out');
         }
       } else {
         // [EXIT] user killed process gracefully -> return partial result
         this.debuggers.comment('command invocation stopped');
-        currentHistoryRecord.result = 'process exited before command invocation finished';
       }
     }
 
-    // 7: return command result
+    // return or throw command result
     if (this.throwOnInvocationError && currentHistoryRecord.hadErrors) {
-      throw new InvocationError(currentHistoryRecord.result);
+      throw new InvocationError(currentHistoryRecord.raw);
     }
     return currentHistoryRecord;
   }
 
-  public addCommand(command: Command | string): this {
-    this.command = this.command.addCommand(command);
-    return this;
+  protected static convert(object: unknown, converters: Converters = new Map([])): string {
+    const _converters = new Map([...SHELL_CONVERTERS, ...converters]);
+    const objectType = kindOf(object) as JavaScriptTypes;
+    const hasConverter = new Map([...SHELL_CONVERTERS, ..._converters]).has(objectType);
+    if (!hasConverter) {
+      throw new Error(`there is no converter to a ${objectType} object`);
+    }
+    return _converters.get(objectType).call(undefined, object, Shell.convert);
   }
 
-  public addScript(path: string): this {
-    this.command = this.command.addScript(path);
-    return this;
+  public static command(literals: readonly string[], ...args: unknown[]): string {
+    return literals
+      .map((literal, index) => {
+        return `${literal}${Shell.convert(args?.[index])}`;
+      })
+      .join('');
   }
 
-  public addArgument(argument: unknown): this {
-    this.command = this.command.addArgument(argument);
-    return this;
+  protected static async invoke(command: string, options: ShellOptions, Ctor: ShellCtor): Promise<InvocationResult> {
+    const shell = new Ctor(options);
+    try {
+      return await shell.invoke(command);
+    } finally {
+      await shell.dispose();
+    }
   }
 
-  public addParameter(parameter: Parameter): this {
-    this.command = this.command.addParameter(parameter);
-    return this;
-  }
-
-  public addParameters(parameters: Parameter[] = []): this {
-    this.command = this.command.addParameters(parameters);
-    return this;
-  }
-
-  public clear(): this {
-    this.command = this.command.clear();
-    return this;
-  }
-
-  public async invoke(): Promise<ShellCommandResult> {
+  public async invoke(command: string): Promise<InvocationResult> {
     if (this.isExited) {
       throw new InvocationError('invoke called after process exited');
     }
-    return this.invocationQueue.add(() => {
-      const commandToInvoke = this.command.line;
-      this.clear();
-      return this.invokeCommand(commandToInvoke);
-    });
+    return this.invocationQueue.add(() => this.invokeCommand(command));
   }
 
-  public async kill(): Promise<void> {
+  public async dispose(signal: NodeJS.Signals = 'SIGTERM'): Promise<void> {
     if (!this.isExited) {
-      this.process.kill(this.killSignal);
+      this.clearInvocationQueue();
+      this.process.kill(signal);
     }
     return this.exitPromise;
-  }
-
-  public async invokeAndKill(): Promise<ShellCommandResult> {
-    const result = await this.invoke();
-    await this.kill();
-    return result;
   }
 }

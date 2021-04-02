@@ -16,29 +16,14 @@
     "plugin:jest/recommended",
     "plugin:jest/style"
   ],
-  "plugins": ["markdown"],
   "rules": {
-    "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/no-empty-function": "off",
-    "import/no-unresolved": "off",
-    "import/extensions": "off",
-    "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.ts", "**/*.test.js"] }],
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
-    "func-names": "off",
-    "no-useless-constructor": "off",
     "no-underscore-dangle": "off",
-    "no-unused-expressions": "off",
     "class-methods-use-this": "off",
-    "max-classes-per-file": "off"
-  },
-  "overrides": [
-    {
-      "files": ["*.md"],
-      "rules": {
-        "@typescript-eslint/no-var-requires": "off",
-        "no-console": "off"
-      }
-    }
-  ]
+    "max-classes-per-file": "off",
+    "no-use-before-define": "off",
+    "import/extensions": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error"
+  }
 }

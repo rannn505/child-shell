@@ -1,10 +1,9 @@
 import { platform } from 'os';
 import isWsl from 'is-wsl';
-import { ExecutableOptions, ShellOptions, Shell } from 'child-shell';
-import { PSCommand } from './PSCommand';
+import { ExecutableOptions, InvocationResult, ShellOptions, Shell, Converter, Converters } from 'child-shell';
 
 export enum PSExecutableType {
-  PowerShell = 'powershell',
+  PowerShellWin = 'powershell',
   PowerShellCore = 'pwsh',
   PowerShellCorePreview = 'pwsh-preview',
 }
@@ -45,16 +44,29 @@ export type PowerShellOptions = ShellOptions & {
 
 const isWin = platform() === 'win32' || isWsl;
 
+const nullConverter: Converter = () => '$Null';
+const booleanConverter: Converter = (object) => ((object as boolean) ? '$True' : '$False');
+const objectConverter: Converter = (object) => `@${JSON.stringify(object).replace(/:/g, '=').replace(/,/g, ';')}`;
+const dateConverter: Converter = (object) => (object as Date).toLocaleString();
+
+const PS_CONVERTERS: Converters = new Map([
+  ['null', nullConverter],
+  ['boolean', booleanConverter],
+  ['object', objectConverter],
+  ['date', dateConverter],
+]);
+
 export class PowerShell extends Shell {
-  constructor(psOptions: PowerShellOptions = {}) {
-    const options = psOptions;
-    options.executableOptions = {
-      '-NoLogo': true,
-      ...psOptions.executableOptions,
-      '-NoExit': true,
-      '-Command': '-',
-    };
-    super(options, PSCommand);
+  constructor(options: PowerShellOptions = {}) {
+    super({
+      ...options,
+      executableOptions: {
+        '-NoLogo': true,
+        ...options.executableOptions,
+        '-NoExit': true,
+        '-Command': '-',
+      },
+    });
   }
 
   protected setExecutable({
@@ -66,11 +78,10 @@ export class PowerShell extends Shell {
     pwshPrev?: boolean;
     executable?: PSExecutableType;
   }): string {
-    // eslint-disable-next-line no-shadow
-    const { PowerShell, PowerShellCore, PowerShellCorePreview } = PSExecutableType;
+    const { PowerShellWin, PowerShellCore, PowerShellCorePreview } = PSExecutableType;
 
     if (process.env.NPS) {
-      return process.env.NPS as PSExecutableType;
+      return process.env.NODE_POWERSHELL as PSExecutableType;
     }
 
     if (pwsh) {
@@ -82,18 +93,18 @@ export class PowerShell extends Shell {
     }
 
     if (!executable) {
-      return !isWin ? PowerShellCore : PowerShell;
+      return !isWin ? PowerShellCore : PowerShellWin;
     }
 
     switch (executable) {
-      case PowerShell:
-        return PowerShellCore;
+      case PowerShellWin:
+        return PowerShellWin;
       case PowerShellCore:
         return PowerShellCore;
       case PowerShellCorePreview:
         return PowerShellCore;
       default:
-        throw new Error('Unable to determine PowerShell executable');
+        return super.setExecutable({ executable });
     }
   }
 
@@ -105,16 +116,18 @@ export class PowerShell extends Shell {
     return `[Console]::Error.WriteLine("${input}")`;
   }
 
-  // private setExecutableSuffix(executable: string): void {
-  //   if (!isWin) {
-  //     return;
-  //   }
-  //   // eslint-disable-next-line no-param-reassign
-  //   executable = `${executable}.exe`;
-  // }
+  public static convert(object: unknown): string {
+    return Shell.convert(object, PS_CONVERTERS);
+  }
 
-  // public dispose(): Promise<ShellCommandResult> {
-  //   this.addCommand('exit 0');
-  //   return super.invoke();
-  // }
+  public static async invoke(command: string, options?: PowerShellOptions): Promise<InvocationResult> {
+    return Shell.invoke(command, options, PowerShell);
+  }
+
+  public static async $(literals: readonly string[], ...args: unknown[]): Promise<InvocationResult> {
+    return PowerShell.invoke(PowerShell.command(literals, args));
+  }
 }
+
+export const { $ } = PowerShell;
+export const ps$ = $;

@@ -16,20 +16,21 @@
     "npm": ">=7.6.0"
   },
   "scripts": {
-    "clean": "npx rimraf **/build",
+    "clean": "npx rimraf **/dist",
     "clean:cache": "npx rimraf .eslintcache **/tsconfig.tsbuildinfo coverage ./**/node_modules",
     "clean:all": "run-p -ln clean clean:cache",
     "format": "prettier --write '**/*.{js,ts,md}' --ignore-path .gitignore",
     "format:check": "prettier --check '**/*.{js,ts,md}' --ignore-path .gitignore",
-    "lint": "eslint . --cache --fix --ext js,ts,md --ignore-path .gitignore",
-    "lint:check": "eslint . --cache --ext js,ts,md --ignore-path .gitignore",
+    "lint": "eslint . --cache --fix --ext js,ts --ignore-path .gitignore",
+    "lint:check": "eslint . --cache --ext js,ts --ignore-path .gitignore",
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "build": "tsc --build tsconfig.build.json",
     "build:watch": "npm run build -- --watch",
     "types:check": "npm run build -- --dry",
-    "start": "cd packages/examples & npm start",
+    "start:playground": "cd packages/playground && npm start",
+    "start": "run-s -ln build start:playground",
     "prepublishOnly": "run-p -ln types:check format:check lint:check test"
   },
   "husky": {
@@ -38,16 +39,15 @@
     }
   },
   "devDependencies": {
-    "@types/jest": "^26.0.21",
-    "@types/node": "^14.14.35",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "eslint": "^7.22.0",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.3.2",
-    "eslint-plugin-markdown": "^2.0.0",
     "eslint-plugin-prettier": "^3.3.1",
     "husky": "^4.3.8",
     "jest": "^26.6.3",
@@ -56,6 +56,7 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.4",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   }
 }

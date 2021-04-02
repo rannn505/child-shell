@@ -1,4 +1,2 @@
-export { InvocationError, ProcessError, ShellCommandResult } from 'child-shell';
-
-export * from './SHCommand';
+export { InvocationError, ProcessError, InvocationResult } from 'child-shell';
 export * from './Bash';

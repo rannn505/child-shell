@@ -11,12 +11,12 @@ export class BaseError extends Error {
 export class ProcessError extends BaseError {
   public readonly originalError?: Error;
   public readonly exitCode?: number;
-  public readonly signalCode?: string;
+  public readonly signalCode?: NodeJS.Signals;
   public readonly message: string;
 
   constructor(process: ChildProcess, originalError?: Error) {
     const { pid, exitCode, signalCode } = process;
-    const message = `Shell process${pid ? ` ${pid}` : ''} exited.\n${originalError.message}`;
+    const message = `Shell process${pid ? ` ${pid}` : ''} exited.\n${originalError?.message}`;
     super(message);
     this.originalError = originalError;
     this.exitCode = exitCode;

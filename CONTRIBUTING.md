@@ -19,17 +19,18 @@ Some questions take a long time to get an answer. **If your question gets closed
 
 The following is a detailed list of all [npm scripts](https://docs.npmjs.com/misc/scripts) that will help you develope to **child-shell**:
 
-| Script     | Used for                | Snippet                | Command                                                      |
-| ---------- | ----------------------- | ---------------------- | ------------------------------------------------------------ |
-| clean      | remove build dirs       | `$ npm run clean`      | `npx rimraf **/build`                                        |
-| clean:all  | clean .                 | `$ npm run clean:all`  | `run-p -ln clean clean:cache`                                |
+| Script     | Used for                | Snippet                | Command                                                       |
+| ---------- | ----------------------- | ---------------------- | ------------------------------------------------------------- |
+| install    | bootstrap .             | `$ npm i`              |                                                               |
+| clean      | remove all dist dirs    | `$ npm run clean`      | `npx rimraf **/dist`                                          |
+| clean:all  | clean .                 | `$ npm run clean:all`  | `run-p -ln clean clean:cache`                                 |
 | format     | make the code look sexy | `$ npm run format`     | `prettier --write '**/*.{js,ts,md}' --ignore-path .gitignore` |
-| lint       | find potential bugs     | `$ npm run lint`       | `eslint . --cache --fix --ext js,ts,md --ignore-path .gitignore` |
-| test       | run UTs                 | `$ npm test`           | `jest`                                                       |
-| test:watch | watch UTs               | `$ npm run test:watch` | `npm test -- --watch`                                        |
-| test:cov   | get coverage numbers    | `$ npm run test:cov`   | `npm test -- --coverage`                                     |
-| build      | just build              | `$ npm run build`      | `tsc --build tsconfig.build.json`                            |
-| start      | start examples          | `$ npm start`          | `cd packages/examples & npm start`                           |
+| lint       | find potential bugs     | `$ npm run lint`       | `eslint . --cache --fix --ext js,ts --ignore-path .gitignore` |
+| test       | run UTs                 | `$ npm test`           | `jest`                                                        |
+| test:watch | watch UTs               | `$ npm run test:watch` | `npm test -- --watch`                                         |
+| test:cov   | get coverage numbers    | `$ npm run test:cov`   | `npm test -- --coverage`                                      |
+| build      | just build              | `$ npm run build`      | `tsc --build tsconfig.build.json`                             |
+| start      | start playground        | `$ npm start`          | `run-s -ln build start:playground`                            |
 
 ### Sending a Pull Request
 
@@ -48,10 +49,10 @@ After you have submitted your pull request, I'll try to get back to you as soon 
 
 Improvements to the documentation are always welcome. You can find them in the [`docs`](/website/docs) path. I use [Docusaurus](https://v2.docusaurus.io/) to build the documentation website. The website is published automatically whenever the `master` branch is updated.
 
-### Examples
+<!-- ### Examples
 
 **child-shell** comes with some [examples](/packages/examples) to demonstrate various concepts and best practices.
-When adding a new example, please note the style and format of the existing examples, and try to reuse as much code as possible.
+When adding a new example, please note the style and format of the existing examples, and try to reuse as much code as possible. -->
 
 ## Resources
 

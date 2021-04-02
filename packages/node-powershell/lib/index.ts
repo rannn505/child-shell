@@ -1,4 +1,2 @@
-export { InvocationError, ProcessError, ShellCommandResult } from 'child-shell';
-
-export * from './PSCommand';
+export { InvocationError, ProcessError, InvocationResult } from 'child-shell';
 export * from './PowerShell';
