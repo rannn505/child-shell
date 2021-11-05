@@ -3,17 +3,16 @@ import { inspect } from 'util';
 import { spawn, ChildProcess, SpawnOptions } from 'child_process';
 import { Readable, Writable } from 'stream';
 import { once } from 'events';
-import kindOf from 'kind-of';
 import Debugger from 'debug';
 import pTimeout from 'p-timeout';
 import PQueue from 'p-queue';
 import { nanoid } from 'nanoid';
 import { AccumulateStream } from 'accumulate-stream';
 import { trimBuffer } from 'trim-buffer';
-import { JavaScriptTypes, Converters, SHELL_CONVERTERS } from './Converters';
 import { ProcessError, InvocationError } from './errors';
+import { Converters, convertJsObjToShellStr } from './bla';
 
-export type StdioObject = {
+export type StdioStreams = {
   stdin: Writable;
   stdout: Readable;
   stderr: Readable;
@@ -59,14 +58,14 @@ export type ShellOptions = {
   throwOnInvocationError?: boolean;
 };
 
-export type ShellCtor = new (options: ShellOptions) => Shell;
+type ShellCtor = { new (options?: ShellOptions): Shell };
+type ShellDerived = ShellCtor & typeof Shell;
 
 export abstract class Shell {
   private readonly executable: string;
   private readonly executableOptions: string[];
   private readonly spawnOptions: SpawnOptions;
   private readonly invocationQueue: PQueue;
-  private static readonly enabledDebuggers: string[] = [];
   private readonly debuggers: Debuggers;
   private readonly process: ChildProcess;
   private isExited = false;
@@ -78,7 +77,9 @@ export abstract class Shell {
   protected abstract writeToOutput(input: string): string;
   protected abstract writeToError(input: string): string;
 
-  public readonly streams: StdioObject;
+  protected static converters: Converters;
+
+  public readonly streams: StdioStreams;
   public readonly history: InvocationResult[] = [];
 
   constructor(options: ShellOptions = {}) {
@@ -195,8 +196,7 @@ ${inspect(
     _debugger.log = console.log.bind(console);
 
     if (debug) {
-      Shell.enabledDebuggers.push(`${namespace}*`);
-      Debugger.enable(Shell.enabledDebuggers.join(','));
+      Debugger.enable(`${namespace}*`);
     }
 
     return {
@@ -358,33 +358,6 @@ ${inspect(
     return currentHistoryRecord;
   }
 
-  protected static convert(object: unknown, converters: Converters = new Map([])): string {
-    const _converters = new Map([...SHELL_CONVERTERS, ...converters]);
-    const objectType = kindOf(object) as JavaScriptTypes;
-    const hasConverter = new Map([...SHELL_CONVERTERS, ..._converters]).has(objectType);
-    if (!hasConverter) {
-      throw new Error(`there is no converter to a ${objectType} object`);
-    }
-    return _converters.get(objectType).call(undefined, object, Shell.convert);
-  }
-
-  public static command(literals: readonly string[], ...args: unknown[]): string {
-    return literals
-      .map((literal, index) => {
-        return `${literal}${Shell.convert(args?.[index])}`;
-      })
-      .join('');
-  }
-
-  protected static async invoke(command: string, options: ShellOptions, Ctor: ShellCtor): Promise<InvocationResult> {
-    const shell = new Ctor(options);
-    try {
-      return await shell.invoke(command);
-    } finally {
-      await shell.dispose();
-    }
-  }
-
   public async invoke(command: string): Promise<InvocationResult> {
     if (this.isExited) {
       throw new InvocationError('invoke called after process exited');
@@ -398,5 +371,30 @@ ${inspect(
       this.process.kill(signal);
     }
     return this.exitPromise;
+  }
+
+  public static command(literals: readonly string[], ...args: unknown[]): string {
+    return literals
+      .map((literal, index) => {
+        return `${literal}${convertJsObjToShellStr(args?.[index], this.converters)}`;
+      })
+      .join('');
+  }
+
+  public static async invoke(this: ShellDerived, command: string, options?: ShellOptions): Promise<InvocationResult> {
+    const shell = new this(options);
+    try {
+      return await shell.invoke(command);
+    } finally {
+      await shell.dispose();
+    }
+  }
+
+  public static async $(
+    this: ShellDerived,
+    literals: readonly string[],
+    ...args: unknown[]
+  ): Promise<InvocationResult> {
+    return this.invoke(this.command(literals, args));
   }
 }

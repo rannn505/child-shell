@@ -1,6 +1,6 @@
 import { platform } from 'os';
 import isWsl from 'is-wsl';
-import { ExecutableOptions, InvocationResult, ShellOptions, Shell, Converter, Converters } from 'child-shell';
+import { ExecutableOptions, ShellOptions, Shell, Converter, Converters } from 'child-shell';
 
 export enum PSExecutableType {
   PowerShellWin = 'powershell',
@@ -57,6 +57,8 @@ const PS_CONVERTERS: Converters = new Map([
 ]);
 
 export class PowerShell extends Shell {
+  converters = PS_CONVERTERS;
+
   constructor(options: PowerShellOptions = {}) {
     super({
       ...options,
@@ -115,19 +117,4 @@ export class PowerShell extends Shell {
   protected writeToError(input: string): string {
     return `[Console]::Error.WriteLine("${input}")`;
   }
-
-  public static convert(object: unknown): string {
-    return Shell.convert(object, PS_CONVERTERS);
-  }
-
-  public static async invoke(command: string, options?: PowerShellOptions): Promise<InvocationResult> {
-    return Shell.invoke(command, options, PowerShell);
-  }
-
-  public static async $(literals: readonly string[], ...args: unknown[]): Promise<InvocationResult> {
-    return PowerShell.invoke(PowerShell.command(literals, args));
-  }
 }
-
-export const { $ } = PowerShell;
-export const ps$ = $;
