@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import { AccumulateStream } from 'accumulate-stream';
 import { trimBuffer } from 'trim-buffer';
 import { ProcessError, InvocationError } from './errors';
-import { Converters, convertJsObjToShellStr } from './bla';
+import { Converters, convertJsObjToShellStr } from './converters';
 
 export type StdioStreams = {
   stdin: Writable;
