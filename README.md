@@ -40,11 +40,11 @@
   </a>
 </p>
 
-<p align="center">
+<!-- <p align="center">
   <a href="https://www.patreon.com/bePatron?u=35319292">
     <img alt="Become a patron" src="https://img.shields.io/badge/Become%20a-patron-E85B46?style=flat-square">
   </a>
-</p>
+</p> -->
 
 - [About](#about)
 - [Documentation](#documentation)

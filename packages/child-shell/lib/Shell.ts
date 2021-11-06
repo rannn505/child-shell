@@ -6,11 +6,12 @@ import { once } from 'events';
 import Debugger from 'debug';
 import pTimeout from 'p-timeout';
 import PQueue from 'p-queue';
-import { nanoid } from 'nanoid';
+import kindOf from 'kind-of';
+import { customAlphabet } from 'nanoid';
 import { AccumulateStream } from 'accumulate-stream';
 import { trimBuffer } from 'trim-buffer';
 import { ProcessError, InvocationError } from './errors';
-import { Converters, convertJsObjToShellStr } from './converters';
+import { JavaScriptTypes, Converters, Converter, SHELL_CONVERTERS } from './converters';
 
 export type StdioStreams = {
   stdin: Writable;
@@ -58,8 +59,11 @@ export type ShellOptions = {
   throwOnInvocationError?: boolean;
 };
 
-type ShellCtor = { new (options?: ShellOptions): Shell };
-type ShellDerived = ShellCtor & typeof Shell;
+export type ShellCtor = { new (options?: ShellOptions): Shell };
+export type ShellDerived = ShellCtor & typeof Shell;
+
+const DELIMITER_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const DELIMITER_LENGTH = 16;
 
 export abstract class Shell {
   private readonly executable: string;
@@ -76,8 +80,7 @@ export abstract class Shell {
 
   protected abstract writeToOutput(input: string): string;
   protected abstract writeToError(input: string): string;
-
-  protected static converters: Converters;
+  protected static converters: Converters = SHELL_CONVERTERS;
 
   public readonly streams: StdioStreams;
   public readonly history: InvocationResult[] = [];
@@ -89,6 +92,11 @@ export abstract class Shell {
     this.invocationQueue = this.setInvocationQueue();
 
     this.process = spawn(this.executable, this.executableOptions, this.spawnOptions);
+    this.streams = {
+      stdin: this.process.stdin as Writable,
+      stdout: this.process.stdout as Readable,
+      stderr: this.process.stderr as Readable,
+    };
 
     this.debuggers = this.setDebuggers(options);
     this.debuggers.comment(`shell process started: "${this.executable} ${this.executableOptions.join(' ')}"`);
@@ -96,18 +104,13 @@ export abstract class Shell {
     this.resultsEncoding = options.outputEncoding ?? 'utf-8';
     this.setProcessStdioEncoding(options);
     this.setProcessKillOptions(options);
-    this.invocationTimeout = options.invocationTimeout;
+    this.invocationTimeout = options.invocationTimeout ?? 0;
     this.throwOnInvocationError = options.throwOnInvocationError ?? true;
-    this.streams = {
-      stdin: this.process.stdin,
-      stdout: this.process.stdout,
-      stderr: this.process.stderr,
-    };
   }
 
   private detachStreamFromOutput(stream: Writable): void {
-    this.process.stdout.unpipe(stream);
-    this.process.stderr.unpipe(stream);
+    this.streams.stdout.unpipe(stream);
+    this.streams.stderr.unpipe(stream);
     stream.end();
   }
 
@@ -196,7 +199,8 @@ ${inspect(
     _debugger.log = console.log.bind(console);
 
     if (debug) {
-      Debugger.enable(`${namespace}*`);
+      // debug package manages its state globally - https://github.com/visionmedia/debug#set-dynamically
+      Debugger.enable(`${process.env.DEBUG},${namespace}*`);
     }
 
     return {
@@ -211,17 +215,17 @@ ${inspect(
 
     // listen to stderr for catching starter errors
     const stderr = new AccumulateStream({ count: 3 });
-    this.process.stderr.pipe(stderr);
+    this.streams.stderr.pipe(stderr);
     once(stderr, 'data').then(() => {
       // probably there is no starter error after 3 chunks so disable this listener
       this.detachStreamFromOutput(stderr);
     });
 
     // set up process exit listeners
-    const processErrorPromise = once(this.process, 'error').then(([error]: [Error]) => {
+    const processErrorPromise = once(this.process, 'error').then(([error]) => {
       throw new ProcessError(this.process, error);
     });
-    const processExitPromise = once(this.process, 'exit').then(([code, signal]: [number, NodeJS.Signals]) => {
+    const processExitPromise = once(this.process, 'exit').then(([code, signal]) => {
       const error = !useStderrOnExit ? undefined : new Error(stderr.getBuffer().toString(this.resultsEncoding));
 
       if (signal && signal !== 'SIGTERM') {
@@ -232,12 +236,11 @@ ${inspect(
         throw new ProcessError(this.process, error);
       }
     });
-    if (this.process.stdin) {
-      // catch EPIPE error to avoid node crash and let process's 'exit' event to determine result
-      once(this.process.stdin, 'error').then(() => {
-        useStderrOnExit = true;
-      });
-    }
+
+    // catch EPIPE error to avoid node crash and let process's 'exit' event to determine result
+    once(this.streams.stdin, 'error').then(() => {
+      useStderrOnExit = true;
+    });
 
     // ordered process exit scenarios:
     // ENOENT - spawn error - `error` listener
@@ -246,7 +249,7 @@ ${inspect(
     return Promise.race([processErrorPromise, processExitPromise]).finally(() => {
       this.isExited = true;
       this.clearInvocationQueue();
-      this.process.stdin.end();
+      this.streams.stdin.end();
       this.detachStreamFromOutput(stderr);
       this.debuggers.comment(`shell process exited`);
     });
@@ -259,9 +262,9 @@ ${inspect(
     inputEncoding?: BufferEncoding;
     outputEncoding?: BufferEncoding;
   }): void {
-    this.process.stdin.setDefaultEncoding(inputEncoding);
-    this.process.stdout.setEncoding(outputEncoding);
-    this.process.stderr.setEncoding(outputEncoding);
+    this.streams.stdin.setDefaultEncoding(inputEncoding);
+    this.streams.stdout.setEncoding(outputEncoding);
+    this.streams.stderr.setEncoding(outputEncoding);
   }
 
   private setProcessKillOptions({ disposeTimeout }: { disposeTimeout?: number }): void {
@@ -286,12 +289,12 @@ ${inspect(
     const currentHistoryRecord = this.history[0];
 
     // generate output bulk delimiter
-    const bulkDelimiter = nanoid();
+    const bulkDelimiter = customAlphabet(DELIMITER_ALPHABET, DELIMITER_LENGTH)();
 
     // init bulk readers for both output streams
     const outputPromise = Promise.all([
-      this.readBulkFromOutput(this.process.stdout, bulkDelimiter),
-      this.readBulkFromOutput(this.process.stderr, bulkDelimiter),
+      this.readBulkFromOutput(this.streams.stdout, bulkDelimiter),
+      this.readBulkFromOutput(this.streams.stderr, bulkDelimiter),
     ]);
 
     // race output and error
@@ -300,16 +303,16 @@ ${inspect(
     const isCommandDone = Promise.race([this.exitPromise, outputPromise]);
 
     // write delimiter then command then delimiter to process input so `readBulkFromOutput` will detect the exact command output
-    this.process.stdin.write(this.writeToError(bulkDelimiter));
-    this.process.stdin.write(EOL);
-    this.process.stdin.write(this.writeToOutput(bulkDelimiter));
-    this.process.stdin.write(EOL);
-    this.process.stdin.write(command);
-    this.process.stdin.write(EOL);
-    this.process.stdin.write(this.writeToError(bulkDelimiter));
-    this.process.stdin.write(EOL);
-    this.process.stdin.write(this.writeToOutput(bulkDelimiter));
-    this.process.stdin.write(EOL);
+    this.streams.stdin.write(this.writeToError(bulkDelimiter));
+    this.streams.stdin.write(EOL);
+    this.streams.stdin.write(this.writeToOutput(bulkDelimiter));
+    this.streams.stdin.write(EOL);
+    this.streams.stdin.write(command);
+    this.streams.stdin.write(EOL);
+    this.streams.stdin.write(this.writeToError(bulkDelimiter));
+    this.streams.stdin.write(EOL);
+    this.streams.stdin.write(this.writeToOutput(bulkDelimiter));
+    this.streams.stdin.write(EOL);
 
     try {
       // wait for command to finish and apply timeout if needed
@@ -373,10 +376,19 @@ ${inspect(
     return this.exitPromise;
   }
 
-  public static command(literals: readonly string[], ...args: unknown[]): string {
+  private static convertToShell(this: ShellDerived, jsObject: unknown): string {
+    const objectType = kindOf(jsObject) as JavaScriptTypes;
+    const hasConverter = this.converters.has(objectType);
+    if (!hasConverter) {
+      throw new Error(`cannot convert ${objectType} object to its shell representation`);
+    }
+    return (this.converters.get(objectType) as Converter).call(undefined, jsObject, this.convertToShell.bind(this));
+  }
+
+  public static command(this: ShellDerived, literals: readonly string[], ...expressions: unknown[]): string {
     return literals
       .map((literal, index) => {
-        return `${literal}${convertJsObjToShellStr(args?.[index], this.converters)}`;
+        return `${literal}${this.convertToShell(expressions?.[index])}`;
       })
       .join('');
   }
@@ -393,8 +405,13 @@ ${inspect(
   public static async $(
     this: ShellDerived,
     literals: readonly string[],
-    ...args: unknown[]
+    ...expressions: unknown[]
   ): Promise<InvocationResult> {
-    return this.invoke(this.command(literals, args));
+    return this.invoke(this.command(literals, ...expressions));
+  }
+
+  public static $$(this: ShellDerived, literals: readonly string[], ...expressions: unknown[]) {
+    return (options?: ShellOptions): Promise<InvocationResult> =>
+      this.invoke(this.command(literals, ...expressions), options);
   }
 }

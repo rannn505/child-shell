@@ -1,7 +1,7 @@
 {
   "name": "accumulate-stream",
-  "version": "5.0.0-next.3",
-  "description": "Useful implementations for writable stream",
+  "version": "0.0.0",
+  "description": "Transform stream that accumulates and emits data upon events",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/accumulate-stream#readme",
   "license": "MIT",
@@ -33,8 +33,8 @@
     "ms": "^2.1.3"
   },
   "devDependencies": {
-    "@types/bytes": "^3.1.0",
+    "@types/bytes": "^3.1.1",
     "@types/ms": "^0.7.31",
-    "@types/node": "^14.14.37"
+    "@types/node": "^16.11.6"
   }
 }

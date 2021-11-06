@@ -1,5 +1,3 @@
-import kindOf from 'kind-of';
-
 export type JavaScriptTypes =
   | 'undefined'
   | 'null'
@@ -37,7 +35,7 @@ export type Converters = Map<JavaScriptTypes, Converter>;
 export type ConvertFn = (object: unknown, converters?: Converters) => string;
 
 const emptyConverter: Converter = () => '';
-const primitiveConverter: Converter = (object) => object.toString();
+const primitiveConverter: Converter = (object) => String(object);
 const stringConverter: Converter = (object) => {
   const hasDoubleQuotes = (object as string).includes('"');
   if (hasDoubleQuotes) {
@@ -49,7 +47,7 @@ const objectConverter: Converter = (object) => JSON.stringify(object);
 const arrayConverter: Converter = (object, convert) =>
   (object as unknown[]).map((el: unknown) => convert(el)).join(',');
 
-const DEFAULT_CONVERTERS: Converters = new Map([
+export const SHELL_CONVERTERS: Converters = new Map([
   ['undefined', emptyConverter],
   ['null', emptyConverter],
   ['boolean', primitiveConverter],
@@ -62,13 +60,3 @@ const DEFAULT_CONVERTERS: Converters = new Map([
   ['symbol', primitiveConverter],
   // [TBD] add default converts for for: map, weakmap, set, weakset
 ]);
-
-export const convertJsObjToShellStr = (object: unknown, extraConverters: Converters = new Map([])): string => {
-  const converters = new Map([...DEFAULT_CONVERTERS, ...extraConverters]);
-  const objectType = kindOf(object) as JavaScriptTypes;
-  const hasConverter = converters.has(objectType);
-  if (!hasConverter) {
-    throw new Error(`cannot convert ${objectType} object to its shell representation`);
-  }
-  return converters.get(objectType).call(undefined, object, convertJsObjToShellStr);
-};

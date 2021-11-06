@@ -17,8 +17,8 @@ export type AccumulateStreamOptions = {
 export type AccumulateStreamEvents = 'chunk' | 'count' | 'size' | 'interval' | 'phrase' | string;
 
 export class AccumulateStream extends Transform {
-  protected buffer: Buffer;
-  protected chunksCounter: number;
+  protected buffer!: Buffer;
+  protected chunksCounter!: number;
 
   private readonly interval?: NodeJS.Timeout;
 
@@ -86,12 +86,11 @@ export class AccumulateStream extends Transform {
     }
 
     const isCustomDone =
-      this.options?.custom &&
-      this.options.custom?.event &&
-      this.options.custom?.isDone &&
-      this.options.custom.isDone.call(this, chunk, encoding);
+      this.options?.custom?.event &&
+      this.options?.custom?.isDone &&
+      this.options?.custom?.isDone?.call(this, chunk, encoding);
     if (isCustomDone) {
-      this.emitEvent(this.options.custom.event);
+      this.emitEvent(this.options?.custom?.event as string);
     }
 
     const isDone = isSizeDone || isCountDone || isPhraseDone || isCustomDone;

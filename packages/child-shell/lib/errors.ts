@@ -10,9 +10,9 @@ export class BaseError extends Error {
 
 export class ProcessError extends BaseError {
   public readonly originalError?: Error;
-  public readonly exitCode?: number;
-  public readonly signalCode?: NodeJS.Signals;
-  public readonly message: string;
+  public readonly exitCode: ChildProcess['exitCode'];
+  public readonly signalCode: ChildProcess['signalCode'];
+  public readonly message!: string;
 
   constructor(process: ChildProcess, originalError?: Error) {
     const { pid, exitCode, signalCode } = process;

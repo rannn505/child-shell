@@ -1,3 +1,3 @@
 # `child-shell`
 
-> Base shell wrapper classes. see [documentation](https:/<>).
+> Abstract shell wrapper class. see [documentation](https:/<>).

@@ -1,6 +1,6 @@
 import { platform } from 'os';
 import isWsl from 'is-wsl';
-import { ExecutableOptions, ShellOptions, Shell, Converter, Converters } from 'child-shell';
+import { ExecutableOptions, ShellOptions, Shell, Converters, Converter } from 'child-shell';
 
 export enum PSExecutableType {
   PowerShellWin = 'powershell',
@@ -38,7 +38,7 @@ export type PSExecutableOptions = ExecutableOptions &
 export type PowerShellOptions = ShellOptions & {
   pwsh?: boolean;
   pwshPrev?: boolean;
-  executable?: PSExecutableType;
+  executable?: PSExecutableType | string;
   executableOptions?: PSExecutableOptions;
 };
 
@@ -57,8 +57,7 @@ const PS_CONVERTERS: Converters = new Map([
 ]);
 
 export class PowerShell extends Shell {
-  converters = PS_CONVERTERS;
-
+  static converters = new Map([...Shell.converters, ...PS_CONVERTERS]);
   constructor(options: PowerShellOptions = {}) {
     super({
       ...options,
@@ -82,7 +81,7 @@ export class PowerShell extends Shell {
   }): string {
     const { PowerShellWin, PowerShellCore, PowerShellCorePreview } = PSExecutableType;
 
-    if (process.env.NPS) {
+    if (process.env.NODE_POWERSHELL) {
       return process.env.NODE_POWERSHELL as PSExecutableType;
     }
 

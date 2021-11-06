@@ -10,6 +10,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "strict": true,
     "noImplicitAny": true,
     "removeComments": true,
   },
