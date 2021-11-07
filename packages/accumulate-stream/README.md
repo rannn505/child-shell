@@ -31,7 +31,9 @@ import { AccumulateStream } from 'accumulate-stream';
   accumulator.on('phrase', ({ buffer }) =>
     console.log(`emitted whenever "stream" phrase is detected in chunk - ${buffer.toString()}`),
   );
-  accumulator.on('data', ({ buffer }) => console.log(`emitted whenever one of the conditions is met - ${buffer.toString()}`));
+  accumulator.on('data', ({ buffer }) =>
+    console.log(`emitted whenever one of the conditions is met - ${buffer.toString()}`),
+  );
 
   await once(accumulator, 'data');
   console.log(accumulator.getBuffer().toString()); // streams are awesome.
