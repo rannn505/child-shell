@@ -1,6 +1,6 @@
 {
   "name": "child-shell",
-  "version": "5.0.0-next.3",
+  "version": "5.0.0",
   "description": "Abstract shell wrapper class",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/child-shell#readme",
@@ -29,13 +29,13 @@
   },
   "scripts": {},
   "dependencies": {
-    "accumulate-stream": "^5.0.0-next.3",
+    "accumulate-stream": "^5.0.0",
     "debug": "^4.3.2",
     "kind-of": "^6.0.3",
     "nanoid": "^3.1.30",
     "p-queue": "6.6.2",
     "p-timeout": "4.1.0",
-    "trim-buffer": "^5.0.0-next.3"
+    "trim-buffer": "^5.0.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",

@@ -28,13 +28,14 @@
     "build": "tsc --build tsconfig.build.json",
     "build:watch": "npm run build -- --watch",
     "start": "cd playground && node -r ts-node/register index.ts",
-    "prepublishOnly": "run-p -ln types:check format:check lint:check test"
+    "prepublishOnly": "concurrently \"npm:format:check\" \"npm:lint:check\" \"npm:test\""
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
+    "concurrently": "^6.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",

@@ -1,6 +1,6 @@
 {
   "name": "accumulate-stream",
-  "version": "5.0.0-next.3",
+  "version": "5.0.0",
   "description": "Transform stream that accumulates and emits data upon events",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/accumulate-stream#readme",
