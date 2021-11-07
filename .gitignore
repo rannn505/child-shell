@@ -1,21 +1,15 @@
-# temp
-tmp/**
+.DS_STORE
+.vscode
+.idea
 
-# dependency
-node_modules/**
+node_modules
+coverage
+.eslintcache
+*.tsbuildinfo
+dist
 
-# assets
-assets/img/**
-assets/tmp/**
-assets/edit/**
+tmp
+lib/tmp
 
-# coverage
-coverage/**
-.nyc_output/**
-
-# idea
-.vscode/**
-.idea/**
-
-# links
-links.txt
+npm-debug.log*
+yarn-error.log*

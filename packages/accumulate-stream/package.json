@@ -1,0 +1,40 @@
+{
+  "name": "accumulate-stream",
+  "version": "5.0.0",
+  "description": "Transform stream that accumulates and emits data upon events",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/accumulate-stream#readme",
+  "license": "MIT",
+  "main": "dist",
+  "types": "dist",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "doc",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/child-shell.git",
+    "directory": "packages/accumulate-stream"
+  },
+  "bugs": {
+    "url": "https://github.com/rannn505/child-shell/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {},
+  "dependencies": {
+    "bytes": "^3.1.0",
+    "ms": "^2.1.3"
+  },
+  "devDependencies": {
+    "@types/bytes": "^3.1.1",
+    "@types/ms": "^0.7.31",
+    "@types/node": "^16.11.6"
+  }
+}

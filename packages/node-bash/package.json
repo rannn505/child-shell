@@ -1,0 +1,57 @@
+{
+  "name": "node-bash",
+  "version": "5.0.0",
+  "description": "Node.js binding for Bash",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/node-bash#readme",
+  "license": "MIT",
+  "main": "dist",
+  "types": "dist",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "doc",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/child-shell.git",
+    "directory": "packages/node-bash"
+  },
+  "bugs": {
+    "url": "https://github.com/rannn505/child-shell/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {},
+  "dependencies": {
+    "child-shell": "^5.0.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "child-shell",
+    "node-shell",
+    "node-bash",
+    "bash",
+    "node-sh",
+    "sh",
+    "zsh",
+    "bourne-shell",
+    "spwan",
+    "cmd",
+    "command",
+    "script",
+    "commandline",
+    "shell",
+    "terminal",
+    "cross-platform",
+    "unix",
+    "linux",
+    "macos",
+    "windows"
+  ]
+}

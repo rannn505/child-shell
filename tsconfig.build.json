@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/trim-buffer" },
+    { "path": "packages/accumulate-stream" },
+    { "path": "packages/child-shell" },
+    { "path": "packages/node-bash" },
+    { "path": "packages/node-powershell" }
+  ],
+}

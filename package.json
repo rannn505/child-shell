@@ -1,82 +1,55 @@
 {
-  "name": "node-powershell",
-  "version": "4.0.0",
-  "description": "Easily run PowerShell from your NodeJS app",
-  "main": "./lib/index.js",
-  "files": [
-    "lib",
-    "docs",
-    "example",
-    "test"
+  "name": "child-shell",
+  "private": true,
+  "description": "Node.js bindings for shell",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "homepage": "https://rannn505.github.io/child-shell/",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
   ],
-  "directories": {
-    "lib": "lib",
-    "docs": "docs",
-    "example": "example",
-    "test": "test"
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "devEngines": {
+    "node": ">=v14.16.0",
+    "npm": ">=7.6.0"
   },
   "scripts": {
-    "test": "nyc mocha",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "eslint lib/",
-    "start": "cd ./example && node example.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rannn505/node-powershell.git"
-  },
-  "keywords": [
-    "node-powershell",
-    "ps",
-    "powershell",
-    "node-ps",
-    "microsoft",
-    "shell",
-    "cmd",
-    "commandline",
-    "command",
-    "Line",
-    "windows",
-    "windows powershell",
-    "script",
-    "spwan",
-    "shells",
-    "terminal",
-    "linux powershell",
-    "powershell github",
-    "PowerShell for every system",
-    "PowerShell cross-platform",
-    "powershell linux",
-    "powershell centos",
-    "powershell rhel",
-    "powershell ubuntu",
-    "powershell macos",
-    "powershell docker",
-    "PowerShell Core",
-    "PowerShell Core 6.0",
-    "PowerShell 6.0",
-    "pwsh"
-  ],
-  "author": "Ran Cohen <rannn505@outlook.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rannn505/node-powershell/issues"
-  },
-  "homepage": "http://rannn505.github.io/node-powershell/",
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "is-wsl": "^2.2.0",
-    "shortid": "^2.2.14"
+    "prepare": "is-ci || (husky install && npm run build)",
+    "clean": "rimraf packages/**/dist packages/**/tsconfig.tsbuildinfo packages/**/coverage .eslintcache ./**/node_modules",
+    "format": "prettier --write '**/*.{js,ts,md}' --ignore-path .gitignore",
+    "format:check": "prettier --check '**/*.{js,ts,md}' --ignore-path .gitignore",
+    "lint": "eslint . --cache --fix --ext js,ts --ignore-path .gitignore",
+    "lint:check": "eslint . --cache --ext js,ts --ignore-path .gitignore",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "npm test -- --coverage",
+    "build": "tsc --build tsconfig.build.json",
+    "build:watch": "npm run build -- --watch",
+    "start": "cd playground && node -r ts-node/register index.ts",
+    "prepublishOnly": "concurrently \"npm:format:check\" \"npm:lint:check\" \"npm:test\""
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.0",
-    "eslint": "^5.9.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "mocha": "^4.0.1",
-    "nyc": "^13.1.0",
-    "sinon": "^7.2.3"
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.6",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "concurrently": "^6.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^25.2.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "is-ci": "^3.0.1",
+    "jest": "^27.3.1",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   }
 }

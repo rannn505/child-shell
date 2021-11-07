@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [master, next]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [10, 12, 14]
+    runs-on: ${{ matrix.os }}
+    # [NOTE] powershell is already install on GitHub-hosted runners
+    # https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install npm latest
+        run: npm install -g npm
+
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:check
+      - run: npm test

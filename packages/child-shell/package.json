@@ -1,0 +1,45 @@
+{
+  "name": "child-shell",
+  "version": "5.0.0",
+  "description": "Abstract shell wrapper class",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/child-shell#readme",
+  "license": "MIT",
+  "main": "dist",
+  "types": "dist",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "doc",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/child-shell.git",
+    "directory": "packages/child-shell"
+  },
+  "bugs": {
+    "url": "https://github.com/rannn505/child-shell/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {},
+  "dependencies": {
+    "accumulate-stream": "^5.0.0",
+    "debug": "^4.3.2",
+    "kind-of": "^6.0.3",
+    "nanoid": "^3.1.30",
+    "p-queue": "6.6.2",
+    "p-timeout": "4.1.0",
+    "trim-buffer": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/kind-of": "^6.0.0",
+    "@types/node": "^16.11.6"
+  }
+}

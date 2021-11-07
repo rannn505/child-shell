@@ -1,0 +1,60 @@
+{
+  "name": "node-powershell",
+  "version": "5.0.0",
+  "description": "Node.js binding for PowerShell",
+  "author": "Ran Cohen <rannn505@outlook.com>",
+  "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/node-powershell#readme",
+  "license": "MIT",
+  "main": "dist",
+  "types": "dist",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "doc",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rannn505/child-shell.git",
+    "directory": "packages/node-powershell"
+  },
+  "bugs": {
+    "url": "https://github.com/rannn505/child-shell/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {},
+  "dependencies": {
+    "child-shell": "^5.0.0",
+    "is-wsl": "^2.2.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "child-shell",
+    "node-shell",
+    "node-powershell",
+    "powershell",
+    "windows powershell",
+    "powershell core",
+    "pwsh",
+    "node-ps",
+    "ps",
+    "microsoft",
+    "spwan",
+    "cmd",
+    "command",
+    "script",
+    "commandline",
+    "shell",
+    "terminal",
+    "cross-platform",
+    "unix",
+    "linux",
+    "macos",
+    "windows"
+  ]
+}
