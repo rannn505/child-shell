@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node: [10, 12, 14]
+        node: [lts/dubnium, lts/*]
     runs-on: ${{ matrix.os }}
     # [NOTE] powershell is already install on GitHub-hosted runners
     # https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
@@ -24,9 +24,7 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install npm latest
-        run: npm install -g npm
-
+      - run: npm -v
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint:check
