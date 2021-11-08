@@ -1,6 +1,6 @@
 {
   "name": "node-powershell",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Node.js binding for PowerShell",
   "author": "Ran Cohen <rannn505@outlook.com>",
   "homepage": "https://github.com/rannn505/child-shell/tree/master/packages/node-powershell#readme",

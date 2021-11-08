@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="child-shell" src="https://raw.githubusercontent.com/rannn505/node-powershell/node-shell/logo/logo.svg?sanitize=true" width="128">
+  <img alt="child-shell" src="https://raw.githubusercontent.com/rannn505/child-shell/master/icon/icon.svg?sanitize=true" width="128">
 </p>
 <h3 align="center"> Child Shell </h3>
 <p align="center"> Node.js bindings 🔗 for shell </p>
@@ -15,28 +15,28 @@
 
 <p align="center">
   <a href="">
-    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/rannn505/node-powershell/CI?style=flat-square">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/rannn505/child-shell/CI?style=flat-square">
   </a>
-  <a href="">
+  <!-- <a href="">
     <img alt="Coverage" src="">
-  </a>
-    <a href="https://npm-stat.com/charts.html?package=child-shell">
-    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/child-shell.svg?style=flat-square">
-  </a>
-  <a href="https://github.com/rannn505/node-powershell/stargazers">
-    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/rannn505/node-powershell?style=social">
-  </a>
-</p>
-
-<p align="center">
+  </a> -->
   <a href="https://jestjs.io/">
     <img alt="Jest" src="https://img.shields.io/badge/tested_with-jest-99424f.svg?style=flat-square">
   </a>
   <a href="https://prettier.io/">
     <img alt="Prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
   </a>
-  <a href="https://github.com/rannn505/node-powershell/blob/node-shell/LICENSE">
-    <img alt="License" src="https://img.shields.io/github/license/rannn505/node-powershell?color=%23000000&style=flat-square">
+</p>
+
+<p align="center">
+  <a href="https://npm-stat.com/charts.html?package=child-shell">
+    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/child-shell.svg?style=flat-square">
+  </a>
+  <a href="https://github.com/rannn505/child-shell/stargazers">
+    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/rannn505/child-shell?style=social">
+  </a>
+  <a href="https://github.com/rannn505/child-shell/blob/master/LICENSE.md">
+    <img alt="License" src="https://img.shields.io/github/license/rannn505/child-shell?color=%23000000&style=flat-square">
   </a>
 </p>
 
@@ -72,7 +72,7 @@ Learn about using [child-shell on the official site!](https://<>)
 - [Configuring child-shell](https://<>/docs/configuration)
 - [Useful Tips](https://<>/docs/tips)
 - [API Reference](https://<>/docs/en/api)
-- Shell Libraries:
+- Shell packages:
   - [node-bash](/packages/node-bash)
   - [node-powershell](/packages/node-powershell)
 
@@ -80,7 +80,7 @@ Learn about using [child-shell on the official site!](https://<>)
 
 Development of **child-shell** happens transparently on its [GitHub repo](https://github.com/rannn505/child-shell).<br/>
 Read the [contributing guide](CONTRIBUTING.md) to learn how to propose bugfixes and improvements, and how to build and test your changes.<br/>
-Future plans for **child-shell** are visible on its [board](https://github.com/rannn505/child-shell/projects/1).
+Future plans for **child-shell** are visible on its [board](https://github.com/rannn505/child-shell/projects/<>).
 These plans are subject to frequent changes, and will be greatly affected by your feedback.
 
 ## License
