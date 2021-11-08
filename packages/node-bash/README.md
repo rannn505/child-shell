@@ -2,7 +2,7 @@
 
 > Node.js binding for Bash
 
-[![NPM Version](https://img.shields.io/npm/v/node-powershell.svg?style=flat-square)](https://www.npmjs.com/package/node-powershell) [![NPM Downloads](https://img.shields.io/npm/dt/node-powershell.svg?style=flat-square)](https://npm-stat.com/charts.html?package=node-powershell) [![Coveralls](https://img.shields.io/coveralls/rannn505/node-powershell.svg?style=flat-square)](https://coveralls.io/github/rannn505/node-powershell)
+[![NPM Version](https://img.shields.io/npm/v/node-bash.svg?style=flat-square)](https://www.npmjs.com/package/node-bash) [![NPM Downloads](https://img.shields.io/npm/dt/node-bash.svg?style=flat-square)](https://npm-stat.com/charts.html?package=node-bash)
 
 ## Installation
 
@@ -14,11 +14,11 @@ $ yarn add node-bash
 ## Usage
 
 ```javascript
-import { $ } from 'node-bash';
-$`echo "hello from Bash"`;
+import { Bash } from 'node-bash';
+Bash.$`echo "hello from Bash"`;
 ```
 
-> See **child-shell** [documentation](https:/<>) and [playground](/packages/playground/index.ts) for more use cases
+> See **child-shell** [documentation](https:/<>) and [playground](https://github.com/rannn505/child-shell/blob/master/playground/index.ts) for more use cases
 
 ## Resources
 

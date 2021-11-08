@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master, next]
+    branches: [master]
 
 jobs:
   build:
@@ -11,7 +11,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         node: [lts/dubnium, lts/*]
     runs-on: ${{ matrix.os }}
-    # [NOTE] powershell is already install on GitHub-hosted runners
+    # Bash & PowerShell are already installed on GitHub-hosted runners
     # https://help.github.com/en/actions/reference/software-installed-on-github-hosted-runners
 
     steps:
@@ -24,8 +24,12 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - run: npm -v
+      # Latest npm is needed for workspaces capabilities
+      - name: Install npm latest
+        run: npm install -g npm
+
       - run: npm ci
+
       - run: npm run format:check
       - run: npm run lint:check
       - run: npm test
