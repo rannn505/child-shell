@@ -32,7 +32,7 @@
     "accumulate-stream": "^5.0.0",
     "debug": "^4.3.2",
     "kind-of": "^6.0.3",
-    "nanoid": "^3.1.30",
+    "nanoid": "^3.1.31",
     "p-queue": "6.6.2",
     "p-timeout": "4.1.0",
     "trim-buffer": "^5.0.0"
